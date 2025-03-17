@@ -1,0 +1,79 @@
+/* Sheets.css */
+.sheets-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.sheets-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background 0.3s;
+}
+
+.sheets-button:hover {
+  background-color: #0056b3;
+}
+
+.sheets-error {
+  color: red;
+  margin-top: 10px;
+}
+
+.sheets-file-list {
+  margin-top: 20px;
+}
+
+.sheets-file-item {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sheets-sheet-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: background 0.3s;
+}
+
+.sheets-sheet-button:hover {
+  background: #218838;
+}
+
+.sheets-table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.sheets-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sheets-table th {
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 2px solid #0056b3;
+}
+
+.sheets-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}

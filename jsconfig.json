@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // Indique que les chemins commencent à la racine du projet
+    "paths": {
+      "@components/*": ["components/*"], // Exemple : Alias pour les composants
+      "@utils/*": ["utils/*"] // Alias pour des utilitaires
+    }
+  },
+  "include": ["**/*.js", "**/*.jsx", "src/app/api/auth/outlook"], // Fichiers JavaScript à inclure
+  "exclude": ["node_modules", ".next"] // Exclusion des dossiers inutiles
+}
