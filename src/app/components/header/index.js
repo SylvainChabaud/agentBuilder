@@ -44,6 +44,7 @@ export default function HeaderWrapper() {
             style={{ left: '75%' }}
           >
             <Link href="/sheets">Sheets</Link>
+            <Link href="/webSearch">WebSearch</Link>
 
             <div
               className="nav-item"
@@ -53,7 +54,7 @@ export default function HeaderWrapper() {
               Gmail
               <DropdownContent
                 className={isGmailDropdownVisible ? 'visible' : ''}
-                style={{ right: '0%', top: '40%' }}
+                style={{ right: '0%', top: '50%' }}
               >
                 <Link href="/gmail/emails">Mes emails</Link>
                 <Link href="/gmail/sendEmail">Envoyer un email</Link>
