@@ -19,5 +19,5 @@ export const GMAIL_SEND_EMAIL_EXPERTISE = {
 };
 
 export const WEB_SEARCH_EXPERTISE = {
-  OUTPUT_SCHEMA: { search: 'string', results: 'string' },
+  OUTPUT_SCHEMA: { htmlSnippet: 'string', htmlTitle: 'string', link: 'string' },
 };
