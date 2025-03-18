@@ -58,7 +58,11 @@ const NodeParameters = ({
     if (nodeApp === APPS_LIST[4].id) {
       return expertise?.id === 'sheets';
     } else if (nodeApp === APPS_LIST[0].id) {
-      return expertise?.id === 'gmailEmails' || expertise?.id === 'sendEmail';
+      return (
+        expertise?.id === 'gmailEmails' ||
+        expertise?.id === 'sendEmail' ||
+        expertise?.id === 'webSearch'
+      );
     } else if (nodeApp === APPS_LIST[5].id) {
       return expertise?.id === 'displayEmails';
     } else if (nodeApp === APPS_LIST[3].id) {
@@ -70,7 +74,8 @@ const NodeParameters = ({
         expertise?.id !== 'gmailEmails' &&
         expertise?.id !== 'sendEmail' &&
         expertise?.id !== 'sheets' &&
-        expertise?.id !== 'displayEmails'
+        expertise?.id !== 'displayEmails' &&
+        expertise?.id !== 'webSearch'
       );
     } else return false;
   });

@@ -47,7 +47,7 @@ export const useWorkflow = ({
 
   // Fonction qui déclenche l'exécution du workflow
   const handleRunWorkflow = async () => {
-    const initialInput = 'Hello';
+    const initialInput = 'recette de samosa';
 
     console.log('initialInput', initialInput);
 

@@ -1,6 +1,7 @@
 import { handleGmailLoginClient } from 'src/app/components/gmail/oAuth/handleGmailLoginClient';
 import { handleFetchEmails } from 'lib/services/gmail/fetchEmails';
 import { handleSendEmail } from 'lib/services/gmail/sendEmail';
+import { handleWebSearch } from 'lib/services/gmail/webSearch';
 import { NODE_STATUS } from '../../constants';
 import { APPS_LABELS } from 'lib/constants';
 import { handleFetchSheetContent } from 'lib/services/sheets/getFileContent';
@@ -43,10 +44,9 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
 
     return result;
   } else if (node.app === APPS_LABELS.GMAIL) {
-    const accessToken = await handleGmailLoginClient('/agentBuilder');
-    console.info('gmail access token', 'accessToken');
-
     if (node.expertise === 'gmailEmails') {
+      const accessToken = await handleGmailLoginClient('/agentBuilder');
+      console.info('gmail access token', 'accessToken');
       // Appel à l'API Gmail pour récupérer les emails
       const { messages } = await handleFetchEmails(accessToken);
 
@@ -62,6 +62,8 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
       return formattedEmails;
     } else if (node.expertise === 'sendEmail') {
       console.info('POST GMAIL sendEmail 456', node);
+      const accessToken = await handleGmailLoginClient('/agentBuilder');
+      console.info('gmail access token', 'accessToken');
 
       const emails = await sendModelMessage({ input, node, expertisesList });
 
@@ -75,6 +77,36 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
       }
 
       return emails;
+    } else if (node.expertise === 'webSearch') {
+      console.info('POST GMAIL webSearch', input);
+
+      // Si l'entrée contient une requête de recherche, on l'utilise
+      let searchQuery = '';
+      if (input && input.length > 0 && input[0].data) {
+        console.info('POST GMAIL webSearch 1', input);
+        // Tenter d'extraire la requête de recherche à partir de l'entrée
+        const searchData = input[0].data;
+        if (Array.isArray(searchData) && searchData.length > 0) {
+          console.info('POST GMAIL webSearch 2', searchData);
+          if (searchData[0]) {
+            console.info('POST GMAIL webSearch 3', searchData[0]);
+            searchQuery = searchData[0];
+          } else {
+            // Fallback - utiliser une chaîne de caractères ou le premier élément
+            searchQuery =
+              typeof searchData[0] === 'string'
+                ? searchData[0]
+                : JSON.stringify(searchData[0]);
+          }
+        }
+      }
+
+      // Effectuer la recherche web
+      const { results } = await handleWebSearch({
+        searchQuery: searchQuery || 'Météo à Floirac 18 mars 2025',
+      });
+
+      return [{ search: searchQuery, results }];
     }
   } else if (node.app === APPS_LABELS.IA_MODEL) {
     const modelMessage = await sendModelMessage({

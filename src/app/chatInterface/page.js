@@ -19,6 +19,7 @@ const ChatInterface = () => {
     handleSubmit,
     onSelectedModel,
     onDeleteMessage,
+    onRestartFromMessage,
     setInputMessage,
     onCreateExpert,
     onChangeExpertise,
@@ -84,6 +85,23 @@ const ChatInterface = () => {
                     }}
                   >
                     ✖
+                  </button>
+
+                  <button
+                    onClick={() => onRestartFromMessage(message)}
+                    style={{
+                      position: 'absolute',
+                      top: '10px',
+                      right: '30px',
+                      background: 'transparent',
+                      border: 'none',
+                      fontSize: '0.65rem',
+                      cursor: 'pointer',
+                      color: message.role === 'user' ? '#ffefff' : '#000000',
+                    }}
+                    title="Relancer la conversation à partir de ce message"
+                  >
+                    🔄
                   </button>
 
                   <p

@@ -3,7 +3,7 @@
 import { useWebSearch } from './useWebSearch';
 
 export default function WebSearch() {
-  const { query, setQuery, results, isLoading, error, handleSearch } =
+  const { results, error, isLoading, query, setQuery, handleSearch } =
     useWebSearch();
 
   return (
@@ -14,15 +14,14 @@ export default function WebSearch() {
         padding: '2rem',
         backgroundColor: '#f9fafb',
         borderRadius: '0.5rem',
-        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
       }}
     >
       <h1
         style={{
-          textAlign: 'center',
-          marginBottom: '1rem',
           fontSize: '1.5rem',
           fontWeight: 'bold',
+          marginBottom: '1rem',
+          textAlign: 'center',
         }}
       >
         Recherche Web
@@ -32,55 +31,43 @@ export default function WebSearch() {
         <p style={{ color: 'red', textAlign: 'center' }}>Erreur: {error}</p>
       )}
 
-      <div style={{ marginBottom: '1rem' }}>
-        <div
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+        <input
+          type="text"
+          placeholder="Votre recherche..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           style={{
-            display: 'flex',
-            gap: '0.5rem',
+            flexGrow: 1,
+            padding: '0.5rem',
+            border: '1px solid #ccc',
+            borderRadius: '0.5rem',
+            outline: 'none',
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch();
+            }
+          }}
+        />
+        <button
+          onClick={() => handleSearch()}
+          style={{
+            padding: '0.5rem 1rem',
+            backgroundColor: isLoading ? '#9ca3af' : '#3b82f6',
+            color: '#fff',
+            borderRadius: '0.5rem',
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+            border: 'none',
+          }}
+          disabled={isLoading}
         >
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Votre recherche..."
-            style={{
-              flexGrow: 1,
-              padding: '0.5rem',
-              border: '1px solid #ccc',
-              borderRadius: '0.5rem',
-              outline: 'none',
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSearch();
-              }
-            }}
-          />
-          <button
-            onClick={handleSearch}
-            disabled={!query || isLoading}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: !query || isLoading ? '#9ca3af' : '#3b82f6',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: !query || isLoading ? 'not-allowed' : 'pointer',
-              transition: 'background 0.3s',
-            }}
-          >
-            {isLoading ? 'Recherche...' : 'Rechercher'}
-          </button>
-        </div>
+          {isLoading ? 'Recherche...' : 'Rechercher'}
+        </button>
       </div>
 
-      {isLoading && (
-        <p style={{ textAlign: 'center' }}>Chargement des résultats...</p>
-      )}
-
-      {results && results.length > 0 ? (
-        <div>
+      {results && results.length > 0 && (
+        <div style={{ marginTop: '1.5rem' }}>
           <h2
             style={{
               fontSize: '1.25rem',
@@ -90,60 +77,58 @@ export default function WebSearch() {
           >
             Résultats de recherche
           </h2>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-            }}
-          >
-            {results.map((result, index) => (
-              <div
-                key={index}
+
+          {results.map((result, index) => (
+            <div
+              key={index}
+              style={{
+                marginBottom: '1rem',
+                padding: '1rem',
+                borderRadius: '0.5rem',
+                border: '1px solid #e5e7eb',
+                backgroundColor: '#fff',
+              }}
+            >
+              <h3
                 style={{
-                  padding: '1rem',
-                  backgroundColor: 'white',
-                  borderRadius: '0.5rem',
-                  border: '1px solid #e5e7eb',
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  marginBottom: '0.5rem',
                 }}
               >
-                <h3
+                <a href={result.link} target="_blank" rel="noopener noreferrer">
+                  {result.title}
+                </a>
+              </h3>
+
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  color: '#4b5563',
+                  marginBottom: '0.5rem',
+                }}
+              >
+                {result.displayLink}
+              </p>
+
+              <p style={{ marginBottom: '0.5rem', fontSize: '0.95rem' }}>
+                {result.snippet}
+              </p>
+
+              {result.pagemap?.cse_image?.[0]?.src && (
+                <img
+                  src={result.pagemap.cse_image[0].src}
+                  alt={result.title}
                   style={{
-                    fontSize: '1.1rem',
-                    fontWeight: 'bold',
-                    marginBottom: '0.5rem',
-                    color: '#1e40af',
+                    width: '100%',
+                    borderRadius: '0.5rem',
+                    marginTop: '1rem',
                   }}
-                >
-                  <a
-                    href={result.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: 'none' }}
-                  >
-                    {result.title}
-                  </a>
-                </h3>
-                <p
-                  style={{
-                    fontSize: '0.875rem',
-                    color: '#4b5563',
-                    marginBottom: '0.5rem',
-                  }}
-                >
-                  {result.link}
-                </p>
-                <p style={{ fontSize: '0.95rem' }}>{result.snippet}</p>
-              </div>
-            ))}
-          </div>
+                />
+              )}
+            </div>
+          ))}
         </div>
-      ) : (
-        results && (
-          <p style={{ textAlign: 'center' }}>
-            Aucun résultat trouvé pour votre recherche.
-          </p>
-        )
       )}
     </div>
   );

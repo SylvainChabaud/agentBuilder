@@ -17,3 +17,7 @@ export const GMAIL_EMAILS_EXPERTISE = {
 export const GMAIL_SEND_EMAIL_EXPERTISE = {
   OUTPUT_SCHEMA: { to: 'string', subject: 'string', body: 'string' },
 };
+
+export const WEB_SEARCH_EXPERTISE = {
+  OUTPUT_SCHEMA: { search: 'string', results: 'string' },
+};

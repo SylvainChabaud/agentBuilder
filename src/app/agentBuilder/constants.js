@@ -5,6 +5,7 @@ import {
   GMAIL_EMAILS_EXPERTISE,
   GMAIL_SEND_EMAIL_EXPERTISE,
   RESUME_EXPERTISE,
+  WEB_SEARCH_EXPERTISE,
 } from 'data/constants';
 import EmailsDisplay from '../displays/emails/page';
 
@@ -115,6 +116,11 @@ export const EXPERTISES_LIST = [
     name: 'Affiche les emails',
     inputs: RESUME_EXPERTISE.OUTPUT_SCHEMA,
     component: EmailsDisplay,
+  },
+  {
+    id: 'webSearch',
+    name: 'Recherche Web',
+    outputs: WEB_SEARCH_EXPERTISE.OUTPUT_SCHEMA,
   },
   // {
   //   id: 'sendSheet',

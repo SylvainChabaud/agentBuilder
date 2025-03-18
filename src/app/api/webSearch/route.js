@@ -19,6 +19,8 @@ async function fetchGoogleSearchResults(query) {
 
     const data = await response.json();
 
+    console.info('fetchGoogleSearchResults', data);
+
     return data.items; // Renvoie un tableau de résultats
   } catch (error) {
     console.error(
@@ -33,6 +35,8 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query');
+
+    console.info('query GET', query);
 
     if (!query) {
       return new Response(

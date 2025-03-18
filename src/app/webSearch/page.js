@@ -1,5 +1,5 @@
 import React from 'react';
-import WebSearch from 'src/app/components/webSearch';
+import WebSearch from 'src/app/components/webSearch/index';
 
 const WebSearchPage = () => {
   return (

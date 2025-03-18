@@ -1,4 +1,5 @@
 'use client';
+import { handleWebSearch } from 'lib/services/gmail/webSearch';
 import { useState } from 'react';
 
 export const useWebSearch = () => {
@@ -10,22 +11,18 @@ export const useWebSearch = () => {
   const handleSearch = async () => {
     if (!query.trim()) return;
 
+    console.info('handleSearch', query);
+
     try {
       setIsLoading(true);
       setError(null);
 
-      // Appel à l'API de recherche web
-      const response = await fetch(
-        `/api/webSearch?query=${encodeURIComponent(query)}`
-      );
+      const { results } = await handleWebSearch({
+        searchQuery: query,
+        isWebSearch: true,
+      });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur lors de la recherche');
-      }
-
-      const data = await response.json();
-      setResults(data.results || []);
+      setResults(results || []);
     } catch (err) {
       console.error('Erreur lors de la recherche web:', err);
       setError(err.message || 'Une erreur est survenue lors de la recherche');

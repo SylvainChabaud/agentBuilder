@@ -115,6 +115,18 @@ export const useChatInterface = () => {
     });
   };
 
+  const onRestartFromMessage = ({ id: messageId }) => {
+    console.info('onRestartFromMessage', messageId);
+    // Filtrer les messages pour ne garder que ceux jusqu'au message sélectionné inclus
+    setMessages((prevMessages) => {
+      const messageIndex = prevMessages.findIndex(({ id }) => id === messageId);
+      if (messageIndex !== -1) {
+        return prevMessages.slice(0, messageIndex + 1);
+      }
+      return prevMessages;
+    });
+  };
+
   const onCreateExpert = async (data) => {
     const convertOutputs = (outputs) => {
       return outputs.reduce((acc, item) => {
@@ -177,6 +189,7 @@ export const useChatInterface = () => {
     handleSubmit,
     onSelectedModel,
     onDeleteMessage,
+    onRestartFromMessage,
     setInputMessage,
     onCreateExpert,
     onChangeExpertise,
