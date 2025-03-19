@@ -1,5 +1,4 @@
 import React from 'react';
-import Emails from 'src/app/components/gmail/emails';
 import Sheets from 'src/app/components/sheets';
 
 const SheetsPage = () => {

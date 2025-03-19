@@ -114,15 +114,15 @@ export function extractObject(inputText, inputObject) {
   const keysPosition = [];
 
   for (const key of keys) {
-    const regex = new RegExp('\\b' + escapeRegExp(key) + '\\b', 'gi'); // Match exact insensible à la casse
+    const regex = new RegExp('\\b' + escapeRegExp(key) + '\\b', 'gi');
     let match;
 
     while ((match = regex.exec(cleanedText)) !== null) {
       const keyStart = match.index;
       const keyEnd = keyStart + match[0].length;
-      const nextChars = cleanedText.slice(keyEnd, keyEnd + 5); // 5 caractères après la clé
+      const nextChars = cleanedText.slice(keyEnd, keyEnd + 5);
 
-      const colonIndex = nextChars.indexOf(':'); // Cherche ':' dans les 5 caractères
+      const colonIndex = nextChars.indexOf(':');
       if (colonIndex !== -1) {
         const colonPosition = keyEnd + colonIndex;
         keysPosition.push({ key, keyStart, colonPosition });
@@ -134,17 +134,56 @@ export function extractObject(inputText, inputObject) {
   keysPosition.sort((a, b) => a.keyStart - b.keyStart);
   console.info('extractObject 3', keysPosition);
 
-  // 4. Extraction des valeurs (précision avec colonPosition)
+  // 4. Extraction des valeurs (avec nettoyage intelligent selon le type de clé)
   const result = {};
   for (let i = 0; i < keysPosition.length; i++) {
     const currentKey = keysPosition[i];
     const nextKey = keysPosition[i + 1];
 
-    const valueStart = currentKey.colonPosition + 1; // Après le ':'
+    const valueStart = currentKey.colonPosition + 1;
     const valueEnd = nextKey ? nextKey.keyStart : cleanedText.length;
 
-    const rawValue = cleanedText.slice(valueStart, valueEnd);
-    const cleanValue = rawValue.trim().replace(/,\s*$/, '').trim();
+    let rawValue = cleanedText.slice(valueStart, valueEnd).trim();
+
+    // Vérification du type attendu
+    const expectedType = inputObject[currentKey.key];
+
+    let cleanValue;
+    console.info('extractObject 40', expectedType);
+    if (expectedType === 'string') {
+      console.info('extractObject 41', rawValue);
+      cleanValue = rawValue
+        .replace(/^"|"$/g, '') // Supprime les guillemets en début et fin
+        .replace(/",?\s*\}?$/, '') // Supprime une virgule, un espace ou une accolade finale après un string
+        .trim();
+    } else if (expectedType === 'array') {
+      try {
+        console.info('extractObject 41', rawValue);
+        rawValue = rawValue.replace(/^[^\[]*/, '').replace(/[^\]]*$/, ''); // Nettoie tout avant et après le tableau
+        console.info('extractObject 42', rawValue);
+        rawValue = rawValue.replace(/\\"/g, '"'); // Remplace \" par "
+        console.info('extractObject 43', rawValue);
+        cleanValue = JSON.parse(rawValue);
+        console.info('extractObject 44', cleanValue);
+        if (!Array.isArray(cleanValue)) {
+          throw new Error('Parsing error, not an array');
+          console.info('extractObject 45', cleanValue);
+        }
+        // Vérifie que chaque élément est bien une chaîne de caractères et nettoie
+        cleanValue = cleanValue.map((item) =>
+          String(item).trim().replace(/^"|"$/g, '')
+        );
+        console.info('extractObject 46', cleanValue);
+      } catch (e) {
+        console.warn(
+          `Failed to parse array for key ${currentKey.key}:`,
+          rawValue
+        );
+        cleanValue = [];
+      }
+    } else {
+      cleanValue = rawValue;
+    }
 
     result[currentKey.key] = cleanValue;
   }
