@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Sheets from 'src/app/components/sheets';
 

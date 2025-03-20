@@ -26,13 +26,12 @@
         "jira.js": "^4.1.0",
         "langchain": "^0.3.11",
         "msal": "^1.4.18",
-        "next": "15.1.5",
+        "next": "^15.2.3",
         "next-auth": "^4.24.11",
         "puppeteer": "^24.4.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "styled-components": "^6.1.14",
-        "zustand": "^5.0.3"
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "styled-components": "^6.1.14"
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.26.5",

@@ -40,7 +40,7 @@ export const NodeParametersPanel = styled.div`
   background-color: white;
   position: absolute;
   left: 10px;
-  top: 10px;
+  /* top: 20px; */
   z-index: 4;
   font-size: 12px;
   display: flex;

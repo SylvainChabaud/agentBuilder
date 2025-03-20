@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   INITIAL_COLOR,
   INITIAL_EDGES_POSITION,
@@ -18,6 +18,8 @@ const useAgentBuilder = ({
   addEdge,
   setExpertisesList,
   setWorkflowsList,
+  setIsWorkflowOpen,
+  setIsTerminalOpen,
 }) => {
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [nodeName, setNodeName] = useState('');
@@ -27,6 +29,8 @@ const useAgentBuilder = ({
   const [nodeFile, setNodeFile] = useState({});
   const [nodeSheet, setNodeSheet] = useState([]);
   const [selectedWorkflowName, setSelectedWorkflowName] = useState('');
+
+  const lastSelectionRef = useRef(null);
 
   useEffect(() => {
     const fetchExpertises = async () => {
@@ -89,29 +93,95 @@ const useAgentBuilder = ({
   const onSelectionChange = ({ nodes, edges }) => {
     const [node] = nodes;
 
-    console.info('onSelectionChange', node);
+    console.info('onSelectionChange test', node);
 
-    if (!node) return; // ✅ Évite de mettre à jour un état null
+    if (!node) {
+      // setSelectedNodeId('');
+      // setIsWorkflowOpen(false);
+      // setIsTerminalOpen(false);
+      // return;
+    } // ✅ Évite de mettre à jour un état null
 
-    setSelectedNodeId((prev) => (prev !== node.id ? node.id : prev));
-    setNodeName((prev) => (prev !== node.data.name ? node.data.name : prev));
-    setNodeBg((prev) =>
-      prev !== node.style.backgroundColor ? node.style.backgroundColor : prev
-    );
-    setNodeApp((prev) => (prev !== node.data.app ? node.data.app : prev));
-    setNodeExpertise((prev) =>
-      prev !== node.data.expertise ? node.data.expertise : prev
-    );
-    setNodeSheet((prev) => (prev !== node.data.sheet ? node.data.sheet : prev));
-    setNodeFile((prev) =>
-      prev.id !== node.data.fileId
-        ? {
-            id: node.data.fileId,
-            name: node.data.fileName,
-            sheetNames: [node.data.sheet],
-          }
-        : prev
-    );
+    const newSelection = {
+      id: node?.id || '',
+      name: node?.data?.name || '',
+      app: node?.data?.app || '',
+      expertise: node?.data?.expertise || '',
+      fileId: node?.data?.fileId || '',
+      fileName: node?.data?.fileName || '',
+      sheet: node?.data?.sheet || '',
+      backgroundColor: node?.style?.backgroundColor || '',
+    };
+
+    // Vérifier si la nouvelle sélection est identique à la précédente
+    if (
+      JSON.stringify(newSelection) === JSON.stringify(lastSelectionRef.current)
+    ) {
+      console.info(
+        "⏭️ Aucun changement dans la sélection, on ignore l'update."
+      );
+      return; // Sortir de la fonction si les données sont les mêmes
+    }
+
+    // Mise à jour des valeurs
+    lastSelectionRef.current = newSelection; // Stocker la nouvelle sélection pour le prochain rendu
+    setSelectedNodeId(newSelection.id);
+    setNodeName(newSelection.name);
+    setNodeBg(newSelection.backgroundColor);
+    setNodeApp(newSelection.app);
+    setNodeExpertise(newSelection.expertise);
+    setNodeSheet(newSelection.sheet);
+    setNodeFile({
+      id: newSelection.fileId,
+      name: newSelection.fileName,
+      sheetNames: [newSelection.sheet],
+    });
+
+    // setSelectedNodeId((prev) => (prev !== node.id ? node.id : prev));
+    // setNodeName((prev) => (prev !== node.data.name ? node.data.name : prev));
+    // setNodeBg((prev) =>
+    //   prev !== node.style.backgroundColor ? node.style.backgroundColor : prev
+    // );
+    // setNodeApp((prev) => (prev !== node.data.app ? node.data.app : prev));
+    // setNodeExpertise((prev) =>
+    //   prev !== node.data.expertise ? node.data.expertise : prev
+    // );
+    // setNodeSheet((prev) => (prev !== node.data.sheet ? node.data.sheet : prev));
+    // setNodeFile((prev) =>
+    //   prev.id !== node.data.fileId
+    //     ? {
+    //         id: node.data.fileId,
+    //         name: node.data.fileName,
+    //         sheetNames: [node.data.sheet],
+    //       }
+    //     : prev
+    // );
+
+    // const {
+    //   id,
+    //   data: {
+    //     name = '',
+    //     app = '',
+    //     expertise = '',
+    //     fileId = '',
+    //     fileName = '',
+    //     sheet,
+    //     label = '',
+    //   },
+    //   style: { backgroundColor },
+    // } = node || INITIAL_NODE;
+
+    // setSelectedNodeId(id);
+    // setNodeName(name);
+    // setNodeBg(backgroundColor);
+    // setNodeApp(app);
+    // setNodeExpertise(expertise);
+    // setNodeSheet(sheet);
+    // setNodeFile({
+    //   id: fileId,
+    //   name: fileName,
+    //   sheetNames: [sheet],
+    // });
   };
 
   const onChangeNodeParams = ({ type, value, file }) => {
@@ -382,6 +452,8 @@ const useAgentBuilder = ({
     console.info('value', value);
     setSelectedWorkflowName(value);
   };
+
+  console.info('selectedNodeId', selectedNodeId);
 
   return {
     onWorkflowName,

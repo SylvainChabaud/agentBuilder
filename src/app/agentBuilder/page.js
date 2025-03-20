@@ -74,6 +74,8 @@ const AgentBuilder = () => {
     addEdge,
     setExpertisesList,
     setWorkflowsList,
+    setIsWorkflowOpen,
+    setIsTerminalOpen,
   });
 
   const {

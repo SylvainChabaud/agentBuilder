@@ -51,30 +51,6 @@ export function advancedTextParser(input) {
 
   console.info('sanitized', sanitized);
 
-  /**
-   * 2. Expression régulière pour extraire les paires "clé : valeur"
-   *
-   * - ([\p{L}\p{M}\p{Nd}\p{Pc}'"\-]+) :
-   *   -> capture la clé, composée de :
-   *      - \p{L}\p{M} : lettres et marques d'accent (UNICODE),
-   *      - \p{Nd}     : chiffres décimaux,
-   *      - \p{Pc}     : caractères de ponctuation “de connexion” (ex: underscore),
-   *      - guillemets/apostrophes/traits d’union,
-   *   -> ce groupe doit être en mode "global" (u) pour la gestion UNICODE.
-   *
-   * - \s*:\s* :
-   *   -> match le caractère ':' entouré éventuellement d'espaces
-   *
-   * - ([^,\n]+) :
-   *   -> capture la valeur jusqu'à une virgule, un saut de ligne ou la fin (si rien ne coupe)
-   *   -> on utilise ici [^,\n] pour ne pas dépasser la fin de la "valeur"
-   *   -> si vous avez d’autres séparateurs à gérer (ex: point-virgule), on peut ajuster.
-   *
-   * - /gi ou /giu :
-   *   -> "g" pour global (trouver plusieurs occurrences),
-   *   -> "i" si on veut ignorer la casse sur la clé (optionnel),
-   *   -> "u" pour activer pleinement le support UNICODE.
-   */
   const pattern = /([\p{L}\p{M}\p{Nd}\p{Pc}'"\-]+)\s*:\s*([^,\n]+)/giu;
 
   const result = {};

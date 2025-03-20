@@ -7,7 +7,7 @@ import {
   StyledInput,
   StyledSelect,
 } from './styles';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { handleGmailLoginClient } from 'src/app/components/gmail/oAuth/handleGmailLoginClient';
 import { handleFetchSheets } from 'lib/services/sheets/getFiles';
 
@@ -52,33 +52,37 @@ const NodeParameters = ({
   const shouldDisplaysSheetsFiles =
     nodeApp === APPS_LABELS.SHEET && nodeExpertise === 'sheets';
 
-  const currentExpertiseList = expertisesList.filter((expertise) => {
-    console.info('nodeApp', expertise);
+  const currentExpertiseList = useMemo(() => {
+    console.info('🔄 Recalcul de currentExpertiseList');
 
-    if (nodeApp === APPS_LIST[4].id) {
-      return expertise?.id === 'sheets';
-    } else if (nodeApp === APPS_LIST[0].id) {
-      return (
-        expertise?.id === 'gmailEmails' ||
-        expertise?.id === 'sendEmail' ||
-        expertise?.id === 'webSearch'
-      );
-    } else if (nodeApp === APPS_LIST[5].id) {
-      return expertise?.id === 'displayEmails';
-    } else if (nodeApp === APPS_LIST[3].id) {
-      return false;
-    } else if (nodeApp === APPS_LIST[1].id) {
-      return false;
-    } else if (nodeApp === APPS_LIST[2].id) {
-      return (
-        expertise?.id !== 'gmailEmails' &&
-        expertise?.id !== 'sendEmail' &&
-        expertise?.id !== 'sheets' &&
-        expertise?.id !== 'displayEmails' &&
-        expertise?.id !== 'webSearch'
-      );
-    } else return false;
-  });
+    return expertisesList.filter((expertise) => {
+      if (nodeApp === APPS_LIST[4].id) {
+        return expertise?.id === 'sheets';
+      } else if (nodeApp === APPS_LIST[0].id) {
+        return (
+          expertise?.id === 'gmailEmails' ||
+          expertise?.id === 'sendEmail' ||
+          expertise?.id === 'webSearch'
+        );
+      } else if (nodeApp === APPS_LIST[5].id) {
+        return expertise?.id === 'displayEmails';
+      } else if (nodeApp === APPS_LIST[3].id) {
+        return false;
+      } else if (nodeApp === APPS_LIST[1].id) {
+        return false;
+      } else if (nodeApp === APPS_LIST[2].id) {
+        return (
+          expertise?.id !== 'gmailEmails' &&
+          expertise?.id !== 'sendEmail' &&
+          expertise?.id !== 'sheets' &&
+          expertise?.id !== 'displayEmails' &&
+          expertise?.id !== 'webSearch'
+        );
+      } else {
+        return false;
+      }
+    });
+  }, [expertisesList, nodeApp]);
 
   console.info('currentFiles 1', { nodeSheet, nodeFile, files });
 
