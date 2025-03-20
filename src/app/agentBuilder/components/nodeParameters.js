@@ -68,7 +68,7 @@ const NodeParameters = ({
           expertise?.id === 'webSearch'
         );
       } else if (nodeApp === APPS_LIST[5].id) {
-        return expertise?.id === 'displayEmails';
+        return expertise?.id === 'displaysRanking';
       } else if (nodeApp === APPS_LIST[3].id) {
         return false;
       } else if (nodeApp === APPS_LIST[1].id) {
@@ -78,7 +78,7 @@ const NodeParameters = ({
           expertise?.id !== 'gmailEmails' &&
           expertise?.id !== 'sendEmail' &&
           expertise?.id !== 'sheets' &&
-          expertise?.id !== 'displayEmails' &&
+          expertise?.id !== 'displaysRanking' &&
           expertise?.id !== 'webSearch'
         );
       } else {

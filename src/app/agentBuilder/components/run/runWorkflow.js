@@ -133,9 +133,9 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
 
     console.info('DISPLAYS', { currentExpertise, inputs, component });
 
-    if (currentExpertise === 'displayEmails') {
-      console.info('displayEmails', modelMessage);
-      onRedirect({ path: '/displays/emails', data: modelMessage });
+    if (currentExpertise === 'displaysRanking') {
+      console.info('displaysRanking', modelMessage);
+      onRedirect({ path: '/displays/ranking', data: modelMessage });
     }
     // return input;
   } else {

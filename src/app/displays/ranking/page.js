@@ -2,34 +2,33 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 
-const mockEmails = [
+const mockResumes = [
   {
     type: 'PUB',
-    emails: [
-      { summary: 'Promo -50% chez Amazon' },
-      { summary: 'Offre spéciale abonnement à Netflix' },
-      { summary: 'Remise exceptionnelle sur les smartphones' },
+    resumes: [
+      { resume: 'Promo -50% chez Amazon' },
+      { resume: 'Offre spéciale abonnement à Netflix' },
+      { resume: 'Remise exceptionnelle sur les smartphones' },
     ],
   },
   {
     type: 'PRO',
-    emails: [
-      { summary: "Réunion d'équipe lundi à 10h" },
-      { summary: 'Compte-rendu de la dernière réunion' },
+    resumes: [
+      { resume: "Réunion d'équipe lundi à 10h" },
+      { resume: 'Compte-rendu de la dernière réunion' },
     ],
   },
   {
     type: 'PERSO',
-    emails: [
-      { summary: "Invitation à l'anniversaire de Sophie" },
-      { summary: 'Photos du dernier voyage en Italie' },
+    resumes: [
+      { resume: "Invitation à l'anniversaire de Sophie" },
+      { resume: 'Photos du dernier voyage en Italie' },
     ],
   },
   {
     type: 'RESEAU',
-    emails: [{ summary: 'Nouvelle connexion sur LinkedIn' }],
+    resumes: [{ resume: 'Nouvelle connexion sur LinkedIn' }],
   },
 ];
 
@@ -75,16 +74,13 @@ const generateNonOverlappingPositions = (
   return positions;
 };
 
-export default function EmailsDisplay() {
-  // const stored = sessionStorage.getItem('emailsVision');
-  // const jsonEmailsData = JSON.parse(stored);
-
-  const [emailData, setEmailData] = useState(null);
+export default function RankingDisplay() {
+  const [rankingData, setRankingData] = useState(null);
   const [positions, setPositions] = useState([]);
   const containerRef = useRef(null);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
-  console.info('EmailsDisplay 1', emailData);
+  console.info('RankingDisplay 1', rankingData);
 
   useEffect(() => {
     const updatePositions = () => {
@@ -92,41 +88,41 @@ export default function EmailsDisplay() {
         const { width, height } = containerRef.current.getBoundingClientRect();
         setContainerSize({ width, height });
         setPositions(
-          generateNonOverlappingPositions(emailData?.length, width, height)
+          generateNonOverlappingPositions(rankingData?.length, width, height)
         );
       }
     };
 
     updatePositions();
 
-    if (typeof window !== 'undefined' && emailData === null) {
-      const stored = sessionStorage.getItem('emailsVision');
-      const jsonEmailsData = stored ? JSON.parse(stored) : [];
-      console.info('EmailsDisplay', jsonEmailsData);
-      setEmailData(jsonEmailsData);
+    if (typeof window !== 'undefined' && rankingData === null) {
+      const stored = sessionStorage.getItem('RankingVision');
+      const jsonResumesData = stored ? JSON.parse(stored) : [];
+      console.info('RankingDisplay', jsonResumesData);
+      setRankingData(jsonResumesData);
     }
 
     window.addEventListener('resize', updatePositions);
     return () => {
       window.removeEventListener('resize', updatePositions);
-      sessionStorage.removeItem('emailsData');
+      sessionStorage.removeItem('RankingVision');
     };
-  }, [emailData?.length]);
+  }, [rankingData?.length]);
 
-  const removeEmail = (type, index) => {
-    setEmailData((prev) =>
+  const removeItem = (type, index) => {
+    setRankingData((prev) =>
       prev
         .map((group) =>
           group.type === type
-            ? { ...group, emails: group.emails.filter((_, i) => i !== index) }
+            ? { ...group, resumes: group.resumes.filter((_, i) => i !== index) }
             : group
         )
-        .filter((group) => group.emails.length > 0)
+        .filter((group) => group.resumes.length > 0)
     );
   };
 
   const removeGroup = (type) => {
-    setEmailData((prev) => prev.filter((group) => group.type !== type));
+    setRankingData((prev) => prev.filter((group) => group.type !== type));
   };
 
   return (
@@ -146,7 +142,7 @@ export default function EmailsDisplay() {
     >
       Vision
       <AnimatePresence>
-        {emailData?.map((group, index) => {
+        {rankingData?.map((group, index) => {
           const pos = positions[index];
           if (!pos) return null;
 
@@ -228,7 +224,7 @@ export default function EmailsDisplay() {
                 }}
               >
                 <AnimatePresence>
-                  {group.emails.map((email, idx) => (
+                  {group.resumes.map((item, idx) => (
                     <motion.div
                       key={idx}
                       initial={{ opacity: 0, y: 10 }}
@@ -258,10 +254,10 @@ export default function EmailsDisplay() {
                           paddingRight: '10px',
                         }}
                       >
-                        {email.resume}
+                        {item.resume}
                       </span>
                       <motion.button
-                        onClick={() => removeEmail(group.type, idx)}
+                        onClick={() => removeItem(group.type, idx)}
                         whileHover={{ scale: 1.2, rotate: 10 }}
                         whileTap={{ scale: 0.8 }}
                         style={{

@@ -9,7 +9,7 @@ import {
   RESUME_EXPERTISE,
   WEB_SEARCH_EXPERTISE,
 } from 'data/constants';
-import EmailsDisplay from '../displays/emails/page';
+import RankingDisplay from '../displays/ranking/page';
 
 export const INITIAL_COLOR = '#dbdbdb';
 
@@ -116,11 +116,11 @@ export const EXPERTISES_LIST = [
     // outputs: GOOGLE_SHEETS_EXPERTISE.OUTPUT_SCHEMA,
   },
   {
-    id: 'displayEmails',
-    name: 'Affiche les emails',
+    id: 'displaysRanking',
+    name: 'Ranking display',
     inputs: RESUME_EXPERTISE.OUTPUT_SCHEMA,
     outputs: RESUME_EXPERTISE.OUTPUT_SCHEMA,
-    component: EmailsDisplay,
+    component: RankingDisplay,
     context: [
       {
         role: 'user',

@@ -137,23 +137,16 @@ Générateur d'emails professionnels structurés à partir de données brutes
 JSON strict avec :  
 {  
   subject: 'string',  
-  body: 'string' // Format HTML valide sans Markdown  
+  body: 'string'
 }  
-
-**À ne pas faire**  
-❌ Texte non formaté dans le body  
-❌ Style informel (emojis, argot)  
-❌ Clés supplémentaires  
-❌ Balises HTML complexes  
 
 **Prompt**  
 "Convertis les données d'entrée en email professionnel avec :  
 1. Sujet concis (<60 caractères) incluant l'urgence/objectif principal  
-2. Corps en HTML responsive contenant :  
+2. Corps contenant :  
    - Salutation personnalisée  
    - Structure claire : contexte → action requise → deadline  
-   - Mise en forme minimaliste (bold/color via inline CSS)  
-3. Utilisation des données via placeholders {{NOM_VARIABLE}}  
+   - Mise en forme minimaliste
 4. Optimisation pour clients email (table layout)  
 
 Exemple d'entrée :  
@@ -167,16 +160,16 @@ Exemple d'entrée :
 Sortie attendue :  
 {  
   "subject": "URGENT - Paiement en attente (réf. {{nom_client}})",  
-  "body": "<table style='width:100%; font-family: Arial;'><tr><td style='padding: 20px;'><h1 style='color: #2d3748; font-size: 18px;'>Bonjour {{nom_client}},</h1><p style='line-height: 1.5;'>Votre règlement de <strong style='color: #2b6cb0;'>450€</strong> est en retard.<br>Merci de régulariser avant le <span style='background-color: #fff7ed; padding: 4px;'>15/03/2024</span>.</p><a href='{{lien_paiement}}' style='display: inline-block; margin-top: 15px; padding: 12px 25px; background-color: #2b6cb0; color: white; text-decoration: none; border-radius: 4px;'>Payer maintenant</a></td></tr></table>"  
+  "body": "Nous vous rappelons que votre paaiement est troujours en attente.
+    Veuillez fair ele nécessaire avant le 15/03/2024" !
+     Cordialement,
+     L'équipe de Chabaud Sylvain
 }"  
 
 **Règles strictes**  
 - UNIQUEMENT le JSON final  
-- Body en HTML valide avec styles inline  
-- Guillemets doubles obligatoires  
-- Placeholders cohérents avec l'entrée  
 - Aucune mention "cid:" ou images externes  
-- Pas de commentaires/notes  `;
+- Pas de commentaires/notes`;
 
 export const CONVERT_DISPLAYS_INPUTS_CONTEXT =
-  "Tu expert en résumé et classement de donnée. Tu sais détecter et si la donnée en entrée est de type PUB, PERSO, PRO ou SOCIAL NETWORK. Et tu es capable de résumer cette donnée en une phrase. Le type de donnée en entrée est au format json. Et la sortie que tu vas produire est aussi format json. exemple de sortie { 'type': 'PUB', 'resume': 'string' }.";
+  'Tu expert en résumé et classement de donnée. Tu sais détecter et si la donnée en entrée est de type PUB, PERSO, PRO ou SOCIAL NETWORK. Et tu es capable de résumer cette donnée en une phrase. Le type de donnée en entrée est au format json. Et la sortie que tu vas produire est aussi format json. exemple de sortie { "type": "PUB", "resume": "string" }.';

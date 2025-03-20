@@ -21,7 +21,7 @@ import DisplayResults from './components/displayResults';
 
 import './blink.css';
 import WorkflowsList from './components/workflowsList';
-import { convertEmails } from './utils';
+import { convertDataToDisplays } from './utils';
 
 const AgentBuilder = () => {
   const router = useRouter();
@@ -43,10 +43,10 @@ const AgentBuilder = () => {
   const onRedirect = ({ path, data = [] }) => {
     console.info('onRedirect', { path, data });
 
-    const emailsVision = convertEmails(data);
-    console.info('formattedData 22 ', emailsVision);
+    const visionData = convertDataToDisplays(data);
+    console.info('formattedData 22 ', visionData);
 
-    sessionStorage.setItem('emailsVision', JSON.stringify(emailsVision));
+    sessionStorage.setItem('RankingVision', JSON.stringify(visionData));
     path && router.push(path);
   };
 

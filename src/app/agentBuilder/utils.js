@@ -1,4 +1,4 @@
-export function convertEmails(data) {
+export function convertDataToDisplays(data) {
   const groups = {};
 
   data.forEach((item) => {
@@ -11,5 +11,5 @@ export function convertEmails(data) {
   });
 
   // Convertir l'objet de regroupement en tableau d'objets
-  return Object.entries(groups).map(([type, emails]) => ({ type, emails }));
+  return Object.entries(groups).map(([type, resumes]) => ({ type, resumes }));
 }
