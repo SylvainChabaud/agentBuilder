@@ -9,7 +9,7 @@ import {
   useNodesState,
   useEdgesState,
   addEdge,
-} from 'react-flow-renderer';
+} from '@xyflow/react';
 import useAgentBuilder from './hooks/useAgentBuilder';
 import { StyledReactFlow } from './styles';
 

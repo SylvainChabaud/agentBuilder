@@ -29,18 +29,18 @@ const useAgentBuilder = ({
   const [selectedWorkflowName, setSelectedWorkflowName] = useState('');
 
   useEffect(() => {
-    console.info('useEffect', nodeApp);
     const fetchExpertises = async () => {
       const expertises = await getExpertises();
       console.info('fetchExpertise', expertises);
 
-      setExpertisesList((prev) => [...prev, ...expertises]);
+      setExpertisesList((prev) => (prev.length === 0 ? [...expertises] : prev)); // ✅ Ne met à jour que si l'état est vide
     };
 
     const fetchWorkflows = async () => {
       const workflows = await getWorkflows();
       console.info('getWorkflows', workflows);
-      workflows && setWorkflowsList((prev) => [...prev, ...workflows]);
+
+      setWorkflowsList((prev) => (prev.length === 0 ? [...workflows] : prev)); // ✅ Évite la boucle infinie
     };
 
     fetchExpertises();
@@ -91,31 +91,27 @@ const useAgentBuilder = ({
 
     console.info('onSelectionChange', node);
 
-    const {
-      id,
-      data: {
-        name = '',
-        app = '',
-        expertise = '',
-        fileId = '',
-        fileName = '',
-        sheet,
-        label = '',
-      },
-      style: { backgroundColor },
-    } = node || INITIAL_NODE;
+    if (!node) return; // ✅ Évite de mettre à jour un état null
 
-    setSelectedNodeId(id);
-    setNodeName(name);
-    setNodeBg(backgroundColor);
-    setNodeApp(app);
-    setNodeExpertise(expertise);
-    setNodeSheet(sheet);
-    setNodeFile({
-      id: fileId,
-      name: fileName,
-      sheetNames: [sheet],
-    });
+    setSelectedNodeId((prev) => (prev !== node.id ? node.id : prev));
+    setNodeName((prev) => (prev !== node.data.name ? node.data.name : prev));
+    setNodeBg((prev) =>
+      prev !== node.style.backgroundColor ? node.style.backgroundColor : prev
+    );
+    setNodeApp((prev) => (prev !== node.data.app ? node.data.app : prev));
+    setNodeExpertise((prev) =>
+      prev !== node.data.expertise ? node.data.expertise : prev
+    );
+    setNodeSheet((prev) => (prev !== node.data.sheet ? node.data.sheet : prev));
+    setNodeFile((prev) =>
+      prev.id !== node.data.fileId
+        ? {
+            id: node.data.fileId,
+            name: node.data.fileName,
+            sheetNames: [node.data.sheet],
+          }
+        : prev
+    );
   };
 
   const onChangeNodeParams = ({ type, value, file }) => {
@@ -365,54 +361,21 @@ const useAgentBuilder = ({
   );
 
   const onSelectWorkflow = (workflow) => {
-    console.info('onSelectWorkflow', {
-      nodes: workflow.data?.nodes,
-      edges: workflow.data?.edges,
-      workflow,
-      INITIAL_NODES,
-    });
+    console.info('onSelectWorkflow', workflow);
 
     const selectedNodes = workflow.data?.nodes;
     const selectedEdges = workflow.data?.edges;
 
-    // setWorkflowId(workflow.id);
-    onWorkflowName(workflow.name);
-    setNodes(() => {
-      return selectedNodes.map((node) => {
-        const {
-          data: { app, expertise, name, fileName, fileId, sheet },
-        } = node;
-
-        console.info('onSelectWorkflow', node);
-
-        return {
-          ...node,
-          data: {
-            label: (
-              <NodeLabel
-                name={name}
-                app={app}
-                expertise={expertise}
-                fileName={fileName}
-              />
-            ),
-            app,
-            expertise,
-            name,
-            fileName,
-            fileId,
-            sheet,
-          },
-        };
-      });
-    });
-
-    // onSelectionChange({ nodes });
-
-    // setNodes(INITIAL_NODES);
-    setEdges(selectedEdges);
-
-    // onChangeNodeParams({ type: NODE_PARAMS.NAME, value: '' })
+    setNodes((prevNodes) =>
+      JSON.stringify(prevNodes) !== JSON.stringify(selectedNodes)
+        ? selectedNodes
+        : prevNodes
+    );
+    setEdges((prevEdges) =>
+      JSON.stringify(prevEdges) !== JSON.stringify(selectedEdges)
+        ? selectedEdges
+        : prevEdges
+    );
   };
 
   const onWorkflowName = (value) => {

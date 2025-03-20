@@ -1,5 +1,5 @@
 import React from 'react';
-import { Handle, Position } from 'react-flow-renderer';
+import { Handle, Position } from '@xyflow/react';
 
 /**
  * Node "Display" : Reçoit la classification (2 catégories),

@@ -1,4 +1,3 @@
-import { Position } from 'react-flow-renderer';
 import { CONVERT_GMAIL_INPUTS_CONTEXT } from './components/run/prompts';
 import { MODELS } from '../chatInterface/constants';
 import {
@@ -36,8 +35,8 @@ export const INITIAL_EDGES = [
 ];
 
 export const INITIAL_EDGES_POSITION = {
-  sourcePosition: Position.Right,
-  targetPosition: Position.Left,
+  sourcePosition: 'right',
+  targetPosition: 'left',
 };
 
 export const INITIAL_NODES = [

@@ -1,7 +1,9 @@
-// next.config.mjs
 const nextConfig = {
+  experimental: {
+    appDir: true, // Active l'App Router
+  },
   compiler: {
-    styledComponents: true, // Active le support natif pour styled-components
+    styledComponents: true, // Active styled-components
   },
 };
 

@@ -25,7 +25,7 @@ export default function SamosaRecipes() {
           color: '#333',
         }}
       >
-        Recettes Originales de Samoussas
+        Recettes Originales
       </h1>
 
       <button

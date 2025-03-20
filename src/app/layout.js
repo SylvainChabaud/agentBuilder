@@ -7,6 +7,9 @@ import { LayoutWrapper, Main, Footer } from './styles/layout';
 import HeaderWrapper from './components/header';
 import FooterWrapper from './components/footer';
 
+// default styling
+import '@xyflow/react/dist/style.css';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],

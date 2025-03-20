@@ -59,8 +59,8 @@ export const useRecipes = () => {
           Math.floor(Math.random() * randomCountrySites.length)
         ];
 
-      // const searchQuery = `${randomTerm} savory cake recipes ${randomSite}`;
-      const searchQuery = `beef recipes`;
+      const searchQuery = `${randomTerm} samossa recipes ${randomSite}`;
+      // const searchQuery = `beef recipes`;
 
       console.info('randomTerm', searchQuery);
 
