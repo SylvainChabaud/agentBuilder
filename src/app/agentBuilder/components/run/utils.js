@@ -150,13 +150,7 @@ export function extractObject(inputText, inputObject) {
 
     let cleanValue;
     console.info('extractObject 40', expectedType);
-    if (expectedType === 'string') {
-      console.info('extractObject 41', rawValue);
-      cleanValue = rawValue
-        .replace(/^"|"$/g, '') // Supprime les guillemets en début et fin
-        .replace(/",?\s*\}?$/, '') // Supprime une virgule, un espace ou une accolade finale après un string
-        .trim();
-    } else if (expectedType === 'array') {
+    if (expectedType === 'array') {
       try {
         console.info('extractObject 41', rawValue);
         rawValue = rawValue.replace(/^[^\[]*/, '').replace(/[^\]]*$/, ''); // Nettoie tout avant et après le tableau
@@ -182,7 +176,11 @@ export function extractObject(inputText, inputObject) {
         cleanValue = [];
       }
     } else {
-      cleanValue = rawValue;
+      console.info('extractObject 41', rawValue);
+      cleanValue = rawValue
+        .replace(/^"|"$/g, '') // Supprime les guillemets en début et fin
+        .replace(/",?\s*\}?$/, '') // Supprime une virgule, un espace ou une accolade finale après un string
+        .trim();
     }
 
     result[currentKey.key] = cleanValue;

@@ -120,6 +120,12 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
   } else if (node.app === APPS_LABELS.DISPLAYS) {
     console.info('DISPLAYS', { node, input, expertisesList });
 
+    const modelMessage = await sendModelMessage({
+      input,
+      node,
+      expertisesList,
+    });
+
     const currentExpertise = node.expertise;
     const { inputs = {}, component = <></> } = expertisesList.find(
       ({ id }) => id === currentExpertise
@@ -128,8 +134,8 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
     console.info('DISPLAYS', { currentExpertise, inputs, component });
 
     if (currentExpertise === 'displayEmails') {
-      console.info('displayEmails');
-      onRedirect({ path: '/displays/emails', data: input });
+      console.info('displayEmails', modelMessage);
+      onRedirect({ path: '/displays/emails', data: modelMessage });
     }
     // return input;
   } else {

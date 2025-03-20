@@ -1,4 +1,7 @@
-import { CONVERT_GMAIL_INPUTS_CONTEXT } from './components/run/prompts';
+import {
+  CONVERT_DISPLAYS_INPUTS_CONTEXT,
+  CONVERT_GMAIL_INPUTS_CONTEXT,
+} from './components/run/prompts';
 import { MODELS } from '../chatInterface/constants';
 import {
   GMAIL_EMAILS_EXPERTISE,
@@ -98,12 +101,14 @@ export const EXPERTISES_LIST = [
     name: 'Envoyer un email',
     inputs: GMAIL_EMAILS_EXPERTISE.OUTPUT_SCHEMA,
     // outputs: GMAIL_SEND_EMAIL_EXPERTISE.OUTPUT_SCHEMA,
-    outputs: { to: 'string', subject: 'string', body: 'string' },
-    context: {
-      role: 'user',
-      content: CONVERT_GMAIL_INPUTS_CONTEXT,
-    },
-    model: MODELS[12].id,
+    outputs: GMAIL_SEND_EMAIL_EXPERTISE.OUTPUT_SCHEMA,
+    context: [
+      {
+        role: 'user',
+        content: CONVERT_GMAIL_INPUTS_CONTEXT,
+      },
+    ],
+    model: MODELS[10].id,
   },
   {
     id: 'sheets',
@@ -114,7 +119,15 @@ export const EXPERTISES_LIST = [
     id: 'displayEmails',
     name: 'Affiche les emails',
     inputs: RESUME_EXPERTISE.OUTPUT_SCHEMA,
+    outputs: RESUME_EXPERTISE.OUTPUT_SCHEMA,
     component: EmailsDisplay,
+    context: [
+      {
+        role: 'user',
+        content: CONVERT_DISPLAYS_INPUTS_CONTEXT,
+      },
+    ],
+    model: MODELS[10].id,
   },
   {
     id: 'webSearch',

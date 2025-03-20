@@ -177,3 +177,6 @@ Sortie attendue :
 - Placeholders cohérents avec l'entrée  
 - Aucune mention "cid:" ou images externes  
 - Pas de commentaires/notes  `;
+
+export const CONVERT_DISPLAYS_INPUTS_CONTEXT =
+  "Tu expert en résumé et classement de donnée. Tu sais détecter et si la donnée en entrée est de type PUB, PERSO, PRO ou SOCIAL NETWORK. Et tu es capable de résumer cette donnée en une phrase. Le type de donnée en entrée est au format json. Et la sortie que tu vas produire est aussi format json. exemple de sortie { 'type': 'PUB', 'resume': 'string' }.";

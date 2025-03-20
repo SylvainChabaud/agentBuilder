@@ -43,10 +43,7 @@ const AgentBuilder = () => {
   const onRedirect = ({ path, data = [] }) => {
     console.info('onRedirect', { path, data });
 
-    const formattedData = data[0].data;
-    console.info('formattedData 11', formattedData);
-
-    const emailsVision = convertEmails(formattedData);
+    const emailsVision = convertEmails(data);
     console.info('formattedData 22 ', emailsVision);
 
     sessionStorage.setItem('emailsVision', JSON.stringify(emailsVision));

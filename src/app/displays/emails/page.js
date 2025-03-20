@@ -144,7 +144,7 @@ export default function EmailsDisplay() {
         padding: 10,
       }}
     >
-      Emails Vision
+      Vision
       <AnimatePresence>
         {emailData?.map((group, index) => {
           const pos = positions[index];
