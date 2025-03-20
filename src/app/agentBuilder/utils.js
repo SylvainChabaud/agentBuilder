@@ -3,11 +3,11 @@ export function convertEmails(data) {
 
   data.forEach((item) => {
     const type = item.type; // 'PRO' ou 'PERSO'
-    const summary = item.summary;
+    const resume = item.resume;
     if (!groups[type]) {
       groups[type] = [];
     }
-    groups[type].push({ summary });
+    groups[type].push({ resume });
   });
 
   // Convertir l'objet de regroupement en tableau d'objets

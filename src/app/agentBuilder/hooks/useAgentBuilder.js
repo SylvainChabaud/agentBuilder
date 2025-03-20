@@ -37,7 +37,7 @@ const useAgentBuilder = ({
       const expertises = await getExpertises();
       console.info('fetchExpertise', expertises);
 
-      setExpertisesList((prev) => (prev.length === 0 ? [...expertises] : prev)); // ✅ Ne met à jour que si l'état est vide
+      setExpertisesList((prev) => [...prev, ...expertises]);
     };
 
     const fetchWorkflows = async () => {
@@ -433,19 +433,60 @@ const useAgentBuilder = ({
   const onSelectWorkflow = (workflow) => {
     console.info('onSelectWorkflow', workflow);
 
+    // setWorkflowId(workflow.id);
+    onWorkflowName(workflow.name);
+
     const selectedNodes = workflow.data?.nodes;
     const selectedEdges = workflow.data?.edges;
 
-    setNodes((prevNodes) =>
-      JSON.stringify(prevNodes) !== JSON.stringify(selectedNodes)
-        ? selectedNodes
-        : prevNodes
-    );
-    setEdges((prevEdges) =>
-      JSON.stringify(prevEdges) !== JSON.stringify(selectedEdges)
-        ? selectedEdges
-        : prevEdges
-    );
+    setNodes(() => {
+      return selectedNodes.map((node) => {
+        const {
+          data: { app, expertise, name, fileName, fileId, sheet },
+        } = node;
+
+        console.info('onSelectWorkflow', node);
+
+        return {
+          ...node,
+          data: {
+            label: (
+              <NodeLabel
+                name={name}
+                app={app}
+                expertise={expertise}
+                fileName={fileName}
+              />
+            ),
+            app,
+            expertise,
+            name,
+            fileName,
+            fileId,
+            sheet,
+          },
+        };
+      });
+    });
+
+    // onSelectionChange({ nodes });
+
+    // setNodes(INITIAL_NODES);
+    setEdges(selectedEdges);
+
+    // const selectedNodes = workflow.data?.nodes;
+    // const selectedEdges = workflow.data?.edges;
+
+    // setNodes((prevNodes) =>
+    //   JSON.stringify(prevNodes) !== JSON.stringify(selectedNodes)
+    //     ? selectedNodes
+    //     : prevNodes
+    // );
+    // setEdges((prevEdges) =>
+    //   JSON.stringify(prevEdges) !== JSON.stringify(selectedEdges)
+    //     ? selectedEdges
+    //     : prevEdges
+    // );
   };
 
   const onWorkflowName = (value) => {

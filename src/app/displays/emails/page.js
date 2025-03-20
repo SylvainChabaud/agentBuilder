@@ -258,7 +258,7 @@ export default function EmailsDisplay() {
                           paddingRight: '10px',
                         }}
                       >
-                        {email.summary}
+                        {email.resume}
                       </span>
                       <motion.button
                         onClick={() => removeEmail(group.type, idx)}

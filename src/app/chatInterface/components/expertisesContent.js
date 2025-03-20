@@ -5,7 +5,7 @@ const ExpertisesContent = ({ expertises, onChangeExpertise }) => {
   const [localExpertises, setLocalExpertises] = useState(expertises);
 
   useEffect(() => {
-    console.info('expertises', expertises);
+    console.info('expertises 123', expertises);
     setLocalExpertises(expertises);
   }, [expertises]);
 

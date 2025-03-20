@@ -1,2 +1,24 @@
 [
+  {
+    "id": "expert Résumé",
+    "name": "expert Résumé",
+    "outputs": {
+      "resume": "STRING"
+    },
+    "context": [
+      {
+        "id": 0,
+        "role": "user",
+        "content": "tu es expert en résumé",
+        "timestamp": "2025-03-20T02:18:03.160Z"
+      },
+      {
+        "id": 1,
+        "role": "assistant",
+        "content": "Oui, je peux t'aider à résumer des textes ou des documents de manière concise et efficace. Que souhaites-tu résumer ? 😊",
+        "timestamp": "2025-03-20T02:18:05.717Z"
+      }
+    ],
+    "model": "deepseek chat 70b"
+  }
 ]

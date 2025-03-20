@@ -53,7 +53,10 @@ const NodeParameters = ({
     nodeApp === APPS_LABELS.SHEET && nodeExpertise === 'sheets';
 
   const currentExpertiseList = useMemo(() => {
-    console.info('🔄 Recalcul de currentExpertiseList');
+    console.info('🔄 Recalcul de currentExpertiseList', {
+      nodeApp,
+      expertisesList,
+    });
 
     return expertisesList.filter((expertise) => {
       if (nodeApp === APPS_LIST[4].id) {
