@@ -48,7 +48,6 @@ export default function WelcomeLanding({ onLoginClick }) {
       >
         Commencer maintenant
       </button>
-      <FooterWrapper />
     </main>
   );
 }

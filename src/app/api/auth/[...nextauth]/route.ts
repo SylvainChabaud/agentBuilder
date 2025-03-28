@@ -12,6 +12,7 @@ const handler = NextAuth({
         password: { label: 'Mot de passe', type: 'password' },
       },
       async authorize(credentials) {
+        console.log('🔍 credentials :', credentials);
         const isValid = await verifyUser(
           credentials.username,
           credentials.password

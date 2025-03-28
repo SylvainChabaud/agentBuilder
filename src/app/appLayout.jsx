@@ -5,7 +5,7 @@ import { getProviders, useSession } from 'next-auth/react';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { GlobalStyle } from './styles/globals';
-import { LayoutWrapper } from './styles/layout';
+import { LayoutWrapper, Main } from './styles/layout';
 import HeaderWrapper from './components/header';
 import FooterWrapper from './components/footer';
 import LoginModal from './components/loginModal';
@@ -44,8 +44,8 @@ export default function AppLayout({ children }) {
         {session ? (
           <>
             <HeaderWrapper openLoginModal={openLoginModal} />
-            <main>{children}</main>
-            <FooterWrapper />
+            <Main>{children}</Main>
+            {/* <FooterWrapper /> */}
           </>
         ) : (
           <WelcomeLanding onLoginClick={openLoginModal} />

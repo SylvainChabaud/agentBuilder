@@ -44,7 +44,7 @@ export default function LoginModal({ isOpen, onClose, providers }) {
 
     try {
       await addUser(form.username, form.password);
-      console.log('🔍 user :', user);
+      // console.log('🔍 user :', user);
 
       // Auto-login après inscription
       await handleLogin(e);
