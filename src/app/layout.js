@@ -9,6 +9,8 @@ import FooterWrapper from './components/footer';
 
 // default styling
 import '@xyflow/react/dist/style.css';
+import AppLayout from './appLayout';
+import Providers from './providers';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,15 +26,9 @@ const RootLayout = ({ children }) => {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <GlobalStyle />
-
-        <LayoutWrapper>
-          <HeaderWrapper />
-
-          <Main>{children}</Main>
-
-          <FooterWrapper />
-        </LayoutWrapper>
+        <Providers>
+          <AppLayout>{children}</AppLayout>
+        </Providers>
       </body>
     </html>
   );

@@ -1,10 +1,10 @@
-import { handleGmailLoginClient } from 'src/app/components/gmail/oAuth/handleGmailLoginClient';
-import { handleFetchEmails } from 'lib/services/gmail/fetchEmails';
-import { handleSendEmail } from 'lib/services/gmail/sendEmail';
-import { handleWebSearch } from 'lib/services/gmail/webSearch';
+import { handleGmailLoginClient } from '../../../../../src/app/components/gmail/oAuth/handleGmailLoginClient';
+import { handleFetchEmails } from '../../../../../lib/services/gmail/fetchEmails';
+import { handleSendEmail } from '../../../../../lib/services/gmail/sendEmail';
+import { handleWebSearch } from '../../../../../lib/services/gmail/webSearch';
 import { NODE_STATUS } from '../../constants';
-import { APPS_LABELS } from 'lib/constants';
-import { handleFetchSheetContent } from 'lib/services/sheets/getFileContent';
+import { APPS_LABELS } from '../../../../../lib/constants';
+import { handleFetchSheetContent } from '../../../../../lib/services/sheets/getFileContent';
 import { convertRowsToObjects } from './utils';
 import { sendModelMessage } from './sendModelMessage';
 

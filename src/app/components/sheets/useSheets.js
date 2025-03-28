@@ -1,4 +1,4 @@
-import { handleFetchSheetContent } from 'lib/services/sheets/getFileContent';
+import { handleFetchSheetContent } from '../../../../lib/services/sheets/getFileContent';
 import { handleFetchSheets } from 'lib/services/sheets/getFiles';
 import { useState, useEffect } from 'react';
 import { handleGmailLoginClient } from 'src/app/components/gmail/oAuth/handleGmailLoginClient';

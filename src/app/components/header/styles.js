@@ -35,6 +35,23 @@ export const Header = styled.header`
   }
 `;
 
+export const LoginButton = styled.button`
+  font-family: var(--font-geist-mono);
+  background-color: transparent;
+  color: var(--background);
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--background);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+`;
+
 export const DropdownContent = styled.div`
   position: absolute;
   top: 100%;

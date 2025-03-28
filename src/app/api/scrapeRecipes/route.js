@@ -6,6 +6,8 @@ export async function POST(request) {
   try {
     const { sitesToScrape } = await request.json();
 
+    console.info('Scraping recipes from:', sitesToScrape);
+
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
 
@@ -21,9 +23,13 @@ export async function POST(request) {
         url,
         fullText: pageText,
       });
+
+      console.info('Scraped:', url);
     }
 
     await browser.close();
+
+    console.info('Scraping completed', results);
 
     return Response.json({ results });
   } catch (error) {

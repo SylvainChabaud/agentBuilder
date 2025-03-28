@@ -1,6 +1,6 @@
 import { handleWebSearch } from 'lib/services/gmail/webSearch';
 import { handleScrapesPages } from 'lib/services/pupperteer/scrapePages';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { extractObject } from 'src/app/agentBuilder/components/run/utils';
 import { MODELS } from 'src/app/chatInterface/constants';
 

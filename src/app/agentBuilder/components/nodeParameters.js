@@ -1,4 +1,3 @@
-import { APPS_LABELS } from 'lib/constants';
 import { APPS_LIST, NODE_PARAMS } from '../constants';
 import {
   DeleteNodeButtonStyled,
@@ -8,8 +7,9 @@ import {
   StyledSelect,
 } from './styles';
 import { useEffect, useState, useMemo } from 'react';
-import { handleGmailLoginClient } from 'src/app/components/gmail/oAuth/handleGmailLoginClient';
-import { handleFetchSheets } from 'lib/services/sheets/getFiles';
+import { handleFetchSheets } from '../../../../lib/services/sheets/getFiles';
+import { handleGmailLoginClient } from '../../../../src/app/components/gmail/oAuth/handleGmailLoginClient';
+import { APPS_LABELS } from '../../../../lib/constants';
 
 const NodeParameters = ({
   onChangeNodeParams,
