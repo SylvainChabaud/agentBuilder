@@ -7,6 +7,10 @@ const filePath = path.resolve('data/users.json');
 export async function POST(request) {
   try {
     const { username, password } = await request.json();
+
+    console.log('🔍 username :', username);
+    console.log('🔍 password :', password);
+
     if (!username || !password) {
       return new Response(
         JSON.stringify({ error: 'Username and password required' }),
@@ -31,7 +35,10 @@ export async function POST(request) {
       });
     }
 
+    console.log('🔍 user :', user);
     const isValid = await bcrypt.compare(password, user.password);
+
+    console.log('🔍 isValid :', isValid);
     if (!isValid) {
       return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
         status: 401,
