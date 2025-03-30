@@ -29,7 +29,7 @@ const handler = NextAuth({
     strategy: 'jwt',
   },
   jwt: {
-    secret: process.env.JWT_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -40,6 +40,15 @@ const handler = NextAuth({
       // @ts-ignore
       session.user.id = token.id;
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      console.log('🔁 redirect callback:', { url, baseUrl });
+      // Si url commence par /, on la considère comme locale
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // Si url commence par baseUrl, c’est bon
+      if (url.startsWith(baseUrl)) return url;
+      // Sinon, fallback sur baseUrl (production)
+      return baseUrl;
     },
   },
 });

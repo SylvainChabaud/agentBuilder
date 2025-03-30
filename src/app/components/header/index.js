@@ -11,6 +11,11 @@ export default function HeaderWrapper({ openLoginModal }) {
 
   const { data: session } = useSession();
 
+  // S'assurer que l'URL de base est définie pour la redirection
+  const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/`;
+
+  console.log('🔍 URL de redirection:', baseUrl);
+
   return (
     <Header>
       <h1>Automation Builder</h1>
@@ -50,9 +55,13 @@ export default function HeaderWrapper({ openLoginModal }) {
         </div>
 
         {session ? (
-          <LoginButton onClick={() => signOut({ callbackUrl: '/' })}>
-            Déconnexion
-          </LoginButton>
+          // <LoginButton
+          //   onClick={() => signOut({ callbackUrl: baseUrl, redirect: true })}
+          // >
+          //   Déconnexion
+          // </LoginButton>
+
+          <Link href="/api/auth/signout">Sign Out</Link>
         ) : (
           <LoginButton onClick={openLoginModal}>Connexion</LoginButton>
         )}

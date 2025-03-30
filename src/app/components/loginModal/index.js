@@ -4,6 +4,25 @@ import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { addUser } from '../../../../lib/usersManager/addUser';
+import { AnimatePresence } from 'framer-motion';
+import {
+  Overlay,
+  ModalContainer,
+  CloseButton,
+  Title,
+  TabContainer,
+  TabButton,
+  Form,
+  Label,
+  Input,
+  ErrorMessage,
+  SubmitButton,
+  ProvidersContainer,
+  Divider,
+  ProviderButton,
+  overlayVariants,
+  modalVariants,
+} from './styles';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
@@ -40,170 +59,125 @@ export default function LoginModal({ isOpen, onClose, providers }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
-    console.log('🔍 form :', form);
 
     try {
       await addUser(form.username, form.password);
-      // console.log('🔍 user :', user);
-
       // Auto-login après inscription
       await handleLogin(e);
     } catch (err) {
-      setError(err.message || 'Erreur lors de l’inscription');
+      setError(err.message || "Erreur lors de l'inscription");
+    }
+  };
+
+  const handleModeChange = (newMode) => {
+    if (mode !== newMode) {
+      // Réinitialiser le formulaire et les erreurs
+      setForm({ username: '', password: '' });
+      setError('');
+      setMode(newMode);
     }
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 1000,
-      }}
-      onClick={onClose}
-    >
-      <div
-        className={`${geistSans.variable} ${geistMono.variable}`}
-        style={{
-          backgroundColor: '#fff',
-          borderRadius: '8px',
-          padding: '30px',
-          width: '100%',
-          maxWidth: '500px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-          position: 'relative',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
+    <AnimatePresence>
+      {isOpen && (
+        <Overlay
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={overlayVariants}
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: 10,
-            right: 10,
-            background: 'none',
-            border: 'none',
-            fontSize: '1.2rem',
-            cursor: 'pointer',
-          }}
+          className={`${geistSans.variable} ${geistMono.variable}`}
         >
-          ✕
-        </button>
-
-        <h1
-          style={{
-            fontSize: '1.5rem',
-            textAlign: 'center',
-            marginBottom: '1rem',
-          }}
-        >
-          {mode === 'login' ? 'Connexion' : 'Créer un compte'}
-        </h1>
-
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginBottom: 20,
-          }}
-        >
-          <button onClick={() => setMode('login')} style={{ marginRight: 10 }}>
-            Connexion
-          </button>
-          <button onClick={() => setMode('register')}>Inscription</button>
-        </div>
-
-        <form
-          onSubmit={mode === 'login' ? handleLogin : handleRegister}
-          style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
-        >
-          <label>
-            Nom d'utilisateur
-            <input
-              name="username"
-              type="text"
-              value={form.username}
-              onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '8px',
-                borderRadius: '4px',
-                border: '1px solid #ccc',
-                marginTop: '4px',
-              }}
-            />
-          </label>
-          <label>
-            Mot de passe
-            <input
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '8px',
-                borderRadius: '4px',
-                border: '1px solid #ccc',
-                marginTop: '4px',
-              }}
-            />
-          </label>
-
-          {error && (
-            <p
-              style={{ color: 'red', textAlign: 'center', fontSize: '0.9rem' }}
-            >
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            style={{
-              padding: '10px',
-              backgroundColor: mode === 'login' ? '#007bff' : '#28a745',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
+          <ModalContainer
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={modalVariants}
+            onClick={(e) => e.stopPropagation()}
           >
-            {mode === 'login' ? 'Se connecter' : 'Créer le compte'}
-          </button>
-        </form>
+            <CloseButton onClick={onClose}>✕</CloseButton>
 
-        <div style={{ marginTop: '20px', textAlign: 'center' }}>
-          {Object.values(providers).map(
-            (provider) =>
-              provider.id !== 'credentials' && (
-                <button
-                  key={provider.name}
-                  onClick={() => signIn(provider.id)}
-                  style={{
-                    padding: '10px 20px',
-                    backgroundColor: '#333',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    marginRight: '10px',
-                    marginBottom: '10px',
-                  }}
-                >
-                  Se connecter avec {provider.name}
-                </button>
-              )
-          )}
-        </div>
-      </div>
-    </div>
+            <Title>{mode === 'login' ? 'Connexion' : 'Créer un compte'}</Title>
+
+            <TabContainer>
+              <TabButton
+                $active={mode === 'login'}
+                onClick={() => handleModeChange('login')}
+              >
+                Connexion
+              </TabButton>
+              <TabButton
+                $active={mode === 'register'}
+                onClick={() => handleModeChange('register')}
+              >
+                Inscription
+              </TabButton>
+            </TabContainer>
+
+            <Form onSubmit={mode === 'login' ? handleLogin : handleRegister}>
+              <Label>
+                Nom d'utilisateur
+                <Input
+                  name="username"
+                  type="text"
+                  value={form.username}
+                  onChange={handleInputChange}
+                  autoComplete="username"
+                />
+              </Label>
+              <Label>
+                Mot de passe
+                <Input
+                  name="password"
+                  type="password"
+                  value={form.password}
+                  onChange={handleInputChange}
+                  autoComplete={
+                    mode === 'login' ? 'current-password' : 'new-password'
+                  }
+                />
+              </Label>
+
+              {error && <ErrorMessage>{error}</ErrorMessage>}
+
+              <SubmitButton
+                type="submit"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {mode === 'login' ? 'Se connecter' : 'Créer le compte'}
+              </SubmitButton>
+            </Form>
+
+            {Object.values(providers).some(
+              (provider) => provider.id !== 'credentials'
+            ) && (
+              <>
+                <Divider>
+                  <span>OU</span>
+                </Divider>
+
+                <ProvidersContainer>
+                  {Object.values(providers).map(
+                    (provider) =>
+                      provider.id !== 'credentials' && (
+                        <ProviderButton
+                          key={provider.name}
+                          onClick={() => signIn(provider.id)}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          Se connecter avec {provider.name}
+                        </ProviderButton>
+                      )
+                  )}
+                </ProvidersContainer>
+              </>
+            )}
+          </ModalContainer>
+        </Overlay>
+      )}
+    </AnimatePresence>
   );
 }

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -65,35 +66,26 @@ export const ModalFooter = styled.div`
   }
 `;
 
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
 export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 `;
 
-export const Label = styled.label`
-  font-family: var(--font-geist-mono);
-  font-size: 0.9rem;
-`;
-
 export const Input = styled.input`
-  padding: 0.75rem;
-  border: 2px solid var(--foreground);
-  border-radius: 5px;
-  font-family: var(--font-geist-sans);
-  background-color: transparent;
-  color: var(--foreground);
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
   transition: all 0.2s ease;
+  background-color: #f9f9f9;
+  font-family: inherit;
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    background-color: #fff;
   }
 `;
 
@@ -120,16 +112,194 @@ export const Button = styled.button`
 `;
 
 export const CloseButton = styled.button`
-  background-color: transparent;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  color: #666;
   cursor: pointer;
-  color: var(--foreground);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: #f5f5f5;
+    color: #333;
   }
 `;
+
+// Nouveaux éléments du LoginModal
+export const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+`;
+
+export const ModalContainer = styled(motion.div)`
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+`;
+
+export const Title = styled.h1`
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #222;
+`;
+
+export const TabContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  position: relative;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  padding: 4px;
+`;
+
+export const TabButton = styled.button`
+  padding: 12px 24px;
+  border: none;
+  background: ${(props) => (props.$active ? '#fff' : 'transparent')};
+  color: ${(props) => (props.$active ? '#2563eb' : '#666')};
+  font-weight: ${(props) => (props.$active ? '600' : '400')};
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease;
+  box-shadow: ${(props) =>
+    props.$active ? '0 2px 10px rgba(37, 99, 235, 0.15)' : 'none'};
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+export const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+`;
+
+export const ErrorMessage = styled.p`
+  color: #e11d48;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 5px;
+`;
+
+export const SubmitButton = styled(motion.button)`
+  padding: 14px;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #1d4ed8;
+  }
+`;
+
+export const ProvidersContainer = styled.div`
+  margin-top: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const Divider = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  span {
+    padding: 0 10px;
+    color: #888;
+    font-size: 0.85rem;
+  }
+`;
+
+export const ProviderButton = styled(motion.button)`
+  padding: 14px;
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #eee;
+  }
+`;
+
+// Animation variants
+export const overlayVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
+export const modalVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      damping: 25,
+      stiffness: 400,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: 20,
+    scale: 0.95,
+    transition: { duration: 0.2 },
+  },
+};

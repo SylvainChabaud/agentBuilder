@@ -15,6 +15,9 @@ export async function POST(request) {
       );
     }
 
+    console.log('🔍 username :', username);
+    console.log('🔍 password :', password);
+
     let users = [];
     try {
       const data = await fs.readFile(filePath, 'utf8');
@@ -23,6 +26,8 @@ export async function POST(request) {
       // Si le fichier n'existe pas, on part d'un tableau vide
       users = [];
     }
+
+    console.log('🔍 users :', users);
 
     // Vérifie si un utilisateur existe déjà (insensible à la casse)
     const existingUser = users.find(
