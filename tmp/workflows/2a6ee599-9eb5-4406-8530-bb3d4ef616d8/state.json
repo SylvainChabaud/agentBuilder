@@ -1,0 +1,18 @@
+{
+  "workflowId": "2a6ee599-9eb5-4406-8530-bb3d4ef616d8",
+  "status": "initialized",
+  "objective": [
+    "cht"
+  ],
+  "contextFiles": [],
+  "logs": [
+    {
+      "type": "info",
+      "message": "Workflow initialisé"
+    },
+    {
+      "type": "info",
+      "message": "Analyse prête à être lancée"
+    }
+  ]
+}

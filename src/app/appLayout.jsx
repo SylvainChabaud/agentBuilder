@@ -41,7 +41,7 @@ export default function AppLayout({ children }) {
     <div className={`${geistSans.variable} ${geistMono.variable}`}>
       <GlobalStyle />
       <LayoutWrapper>
-        {session ? (
+        {!session ? (
           <>
             <HeaderWrapper openLoginModal={openLoginModal} />
             <Main>{children}</Main>

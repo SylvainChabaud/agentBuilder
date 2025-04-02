@@ -1,3 +1,5 @@
+'use client';
+
 // src/
 // - components/
 //   - iaAgent/
@@ -23,28 +25,35 @@
 
 // Composant React de base : MainAgentInterface.js
 import React, { useState } from 'react';
-import ObjectiveForm from './ObjectiveForm';
-import ObjectiveContextUploader from './ObjectiveContextUploader';
-import AgentExecutionViewer from './AgentExecutionViewer';
-import FinalOutputViewer from './FinalOutputViewer';
-import ValidationFeedback from './ValidationFeedback';
-import useMainAgent from '@/hooks/useMainAgent';
+// import ObjectiveContextUploader from './ObjectiveContextUploader';
+// import AgentExecutionViewer from './AgentExecutionViewer';
+// import FinalOutputViewer from './FinalOutputViewer';
+// import ValidationFeedback from './ValidationFeedback';
+import useMainAgent from './hooks/useMainAgent';
+import ObjectiveForm from './components/objectiveForm';
+import AgentExecutionViewer from './components/agentExecutionViewer';
+import ObjectiveContextUploader from './components/objectiveContextUploader';
+import FinalOutputViewer from './components/finalOutputViewer';
+import ValidationFeedback from './components/validationFeedback';
 
 const MainAgentInterface = () => {
   const [objective, setObjective] = useState('');
   const [contextFiles, setContextFiles] = useState([]);
-  const {
-    runOrchestration,
-    isRunning,
-    logs,
-    output,
-    memory,
-    validation
-  } = useMainAgent();
+  const { runOrchestration, isRunning, logs, output, memory, validation } =
+    useMainAgent();
 
   const handleLaunch = () => {
+    console.info('handleLaunch', { objective, contextFiles });
     runOrchestration({ objective, contextFiles });
   };
+
+  console.info('MainAgentInterface', {
+    isRunning,
+    output,
+    memory,
+    logs,
+    validation,
+  });
 
   return (
     <div className="ia-agent-container">
