@@ -22,6 +22,7 @@ export default function HeaderWrapper({ openLoginModal }) {
       <nav>
         <Link href="/">Accueil</Link>
         <Link href="/agentBuilder">Automations</Link>
+        <Link href="/agentInterface">Agents</Link>
         <Link href="/chatInterface">Models</Link>
 
         <div
