@@ -1,0 +1,37 @@
+{
+  "workflowId": "078668a4-4fb0-44d0-9ba6-9ce047d7a414",
+  "status": "initialized",
+  "objective": {
+    "id": "078668a4-4fb0-44d0-9ba6-9ce047d7a414",
+    "text": [
+      "chat"
+    ],
+    "files": [
+      {
+        "name": "CHABAUD - compétences Akkodis.docx",
+        "path": "C:\\Users\\UTILIS~1\\AppData\\Local\\Temp\\5810fce015d9b497d38ab3500"
+      }
+    ]
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé."
+    },
+    {
+      "type": "info",
+      "message": "🎯 Objectif enregistré : chat"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

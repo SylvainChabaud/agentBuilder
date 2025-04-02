@@ -1,6 +1,11 @@
-// src/app/api/mainAgent/run/route.js (MOCK complet pour front avec délai simulé)
+// src/app/api/mainAgent/run/route.js (POST complet avec FormData et initialisation workflow)
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
+import { Readable } from 'stream';
+import { IncomingForm } from 'formidable';
+import path from 'path';
+import fs from 'fs/promises';
+import { initializeWorkflowForUser } from '../workflow/initForUser';
+import { getInitParams } from './utils';
 
 export const config = {
   api: {
@@ -8,35 +13,59 @@ export const config = {
   },
 };
 
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function toNodeRequest(req) {
+  const nodeReq = Readable.from(req.body);
+  nodeReq.headers = Object.fromEntries(req.headers);
+  nodeReq.method = req.method;
+  nodeReq.url = '';
+  return nodeReq;
 }
 
-const getMock = (workflowId) => ({
-  workflowId,
-  status: 'ready',
-  logs: [
-    { type: 'info', message: '🎯 Objectif reçu et enregistré' },
-    { type: 'info', message: '📎 Contexte reçu (fichiers simulés)' },
-    { type: 'info', message: '🧠 Étapes préparées, prêt à lancer l’analyse' },
-  ],
-  memory: {
-    version: 1,
-    summary: 'Mémoire initialisée (simulation)',
-  },
-  output: '🚀 Ceci est un livrable simulé généré par le moteur IA.',
-  validation: {
-    success: false,
-    feedback: '🧪 Étape de validation encore à effectuer.',
-  },
-});
-
 export async function POST(req) {
-  // Simule un traitement léger côté back avec UUID
-  const workflowId = crypto.randomUUID();
+  const nodeReq = toNodeRequest(req);
+  const form = new IncomingForm({ multiples: true });
 
-  // Simule une attente pour faire apparaître le loader côté front
-  await delay(2000); // 2 secondes
+  return new Promise((resolve) => {
+    form.parse(nodeReq, async (err, fields, files) => {
+      if (err) {
+        console.error('❌ Erreur parsing FormData:', err);
+        return resolve(
+          NextResponse.json({ error: 'Erreur de parsing' }, { status: 500 })
+        );
+      }
 
-  return NextResponse.json(getMock(workflowId));
+      const { userId, objectiveText, contextFiles } = getInitParams(
+        fields,
+        files
+      );
+
+      console.info('run', { userId, objectiveText, contextFiles });
+
+      try {
+        const { workflowId, state } = await initializeWorkflowForUser(
+          userId,
+          objectiveText,
+          contextFiles
+        );
+
+        return resolve(
+          NextResponse.json({
+            workflowId,
+            logs: state.logs,
+            memory: state.memory,
+            output: state.output,
+            validation: state.validation,
+          })
+        );
+      } catch (err) {
+        console.error('Erreur init workflow:', err);
+        return resolve(
+          NextResponse.json(
+            { error: 'Erreur initialisation workflow' },
+            { status: 500 }
+          )
+        );
+      }
+    });
+  });
 }

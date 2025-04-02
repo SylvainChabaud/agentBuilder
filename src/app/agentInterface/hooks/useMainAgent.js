@@ -26,6 +26,7 @@ const useMainAgent = () => {
 
     try {
       const formData = new FormData();
+      formData.append('userId', 'user-1');
       formData.append('objective', objective);
       contextFiles.forEach((file) => {
         formData.append('files', file); // Champ multiple côté back
