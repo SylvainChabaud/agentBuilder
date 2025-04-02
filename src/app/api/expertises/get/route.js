@@ -1,18 +1,32 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
+import { withAuth } from '../../auth/withAuth';
 
-const filePath = path.resolve('data/expertises.json');
+export async function GET(request) {
+  return await withAuth(request, async (userId) => {
+    const userDir = path.resolve('data/users', userId);
+    const filePath = path.join(userDir, 'expertises.json');
 
-export async function GET() {
-  try {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    return new Response(JSON.stringify(data), { status: 200 });
-  } catch (error) {
-    return new Response(
-      JSON.stringify({
-        error: 'Erreur lors de la récupération des expertises',
-      }),
-      { status: 500 }
-    );
-  }
+    try {
+      let data = [];
+
+      try {
+        const fileContent = await fs.readFile(filePath, 'utf8');
+        data = JSON.parse(fileContent);
+      } catch {
+        // Fichier vide ou inexistant, retourne tableau vide
+        data = [];
+      }
+
+      return new Response(JSON.stringify(data), { status: 200 });
+    } catch (error) {
+      return new Response(
+        JSON.stringify({
+          error: 'Erreur lors de la récupération des expertises',
+          message: error.message,
+        }),
+        { status: 500 }
+      );
+    }
+  });
 }

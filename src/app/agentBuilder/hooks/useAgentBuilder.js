@@ -32,7 +32,11 @@ const useAgentBuilder = ({
 
   const lastSelectionRef = useRef(null);
 
+  console.info('useAgentBuilder');
+
   useEffect(() => {
+    console.info('useAgentBuilder useEffect');
+
     const fetchExpertises = async () => {
       const expertises = await getExpertises();
       console.info('fetchExpertise', expertises);

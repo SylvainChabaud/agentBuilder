@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { getExecutionPlan } from './utils';
 import { runWorkflow } from '../components/run/runWorkflow';
-import { setWorkflow } from 'lib/workflowManager/setWorkflow';
-import { deleteWorkflow } from 'lib/workflowManager/removeWorkflow';
+import { setWorkflow } from '../../../../lib/workflowManager/setWorkflow';
+import { deleteWorkflow } from '../../../../lib/workflowManager/removeWorkflow';
 import { NODE_STATUS } from '../constants';
 
 export const useWorkflow = ({

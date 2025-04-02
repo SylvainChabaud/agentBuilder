@@ -55,13 +55,7 @@ export default function HeaderWrapper({ openLoginModal }) {
         </div>
 
         {session ? (
-          // <LoginButton
-          //   onClick={() => signOut({ callbackUrl: baseUrl, redirect: true })}
-          // >
-          //   Déconnexion
-          // </LoginButton>
-
-          <Link href="/api/auth/signout">Sign Out</Link>
+          <Link href="/api/auth/signout">Déconnexion</Link>
         ) : (
           <LoginButton onClick={openLoginModal}>Connexion</LoginButton>
         )}

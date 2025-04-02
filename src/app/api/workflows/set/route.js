@@ -1,49 +1,54 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
-
-const filePath = path.resolve('data/workflows.json');
+import { withAuth } from '../../auth/withAuth';
 
 export async function POST(request) {
-  console.info('POST WORFLOWS SAVE 1', filePath);
+  return await withAuth(request, async (userId) => {
+    const userDir = path.resolve('data/users', userId);
+    const filePath = path.join(userDir, 'workflows.json');
 
-  const { workflow } = await request.json();
-  console.info('POST WORFLOWS SAVE 2', workflow);
+    console.info('POST userId', { userId, filePath });
 
-  if (!workflow) {
-    return new Response(JSON.stringify({ error: 'Paramètres manquants' }), {
-      status: 400,
-    });
-  }
+    try {
+      // 🔐 Crée le dossier utilisateur si nécessaire
+      await fs.mkdir(userDir, { recursive: true });
 
-  try {
-    console.info('POST WORFLOWS SAVE 3', { workflow, filePath });
+      const { workflow } = await request.json();
 
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    console.info('POST WORFLOWS SAVE 3bis', data);
+      console.info('workflow', workflow);
 
-    const isValidArray = Array.isArray(data); // Vérifie si data est bien un tableau
-    const isEmpty = isValidArray && data.length === 0;
-    const nextId = isEmpty
-      ? 0
-      : isValidArray && data[data.length - 1]?.id !== undefined
-        ? data[data.length - 1].id + 1
-        : 0;
+      if (!workflow) {
+        return new Response(JSON.stringify({ error: 'Paramètres manquants' }), {
+          status: 400,
+        });
+      }
 
-    console.info('POST WORKFLOWS SAVE 4', { data, nextId });
+      // 📂 Lecture et parsing du fichier
+      let data = [];
+      try {
+        const fileContent = await fs.readFile(filePath, 'utf8');
+        data = JSON.parse(fileContent);
+      } catch {
+        data = [];
+      }
 
-    // Ajouter la nouvelle connexion
-    data.push({ id: nextId, ...workflow });
+      // 🔢 Attribution d’un ID unique dans le tableau
+      const nextId =
+        Array.isArray(data) && data.length ? data[data.length - 1].id + 1 : 0;
 
-    console.info('POST WORFLOWS SAVE 5', data);
+      // ✅ Ajout du workflow
+      data.push({ id: nextId, ...workflow });
+      await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 
-    // Écrire dans le fichier
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
-  } catch (error) {
-    return new Response(
-      JSON.stringify({ error: 'Erreur lors de la sauvegarde du workflow' }),
-      { status: 500 }
-    );
-  }
+      return new Response(JSON.stringify({ success: true }), { status: 200 });
+    } catch (error) {
+      return new Response(
+        JSON.stringify({
+          error: 'Erreur lors de la sauvegarde du workflow',
+          message: error.message,
+        }),
+        { status: 500 }
+      );
+    }
+  });
 }

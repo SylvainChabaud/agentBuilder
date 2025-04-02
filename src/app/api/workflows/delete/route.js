@@ -1,38 +1,45 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
-
-const filePath = path.resolve('data/workflows.json');
+import { withAuth } from '../../auth/withAuth';
 
 export async function DELETE(request) {
-  console.info('DELETE', request);
+  return await withAuth(request, async (userId) => {
+    try {
+      const { workflowId } = await request.json();
 
-  try {
-    const { workflowId } = await request.json();
-    console.info('response', workflowId);
+      if (workflowId === undefined || workflowId === null) {
+        return new Response(JSON.stringify({ error: 'workflowId manquant' }), {
+          status: 400,
+        });
+      }
 
-    if (!workflowId) {
-      return new Response(JSON.stringify({ error: 'workflowId manquant' }), {
-        status: 400,
-      });
+      const userDir = path.resolve('data/users', userId);
+      const filePath = path.join(userDir, 'workflows.json');
+
+      let data = [];
+      try {
+        const fileContent = await fs.readFile(filePath, 'utf8');
+        data = JSON.parse(fileContent);
+      } catch {
+        return new Response(
+          JSON.stringify({ error: 'Aucun workflow à supprimer' }),
+          { status: 404 }
+        );
+      }
+
+      const updatedData = data.filter((conn) => conn.id !== workflowId);
+
+      await fs.writeFile(filePath, JSON.stringify(updatedData, null, 2));
+
+      return new Response(JSON.stringify({ success: true }), { status: 200 });
+    } catch (error) {
+      return new Response(
+        JSON.stringify({
+          error: 'Erreur lors de la suppression du workflow',
+          message: error.message,
+        }),
+        { status: 500 }
+      );
     }
-
-    let data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-
-    // Supprimer la connexion correspondant à workflowId
-    data = data.filter((conn) => conn.id !== workflowId);
-
-    console.info('DELETE 3', data);
-
-    // Écrire les données mises à jour dans le fichier JSON
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
-  } catch (error) {
-    return new Response(
-      JSON.stringify({
-        error: 'Erreur lors de la suppression du workflow',
-      }),
-      { status: 500 }
-    );
-  }
+  });
 }

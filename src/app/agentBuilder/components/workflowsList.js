@@ -5,6 +5,7 @@ const WorkflowsList = ({
   selectedWorkflowName,
   workflowsList = [],
 }) => {
+  console.info('workflowsList', workflowsList);
   // Si data est vide ou non défini, on affiche un message
   if (!workflowsList || workflowsList.length === 0) {
     return <div>Aucune donnée à afficher.</div>;
@@ -22,6 +23,7 @@ const WorkflowsList = ({
     >
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
         {workflowsList.map((workflow) => {
+          console.info('workflow', workflow);
           // Vérifie si ce workflow est le workflow sélectionné
           const isSelected = workflow.name === selectedWorkflowName;
 

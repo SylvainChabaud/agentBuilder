@@ -1,38 +1,44 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
-
-const filePath = path.resolve('data/expertises.json');
+import { withAuth } from '../../auth/withAuth';
 
 export async function POST(request) {
-  console.info('POST EXPERTISES SAVE 1');
+  return await withAuth(request, async (userId) => {
+    const userDir = path.resolve('data/users', userId);
+    const filePath = path.join(userDir, 'expertises.json');
 
-  const { expertise } = await request.json();
-  console.info('POST EXPERTISES SAVE 2', expertise);
+    try {
+      // 🔐 Crée le dossier utilisateur si nécessaire
+      await fs.mkdir(userDir, { recursive: true });
 
-  if (!expertise) {
-    return new Response(JSON.stringify({ error: 'Paramètres manquants' }), {
-      status: 400,
-    });
-  }
+      const { expertise } = await request.json();
+      if (!expertise) {
+        return new Response(JSON.stringify({ error: 'Paramètres manquants' }), {
+          status: 400,
+        });
+      }
 
-  try {
-    console.info('POST EXPERTISES SAVE 3', expertise);
+      let data = [];
+      try {
+        const fileContent = await fs.readFile(filePath, 'utf8');
+        data = JSON.parse(fileContent);
+      } catch {
+        data = [];
+      }
 
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      data.push(expertise);
 
-    console.info('POST EXPERTISES SAVE 4', data);
+      await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 
-    // Ajouter la nouvelle connexion
-    data.push(expertise);
-
-    // Écrire dans le fichier
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
-  } catch (error) {
-    return new Response(
-      JSON.stringify({ error: "Erreur lors de la sauvegarde de l'expertise" }),
-      { status: 500 }
-    );
-  }
+      return new Response(JSON.stringify({ success: true }), { status: 200 });
+    } catch (error) {
+      return new Response(
+        JSON.stringify({
+          error: "Erreur lors de la sauvegarde de l'expertise",
+          message: error.message,
+        }),
+        { status: 500 }
+      );
+    }
+  });
 }

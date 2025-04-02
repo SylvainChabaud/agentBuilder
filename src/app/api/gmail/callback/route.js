@@ -1,13 +1,22 @@
 import dotenv from 'dotenv';
 import { NextResponse } from 'next/server';
 import { getOAuth2Client } from 'lib/gmail/googleConfig';
-import { saveTokenToAPI } from 'lib/connectionManager/saveToken';
+// import { saveTokenToAPI } from 'lib/connectionManager/saveToken';
 import { APPS_LABELS } from 'lib/constants';
+import { saveConnectionForUser } from './saveConnection';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/authOptions';
 
 dotenv.config();
 
 export async function GET(request) {
   try {
+    const session = await getServerSession({ req: request, ...authOptions });
+
+    if (!session || !session.user?.id) {
+      throw new Error('Utilisateur non authentifié');
+    }
+
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
     const state = searchParams.get('state') || 'emails'; // state peut être null, vide ou une chaîne
@@ -23,7 +32,12 @@ export async function GET(request) {
     const accessToken = tokens.access_token;
     console.info('CALLBACK 2', accessToken);
 
-    await saveTokenToAPI(APPS_LABELS.GMAIL, accessToken);
+    // await saveTokenToAPI(APPS_LABELS.GMAIL, accessToken);
+    await saveConnectionForUser(
+      session.user.id,
+      APPS_LABELS.GMAIL,
+      accessToken
+    );
 
     // Si state est défini et non vide, on effectue une redirection
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL; // adapter selon dev/prod
