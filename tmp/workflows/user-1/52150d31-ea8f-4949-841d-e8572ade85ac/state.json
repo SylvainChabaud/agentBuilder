@@ -1,0 +1,32 @@
+{
+  "workflowId": "e21d8b37-2f5d-4624-bf36-f961d106a72d",
+  "status": "initialized",
+  "objective": {
+    "id": "e21d8b37-2f5d-4624-bf36-f961d106a72d",
+    "text": [
+      "wwww"
+    ],
+    "files": []
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé."
+    },
+    {
+      "type": "info",
+      "message": "🎯 Objectif enregistré : wwww"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

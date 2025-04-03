@@ -1,15 +1,17 @@
 {
-  "workflowId": "078668a4-4fb0-44d0-9ba6-9ce047d7a414",
+  "workflowId": "7390eff1-1b75-4feb-b6d2-edeba237128f",
   "status": "initialized",
   "objective": {
-    "id": "078668a4-4fb0-44d0-9ba6-9ce047d7a414",
+    "id": "7390eff1-1b75-4feb-b6d2-edeba237128f",
     "text": [
-      "chat"
+      "lg"
     ],
     "files": [
       {
-        "name": "CHABAUD - compétences Akkodis.docx",
-        "path": "C:\\Users\\UTILIS~1\\AppData\\Local\\Temp\\5810fce015d9b497d38ab3500"
+        "name": "CV - CHABAUD SYLVAIN - 2023 - INDUS.pdf",
+        "path": "C:\\Users\\UTILIS~1\\AppData\\Local\\Temp\\e30285d23eb3fe6f60b590400",
+        "type": "application/pdf",
+        "content": "[Erreur lecture fichier]"
       }
     ]
   },
@@ -29,7 +31,7 @@
     },
     {
       "type": "info",
-      "message": "🎯 Objectif enregistré : chat"
+      "message": "🎯 Objectif enregistré : lg"
     }
   ],
   "output": null,

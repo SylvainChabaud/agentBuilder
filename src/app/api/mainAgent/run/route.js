@@ -2,8 +2,6 @@
 import { NextResponse } from 'next/server';
 import { Readable } from 'stream';
 import { IncomingForm } from 'formidable';
-import path from 'path';
-import fs from 'fs/promises';
 import { initializeWorkflowForUser } from '../workflow/initForUser';
 import { getInitParams } from './utils';
 
@@ -34,14 +32,14 @@ export async function POST(req) {
         );
       }
 
-      const { userId, objectiveText, contextFiles } = getInitParams(
-        fields,
-        files
-      );
-
-      console.info('run', { userId, objectiveText, contextFiles });
-
       try {
+        const { userId, objectiveText, contextFiles } = await getInitParams(
+          fields,
+          files
+        );
+
+        console.info('✅ Fichiers enrichis :', contextFiles);
+
         const { workflowId, state } = await initializeWorkflowForUser(
           userId,
           objectiveText,

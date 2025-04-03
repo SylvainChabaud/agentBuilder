@@ -19,6 +19,7 @@
         "@xyflow/react": "^12.4.4",
         "axios": "^1.7.9",
         "bcrypt": "^5.1.1",
+        "docx4js": "^3.3.0",
         "dotenv": "^16.4.7",
         "formidable": "^3.5.2",
         "framer-motion": "^12.4.10",
@@ -27,12 +28,15 @@
         "isomorphic-fetch": "^3.0.0",
         "jira.js": "^4.1.0",
         "langchain": "^0.3.11",
+        "mammoth": "^1.9.0",
         "next": "^15.2.3",
         "next-auth": "^4.24.11",
+        "pdf2json": "^3.1.5",
         "puppeteer": "^24.4.0",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "styled-components": "^6.1.14"
+        "styled-components": "^6.1.14",
+        "xlsx": "^0.18.5"
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.26.5",

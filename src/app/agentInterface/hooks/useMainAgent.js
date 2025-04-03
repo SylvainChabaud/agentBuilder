@@ -41,16 +41,16 @@ const useMainAgent = () => {
         body: formData,
       });
 
-      console.info('res', res);
+      // console.info('res', res);
 
-      const data = await res.json();
+      // const data = await res.json();
 
-      console.info('data', data);
+      // console.info('data', data);
 
-      if (!res.ok) throw new Error(data.error || 'Erreur serveur');
+      // if (!res.ok) throw new Error(data.error || 'Erreur serveur');
+      const data = {};
 
       console.info('data 123', data);
-
       setLogs(data.logs);
       setOutput(data.output);
       setMemory(data.memory);

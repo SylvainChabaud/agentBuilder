@@ -1,4 +1,8 @@
-import { generateWorkflowId, initWorkflow } from '../lib/workflowFileManager';
+import {
+  deleteWorkflow,
+  generateWorkflowId,
+  initWorkflow,
+} from '../lib/workflowFileManager';
 
 /**
  * Initialise un nouveau workflow IA pour un utilisateur donné.

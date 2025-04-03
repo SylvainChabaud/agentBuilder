@@ -63,6 +63,7 @@ export async function updateWorkflowState(userId, workflowId, patch = {}) {
  */
 export async function deleteWorkflow(userId, workflowId) {
   const dir = path.join(WORKFLOW_ROOT, userId, workflowId);
+  console.info('deleteWorkflow', { userId, workflowId });
   await fs.rm(dir, { recursive: true, force: true });
 }
 
