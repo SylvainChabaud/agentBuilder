@@ -2,8 +2,11 @@
 import { NextResponse } from 'next/server';
 import { Readable } from 'stream';
 import { IncomingForm } from 'formidable';
-import { initializeWorkflowForUser } from '../workflow/initForUser';
-import { getInitParams } from './utils';
+import {
+  getInitParams,
+  initializeWorkflowForUser,
+} from '../workflow/initForUser';
+import { analyzeObjective } from '../workflow/analystAgent';
 
 export const config = {
   api: {
@@ -46,12 +49,20 @@ export async function POST(req) {
           contextFiles
         );
 
+        const { tasks, expertises } = await analyzeObjective({
+          objective: objectiveText,
+          context: contextFiles,
+        });
+
+        console.info('result RUN WORKFLOW', { tasks, expertises });
+
         return resolve(
           NextResponse.json({
             workflowId,
             logs: state.logs,
             memory: state.memory,
-            output: state.output,
+            output: { tasks, expertises },
+            // output: state.output,
             validation: state.validation,
           })
         );

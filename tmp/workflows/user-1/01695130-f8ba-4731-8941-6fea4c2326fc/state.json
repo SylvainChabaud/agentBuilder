@@ -1,0 +1,39 @@
+{
+  "workflowId": "c4a0be97-2a8a-48c6-a424-af9eb291a9d6",
+  "status": "initialized",
+  "objective": {
+    "id": "c4a0be97-2a8a-48c6-a424-af9eb291a9d6",
+    "text": [
+      "Je souhaite challenger ma plaidoirie d'avocat"
+    ],
+    "files": [
+      {
+        "name": "Annexe_1_Contrat_AlphaTech_BetaConsult.docx",
+        "path": "C:\\Users\\UTILIS~1\\AppData\\Local\\Temp\\d269eac5af03e1d2e46263a00",
+        "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "content": "Contrat de Prestation de Services\n\nEntre les soussignés :\n\nAlphaTech SARL12 rue des Entrepreneurs, 75015 Paris(ci-après dénommée 'le Prestataire')etBetaConsult SAS45 avenue de la République, 75011 Paris(ci-après dénommée 'le Client')Article 1 : ObjetDéveloppement d’une plateforme web de gestion documentaire.Article 2 : Durée6 mois à compter du 20 mars 2024.Article 3 : Prix48 000 € HT, répartis en trois échéances égales.Fait à Paris, le 15 mars 2024.Signatures des représentants légaux."
+      }
+    ]
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé."
+    },
+    {
+      "type": "info",
+      "message": "🎯 Objectif enregistré : Je souhaite challenger ma plaidoirie d'avocat"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

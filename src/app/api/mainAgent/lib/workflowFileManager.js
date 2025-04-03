@@ -4,39 +4,8 @@ dotenv.config();
 
 import path from 'path';
 import fs from 'fs/promises';
-import crypto from 'crypto';
 
 const WORKFLOW_ROOT = path.resolve(process.cwd(), process.env.WORKFLOW_DIR);
-
-/**
- * Génère un identifiant unique (workflowId)
- */
-export function generateWorkflowId() {
-  return crypto.randomUUID();
-}
-
-/**
- * Crée un nouveau dossier workflow et y écrit le state.json
- * @param {string} userId
- * @param {Object} initialState
- * @returns {Promise<string>} workflowId
- */
-export async function initWorkflow(userId, initialState) {
-  console.info('initWorkflow 123', { userId, initialState });
-
-  const workflowId = generateWorkflowId();
-  const basePath = path.join(WORKFLOW_ROOT, userId, workflowId);
-  await fs.mkdir(basePath, { recursive: true });
-
-  console.info('initWorkflow 456', basePath);
-
-  const filePath = path.join(basePath, 'state.json');
-  await fs.writeFile(filePath, JSON.stringify(initialState, null, 2));
-
-  console.info('initWorkflow 789', filePath);
-
-  return workflowId;
-}
 
 /**
  * Lit le fichier state.json d’un workflow

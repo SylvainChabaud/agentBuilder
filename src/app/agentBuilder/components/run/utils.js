@@ -161,7 +161,6 @@ export function extractObject(inputText, inputObject) {
         console.info('extractObject 44', cleanValue);
         if (!Array.isArray(cleanValue)) {
           throw new Error('Parsing error, not an array');
-          console.info('extractObject 45', cleanValue);
         }
         // Vérifie que chaque élément est bien une chaîne de caractères et nettoie
         cleanValue = cleanValue.map((item) =>
@@ -178,9 +177,16 @@ export function extractObject(inputText, inputObject) {
     } else {
       console.info('extractObject 41', rawValue);
       cleanValue = rawValue
-        .replace(/^"|"$/g, '') // Supprime les guillemets en début et fin
-        .replace(/",?\s*\}?$/, '') // Supprime une virgule, un espace ou une accolade finale après un string
+        .replace(/^"|"$/g, '') // Enlève les guillemets autour
+        .replace(/",?\s*\}?$/, '') // Supprime fin avec ", } ou ","
+        .replace(/,\s*$/, '') // Supprime virgule finale
+        .replace(/\s*\}$/, '') // Supprime accolade finale inutile
+        .replace(/\s*\]$/, '') // Supprime crochet final s’il est isolé
         .trim();
+      // cleanValue = rawValue
+      //   .replace(/^"|"$/g, '') // Supprime les guillemets en début et fin
+      //   .replace(/",?\s*\}?$/, '') // Supprime une virgule, un espace ou une accolade finale après un string
+      //   .trim();
     }
 
     result[currentKey.key] = cleanValue;

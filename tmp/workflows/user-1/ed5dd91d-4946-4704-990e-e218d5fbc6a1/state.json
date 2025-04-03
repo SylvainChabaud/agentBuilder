@@ -1,0 +1,32 @@
+{
+  "workflowId": "ecfcb5be-f064-47d6-8a59-ab6cde9f5141",
+  "status": "initialized",
+  "objective": {
+    "id": "ecfcb5be-f064-47d6-8a59-ab6cde9f5141",
+    "text": [
+      "Challenger ma plaidoirie en identifiant les failles potentielles, les contre-arguments crédibles et les pistes d'amélioration, comme si vous étiez l'avocat adverse."
+    ],
+    "files": []
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé."
+    },
+    {
+      "type": "info",
+      "message": "🎯 Objectif enregistré : Challenger ma plaidoirie en identifiant les failles potentielles, les contre-arguments crédibles et les pistes d'amélioration, comme si vous étiez l'avocat adverse."
+    }
+  ],
+  "output": null,
+  "validation": null
+}

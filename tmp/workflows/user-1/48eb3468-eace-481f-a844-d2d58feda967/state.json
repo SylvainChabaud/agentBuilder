@@ -1,10 +1,10 @@
 {
-  "workflowId": "e21d8b37-2f5d-4624-bf36-f961d106a72d",
+  "workflowId": "f685b10d-31c3-400e-b2ce-8dc1988df793",
   "status": "initialized",
   "objective": {
-    "id": "e21d8b37-2f5d-4624-bf36-f961d106a72d",
+    "id": "f685b10d-31c3-400e-b2ce-8dc1988df793",
     "text": [
-      "wwww"
+      "kjmlkbh"
     ],
     "files": []
   },
@@ -24,7 +24,7 @@
     },
     {
       "type": "info",
-      "message": "🎯 Objectif enregistré : wwww"
+      "message": "🎯 Objectif enregistré : kjmlkbh"
     }
   ],
   "output": null,

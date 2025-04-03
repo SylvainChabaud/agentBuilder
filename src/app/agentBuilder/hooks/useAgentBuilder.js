@@ -38,7 +38,7 @@ const useAgentBuilder = ({
     console.info('useAgentBuilder useEffect');
 
     const fetchExpertises = async () => {
-      const expertises = await getExpertises();
+      const expertises = (await getExpertises()) || [];
       console.info('fetchExpertise', expertises);
 
       setExpertisesList((prev) => [...prev, ...expertises]);

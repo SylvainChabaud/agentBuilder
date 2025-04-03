@@ -71,29 +71,3 @@ export async function extractFileContent(f) {
     return '[Erreur lecture fichier]';
   }
 }
-
-export const getInitParams = async (fields, files) => {
-  console.info('getInitParams', { fields, files });
-  const objectiveText = fields.objective;
-  const userIdRaw = fields.userId ?? 'demo';
-  const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
-
-  const contextFiles = Array.isArray(files.files)
-    ? files.files
-    : files.files
-      ? [files.files]
-      : [];
-
-  const enrichedFiles = await Promise.all(
-    contextFiles.map(async (f) => ({
-      name: f.originalFilename,
-      path: f.filepath,
-      type: f.mimetype,
-      content: await extractFileContent(f),
-    }))
-  );
-
-  console.info('getInitParams 123', { userId, objectiveText, enrichedFiles });
-
-  return { userId, objectiveText, contextFiles: enrichedFiles };
-};
