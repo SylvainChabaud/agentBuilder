@@ -1,7 +1,7 @@
 // lib/ia/callModelAndExtract.js
 
 import { fetchOpenRouter } from 'lib/services/openRouter/fetchOpenRouter';
-import { extractObject } from '../../../agentBuilder/components/run/utils';
+// import { extractObject } from '../../../agentBuilder/components/run/utils';
 import { fetchOllama } from 'lib/services/ollama/fetchOllama';
 
 /**
@@ -46,7 +46,7 @@ export async function callModelAndExtract(
     .replace(/```/g, '') // supprime la fermeture
     .trim();
 
-  const parsed = JSON.parse(cleaned);
+  const parsed = cleaned && JSON.parse(cleaned);
 
   console.info('contentWithoutThink 3', parsed);
 

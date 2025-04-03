@@ -7,6 +7,7 @@ import {
   initializeWorkflowForUser,
 } from '../workflow/initForUser';
 import { analyzeObjective } from '../workflow/analystAgent';
+import { createAgentsFromExpertises } from '../workflow/agentFactory';
 
 export const config = {
   api: {
@@ -49,19 +50,28 @@ export async function POST(req) {
           contextFiles
         );
 
+        console.info('result initializeWorkflowForUser', { workflowId, state });
+
         const { tasks, expertises } = await analyzeObjective({
           objective: objectiveText,
           context: contextFiles,
         });
 
-        console.info('result RUN WORKFLOW', { tasks, expertises });
+        console.info('result analyzeObjective', { tasks, expertises });
+
+        const { agents } = await createAgentsFromExpertises(
+          expertises,
+          objectiveText
+        );
+
+        console.info('result createAgentsFromExpertises', agents);
 
         return resolve(
           NextResponse.json({
             workflowId,
             logs: state.logs,
             memory: state.memory,
-            output: { tasks, expertises },
+            output: { tasks, expertises, agents },
             // output: state.output,
             validation: state.validation,
           })

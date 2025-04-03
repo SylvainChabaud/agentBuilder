@@ -1,20 +1,16 @@
 // lib/ia/agents/analystAgent.js
 
+import { DEFAULT_IA_MODEL } from '../constants';
+import {
+  OBJECTIVE_ANALYSIS_PROMPT,
+  SYSTEM_MESSAGE,
+} from '../expertPrompts/analyzeObjective';
 import { callModelAndExtract } from '../lib/callModel';
 
-const SYSTEM_MESSAGE =
-  'Tu es un agent analyste IA, spécialisé dans la décomposition logique.';
-
-const OBJECTIVE_ANALYSIS_PROMPT = (
-  objective
-) => `Tu es un agent analyste. Voici un objectif utilisateur : "${objective}"
-À partir de cet objectif, déduis : 1. Une liste de sous-tâches intelligentes (Tasks[{}]), chacune avec un nom, une description claire et un niveau de priorité. 2. Les expertises nécessaires pour traiter ces tâches (array de string)
-Format de réponse attendu (JSON uniquement) : { "tasks": [{ "name": "string", "description": "string", "priority": "low" | "medium" | "high" }, ...], "expertises": ["string"] }`;
-
-const outputSchema = {
-  tasks: [{ name: 'string', description: 'string', priority: 'string' }],
-  expertises: ['string'],
-};
+// const outputSchema = {
+//   tasks: [{ name: 'string', description: 'string', priority: 'string' }],
+//   expertises: ['string'],
+// };
 
 /**
  * Appelle un modèle IA pour analyser un objectif et retourner une structure exploitable
@@ -34,13 +30,13 @@ export const analyzeObjective = async ({ objective, context = [] }) => {
 
   const iaRequest = {
     messages,
-    model: 'deepseek/deepseek-r1-distill-llama-70b:free',
-    isOpenRouter: true,
+    model: DEFAULT_IA_MODEL,
+    isOpenRouter: false,
   };
 
   const {
     result: { tasks, expertises },
-  } = await callModelAndExtract(iaRequest, outputSchema);
+  } = await callModelAndExtract(iaRequest);
 
   console.info('output', { tasks, expertises });
 
