@@ -5,14 +5,20 @@ import {
   SYSTEM_MESSAGE,
 } from '../expertPrompts/systemPromptBuilderAgent';
 import { callModelAndExtract } from '../lib/callModel';
+// import { buildUserPromptForAgent } from './buildUserPromptForAgent';
 
 /**
  * Crée dynamiquement une liste d’agents IA spécialisés (coWorkers) selon les expertises données
  * @param {string[]} expertises - Liste des expertises requises (ex: "juridique", "stratégie", "excel")
  * @param {string} objective - Objectif global utilisateur
+ * @param {object|null} context - Contexte enrichi optionnel (résumé + éléments clés)
  * @returns {Promise<Agent[]>}
  */
-export async function createAgentsFromExpertises(expertises, objective) {
+export async function createAgentsFromExpertises(
+  expertises,
+  objective,
+  context = null
+) {
   console.info('createAgentsFromExpertises', { expertises, objective });
 
   if (!Array.isArray(expertises) || expertises.length === 0) {
@@ -21,25 +27,27 @@ export async function createAgentsFromExpertises(expertises, objective) {
 
   const agents = await Promise.all(
     expertises.map(async (expertise, index) => {
+      // const userPrompt = buildUserPromptForAgent(expertise);
+      const systemPromptRequest = generatePromptForExpertise(
+        objective,
+        expertise,
+        context
+      );
+
       const messages = [
         { role: 'system', content: SYSTEM_MESSAGE },
-        {
-          role: 'user',
-          content: generatePromptForExpertise(objective, expertise),
-        },
+        { role: 'user', content: systemPromptRequest },
       ];
 
       const iaRequest = {
         messages,
         model: DEFAULT_IA_MODEL,
-        isOpenRouter: false,
+        isOpenRouter: true,
       };
 
       const {
         result: { system, user },
       } = await callModelAndExtract(iaRequest);
-
-      console.info('callModelAndExtract 9999', { system, user });
 
       const agentId = `agent-${index + 1}-${expertise.toLowerCase().replace(/\s+/g, '-')}`;
 
@@ -51,7 +59,16 @@ export async function createAgentsFromExpertises(expertises, objective) {
         systemPrompt: system,
         userPrompt: user,
         tools: inferToolsForExpertise(expertise),
-        memory: {},
+        memory: {
+          context: {
+            objective,
+            summary: context?.summary || null,
+            keyElements: context?.keyElements || [],
+          },
+          history: [],
+          inputs: [],
+          outputs: [],
+        },
         status: 'idle',
       };
     })

@@ -11,7 +11,7 @@ const WORKFLOW_ROOT = path.resolve(process.cwd(), process.env.WORKFLOW_DIR);
 /**
  * Génère un identifiant unique (workflowId)
  */
-export function generateWorkflowId() {
+function generateWorkflowId() {
   return crypto.randomUUID();
 }
 
@@ -21,19 +21,18 @@ export function generateWorkflowId() {
  * @param {Object} initialState
  * @returns {Promise<string>} workflowId
  */
-export async function initWorkflow(userId, initialState) {
-  console.info('initWorkflow 123', { userId, initialState });
+async function initWorkflow(userId, initialState, workflowId) {
+  // console.info('initWorkflow 123', { userId, initialState });
 
-  const workflowId = generateWorkflowId();
   const basePath = path.join(WORKFLOW_ROOT, userId, workflowId);
   await fs.mkdir(basePath, { recursive: true });
 
-  console.info('initWorkflow 456', basePath);
+  // console.info('initWorkflow 456', basePath);
 
   const filePath = path.join(basePath, 'state.json');
   await fs.writeFile(filePath, JSON.stringify(initialState, null, 2));
 
-  console.info('initWorkflow 789', filePath);
+  // console.info('initWorkflow 789', filePath);
 
   return workflowId;
 }
@@ -48,15 +47,15 @@ export async function initWorkflow(userId, initialState) {
 export async function initializeWorkflowForUser(
   userId,
   objectiveText,
-  contextFiles = []
+  enrichedContext = []
 ) {
   const workflowId = generateWorkflowId();
 
-  console.info('initializeWorkflowForUser 123', {
-    userId,
-    workflowId,
-    contextFiles,
-  });
+  // console.info('initializeWorkflowForUser 123', {
+  //   userId,
+  //   workflowId,
+  //   enrichedContext,
+  // });
 
   /** @type {import('@/types').WorkflowState} */
   const initialState = {
@@ -65,7 +64,7 @@ export async function initializeWorkflowForUser(
     objective: {
       id: workflowId,
       text: objectiveText,
-      files: contextFiles,
+      context: enrichedContext,
     },
     tasks: [],
     agents: [],
@@ -78,40 +77,18 @@ export async function initializeWorkflowForUser(
       },
     },
     logs: [
-      { type: 'info', message: '🚀 Nouveau workflow initialisé.' },
-      { type: 'info', message: '🎯 Objectif enregistré : ' + objectiveText },
+      {
+        type: 'info',
+        message:
+          '🚀 Nouveau workflow initialisé. Objectif enregistré : ' +
+          objectiveText,
+      },
     ],
     output: null,
     validation: null,
   };
 
-  await initWorkflow(userId, initialState);
+  await initWorkflow(userId, initialState, workflowId);
 
   return { workflowId, state: initialState };
 }
-
-export const getInitParams = async (fields, files) => {
-  console.info('getInitParams', { fields, files });
-  const objectiveText = fields.objective;
-  const userIdRaw = fields.userId ?? 'demo';
-  const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
-
-  const contextFiles = Array.isArray(files.files)
-    ? files.files
-    : files.files
-      ? [files.files]
-      : [];
-
-  const enrichedFiles = await Promise.all(
-    contextFiles.map(async (f) => ({
-      name: f.originalFilename,
-      path: f.filepath,
-      type: f.mimetype,
-      content: await extractFileContent(f),
-    }))
-  );
-
-  console.info('getInitParams 123', { userId, objectiveText, enrichedFiles });
-
-  return { userId, objectiveText, contextFiles: enrichedFiles };
-};

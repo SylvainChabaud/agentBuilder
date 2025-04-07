@@ -17,13 +17,31 @@ Le prompt 'user' doit :
 
 Le format de réponse doit être **exclusivement** au format JSON : { "system": "string", "user": "string" }`;
 
-export const generatePromptForExpertise = (objective, expertise) => `
-Voici l’objectif utilisateur à traiter :  
-"${objective}"
+export const generatePromptForExpertise = (
+  objective,
+  expertise,
+  context = null
+) => {
+  const summary = context?.summary?.trim?.() || null;
+  const keyElements = context?.keyElements || null;
 
-Voici l’expertise concernée :  
-"${expertise}"
+  const contextSection = summary
+    ? `
+  Contexte utile pour cet agent :
+  Résumé : "${summary}"
+  ${keyElements ? `Éléments clés : ${JSON.stringify(keyElements)}` : ''}`
+    : '';
 
-Génère maintenant un couple de prompts ('system' et 'user') adaptés à un agent IA expert dans ce domaine, qui doit collaborer à l’atteinte de cet objectif avec d’autres agents IA. 
-
-Réponds uniquement au format JSON demandé.`;
+  return `
+  Voici l’objectif utilisateur à traiter :
+  "${objective}"
+  
+  Voici l’expertise concernée :
+  "${expertise}"
+  
+  ${contextSection}
+  
+  Génère maintenant un couple de prompts ('system' et 'user') adaptés à un agent IA expert dans ce domaine, qui doit collaborer à l’atteinte de cet objectif avec d’autres agents IA.
+  
+  Réponds uniquement au format JSON demandé.`;
+};

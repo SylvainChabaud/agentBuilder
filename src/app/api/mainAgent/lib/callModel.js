@@ -1,7 +1,7 @@
 // lib/ia/callModelAndExtract.js
 
 import { fetchOpenRouter } from 'lib/services/openRouter/fetchOpenRouter';
-// import { extractObject } from '../../../agentBuilder/components/run/utils';
+import { extractObject } from '../../../agentBuilder/components/run/utils';
 import { fetchOllama } from 'lib/services/ollama/fetchOllama';
 
 /**
@@ -13,26 +13,27 @@ import { fetchOllama } from 'lib/services/ollama/fetchOllama';
  * @param {string[]} expectedKeys - Liste des clés attendues dans l’objet retourné
  * @returns {Promise<Object>} - Objet JSON parsé avec les clés extraites
  */
-export async function callModelAndExtract(
-  { messages, model, isOpenRouter = true },
-  expectedKeys = []
-) {
+export async function callModelAndExtract({
+  messages,
+  model,
+  isOpenRouter = true,
+}) {
   if (!messages || !model) {
     return NextResponse.json(
       { error: 'Paramètres manquants' },
       { status: 400 }
     );
   }
-  console.info('callModelAndExtract', { model, messages });
+  // console.info('callModelAndExtract', { model, messages });
 
   const fetchFunc = isOpenRouter ? fetchOpenRouter : fetchOllama;
   const { data } = await fetchFunc({ model, messages });
 
-  console.info('contentWithoutThink 1 ', data);
+  // console.info('contentWithoutThink 1 ', data);
 
   const content = data?.message?.content || '';
 
-  console.info('contentWithoutThink 2 ', content);
+  // console.info('contentWithoutThink 2 ', content);
 
   const contentWithoutThink = content
     .replace(/<think>[\s\S]*?<\/think>/g, '')
@@ -40,15 +41,17 @@ export async function callModelAndExtract(
 
   console.info('contentWithoutThink 3', contentWithoutThink);
 
-  //   const contentObject = extractObject(content, expectedKeys);
-  const cleaned = content
+  // const contentObject = extractObject(content, expectedKeys);
+  const cleaned = contentWithoutThink
     .replace(/```json/g, '') // supprime les balises markdown éventuelles
     .replace(/```/g, '') // supprime la fermeture
     .trim();
 
+  console.info('contentWithoutThink 3 bis', cleaned);
+
   const parsed = cleaned && JSON.parse(cleaned);
 
-  console.info('contentWithoutThink 3', parsed);
+  console.info('contentWithoutThink 3 bis bis', parsed);
 
   return { result: parsed };
 }

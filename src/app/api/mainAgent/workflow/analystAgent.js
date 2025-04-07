@@ -16,7 +16,7 @@ import { callModelAndExtract } from '../lib/callModel';
  * Appelle un modèle IA pour analyser un objectif et retourner une structure exploitable
  * @param {Object} params
  * @param {string} params.objective - Objectif exprimé en langage naturel
- * @param {string[]} [params.context] - Données contextuelles supplémentaires (textes, extraits...)
+ * @param {string[]} [params.context] - Données contextuelles supplémentaires (summary, keys)
  * @returns {Promise<{ tasks: Task[], expertises: string[] }>}
  */
 
@@ -25,13 +25,13 @@ export const analyzeObjective = async ({ objective, context = [] }) => {
 
   const messages = [
     { role: 'system', content: SYSTEM_MESSAGE },
-    { role: 'user', content: OBJECTIVE_ANALYSIS_PROMPT(objective) },
+    { role: 'user', content: OBJECTIVE_ANALYSIS_PROMPT(objective, context) },
   ];
 
   const iaRequest = {
     messages,
     model: DEFAULT_IA_MODEL,
-    isOpenRouter: false,
+    isOpenRouter: true,
   };
 
   const {

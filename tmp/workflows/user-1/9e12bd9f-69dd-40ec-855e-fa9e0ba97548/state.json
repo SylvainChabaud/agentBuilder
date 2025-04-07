@@ -1,0 +1,69 @@
+{
+  "workflowId": "9e12bd9f-69dd-40ec-855e-fa9e0ba97548",
+  "status": "initialized",
+  "objective": {
+    "id": "9e12bd9f-69dd-40ec-855e-fa9e0ba97548",
+    "text": [
+      "Analyse ce programme de formation pour des débutants en IA. Vérifie la clarté, la progressivité et l’adéquation au public cible. Propose des ajustements pédagogiques."
+    ],
+    "context": null
+  },
+  "tasks": [
+    {
+      "name": "Révision des objectifs globaux",
+      "description": "Analyse détaillée des objectifs du programme dans leur globalité",
+      "priority": "high"
+    },
+    {
+      "name": "Identification du public cible",
+      "description": "Determination détaillée des caractéristiques techniques et de formation du public que le programme cherche à intégrer",
+      "priority": "high"
+    },
+    {
+      "name": "Analyse clarté, progressivité et pertinence",
+      "description": "Evaluation d'ouest que les sous-tache du programme font progresse vers les objectifs et la clarté de l'explication propre a ces sous-tache",
+      "priority": "medium"
+    },
+    {
+      "name": "Identification de sous-taches répétées",
+      "description": "Enquete à propos des sub-tasks utilisees habituellement plusieurs fois dans l'enseignement de IA aux etudiants novices",
+      "priority": "medium"
+    },
+    {
+      "name": "Evaluation de la composition des sous-taches",
+      "description": "Examine si les taches du programme sont ordonnées logiquement et complémentaires unes aux autres",
+      "priority": "high"
+    },
+    {
+      "name": "Proposition de modifications pédagogiques",
+      "description": "Fais une liste de changement qui peuvent être utiliser pour amener le programme près de l'objectif tel que definit les utilisateurs, en prenant en compte leurs exigences et leur point de vue",
+      "priority": "medium"
+    }
+  ],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : Analyse ce programme de formation pour des débutants en IA. Vérifie la clarté, la progressivité et l’adéquation au public cible. Propose des ajustements pédagogiques."
+    },
+    {
+      "type": "info",
+      "message": "🧠 Objectif analysé avec succès : 6 tâches, 4 expertises."
+    }
+  ],
+  "output": null,
+  "validation": null,
+  "expertises": [
+    "Analyse logique et structuré",
+    "Professeurs d'enseignement pour débutants dans l'IA",
+    "Programmation connaissances en IA",
+    "Linguistique et conception de documents instructifs"
+  ]
+}

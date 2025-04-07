@@ -8,6 +8,8 @@ import {
 } from '../workflow/initForUser';
 import { analyzeObjective } from '../workflow/analystAgent';
 import { createAgentsFromExpertises } from '../workflow/agentFactory';
+import { prepareUserWorkflowContext } from '../workflow/prepareUserWorkflowContext';
+import { updateWorkflowState } from '../workflow/utils';
 
 export const config = {
   api: {
@@ -15,6 +17,7 @@ export const config = {
   },
 };
 
+// Convertit une requête Next en un flux compatible Node.js (nécessaire pour formidable)
 function toNodeRequest(req) {
   const nodeReq = Readable.from(req.body);
   nodeReq.headers = Object.fromEntries(req.headers);
@@ -37,52 +40,85 @@ export async function POST(req) {
       }
 
       try {
-        const { userId, objectiveText, contextFiles } = await getInitParams(
-          fields,
-          files
-        );
+        // 🧩 Étape 1 : Extraction et résumé IA du contexte utilisateur
+        let userId, objectiveText, enrichedContext;
+        try {
+          ({ userId, objectiveText, enrichedContext } =
+            await prepareUserWorkflowContext(fields, files));
+        } catch (e) {
+          throw new Error('🧩 Échec prepareUserWorkflowContext: ' + e.message);
+        }
 
-        console.info('✅ Fichiers enrichis :', contextFiles);
+        // 🧩 Étape 2 : Initialisation du workflow
+        let workflowId, state;
+        try {
+          ({ workflowId, state } = await initializeWorkflowForUser(
+            userId,
+            objectiveText,
+            enrichedContext
+          ));
+        } catch (e) {
+          throw new Error('⚙️ Échec initializeWorkflowForUser: ' + e.message);
+        }
 
-        const { workflowId, state } = await initializeWorkflowForUser(
-          userId,
-          objectiveText,
-          contextFiles
-        );
+        // 🧩 Étape 3 : Analyse IA de l’objectif
+        let tasks, expertises;
+        try {
+          const summary = enrichedContext?.summary || '';
+          const keyElements = enrichedContext?.keyElements || null;
 
-        console.info('result initializeWorkflowForUser', { workflowId, state });
+          ({ tasks, expertises } = await analyzeObjective({
+            objective: objectiveText,
+            context: { summary, keyElements },
+          }));
+        } catch (e) {
+          throw new Error('🔎 Échec analyzeObjective: ' + e.message);
+        }
 
-        const { tasks, expertises } = await analyzeObjective({
-          objective: objectiveText,
-          context: contextFiles,
-        });
+        // 🧩 Étape 4 : Enregistrement des tâches + expertises
+        try {
+          state.tasks = tasks;
+          state.expertises = expertises;
+          state.logs.push({
+            type: 'info',
+            message: `🧠 Objectif analysé avec succès : ${tasks.length} tâches, ${expertises.length} expertises.`,
+          });
+          await updateWorkflowState(userId, workflowId, state);
+        } catch (e) {
+          throw new Error(
+            '💾 Échec updateWorkflowState (après analyse): ' + e.message
+          );
+        }
 
-        console.info('result analyzeObjective', { tasks, expertises });
+        // 🧩 Étape 5 : Génération des agents IA
+        let agents;
+        try {
+          agents = await createAgentsFromExpertises(
+            expertises,
+            objectiveText,
+            enrichedContext
+          );
+        } catch (e) {
+          throw new Error('🤖 Échec createAgentsFromExpertises: ' + e.message);
+        }
 
-        const { agents } = await createAgentsFromExpertises(
-          expertises,
-          objectiveText
-        );
-
-        console.info('result createAgentsFromExpertises', agents);
-
+        // ✅ Réponse finale partielle
         return resolve(
           NextResponse.json({
             workflowId,
             logs: state.logs,
             memory: state.memory,
             output: { tasks, expertises, agents },
-            // output: state.output,
             validation: state.validation,
           })
         );
       } catch (err) {
-        console.error('Erreur init workflow:', err);
+        console.error(
+          '❌ Erreur dans le cycle d’orchestration IA:',
+          err.message
+        );
         return resolve(
-          NextResponse.json(
-            { error: 'Erreur initialisation workflow' },
-            { status: 500 }
-          )
+          NextResponse.json({ error: err.message }, { status: 500 })
         );
       }
     });

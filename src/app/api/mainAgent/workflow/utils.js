@@ -1,7 +1,12 @@
-// lib/extractFileContent.js
+import dotenv from 'dotenv';
 import fs from 'fs/promises';
 import mammoth from 'mammoth';
 import PDFParser from 'pdf2json';
+import path from 'path';
+
+dotenv.config();
+
+const WORKFLOW_ROOT = path.resolve(process.cwd(), process.env.WORKFLOW_DIR);
 
 /**
  * Extraction simple de texte depuis un PDF avec pdf2json
@@ -70,4 +75,23 @@ export async function extractFileContent(f) {
     console.error('❌ Erreur extractFileContent :', err);
     return '[Erreur lecture fichier]';
   }
+}
+
+/**
+ * Met à jour le fichier state.json pour un workflow donné
+ * @param {string} userId
+ * @param {string} workflowId
+ * @param {Object} state - L’état complet du workflow à sauvegarder
+ * @returns {Promise<void>}
+ */
+export async function updateWorkflowState(userId, workflowId, state) {
+  const basePath = path.join(WORKFLOW_ROOT, userId, workflowId);
+  const filePath = path.join(basePath, 'state.json');
+
+  console.info('filePath 999', filePath);
+
+  await fs.writeFile(filePath, JSON.stringify(state, null, 2));
+
+  // const filePath = path.join(WORKFLOW_ROOT, userId, workflowId, 'state.json');
+  // await fs.writeFile(filePath, JSON.stringify(state, null, 2), 'utf-8');
 }
