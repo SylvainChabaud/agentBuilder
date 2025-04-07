@@ -10,6 +10,7 @@ import { analyzeObjective } from '../workflow/analystAgent';
 import { createAgentsFromExpertises } from '../workflow/agentFactory';
 import { prepareUserWorkflowContext } from '../workflow/prepareUserWorkflowContext';
 import { updateWorkflowState } from '../workflow/utils';
+import { planChallenge } from '../workflow/strategyPlannerAgent';
 
 export const config = {
   api: {
@@ -77,9 +78,10 @@ export async function POST(req) {
           state,
         });
 
-        ////////////////////////////////////////////
-        // 🧩 Étape 3 : Analyse IA de l’objectif //
-        ////////////////////////////////////////////
+        ///////////////////////////////////////////////
+        //  🧩 Étape 3 : Analyse IA de l’objectif    //
+        //  + Enregistrement des tâches + expertises //
+        ///////////////////////////////////////////////
         let tasks, expertises;
         try {
           const summary = enrichedContext?.summary || '';
@@ -89,6 +91,17 @@ export async function POST(req) {
             objective: objectiveText,
             context: { summary, keyElements },
           }));
+
+          state.tasks = tasks;
+          state.expertises = expertises;
+          state.logs.push({
+            type: 'info',
+            message: `🧠 Objectif analysé avec succès : ${tasks.length} tâches, ${expertises.length} expertises.`,
+          });
+
+          console.info('updateWorkflowState (après analyse)', state);
+
+          await updateWorkflowState(userId, workflowId, state);
         } catch (e) {
           throw new Error('🔎 Échec analyzeObjective: ' + e.message);
         }
@@ -98,27 +111,9 @@ export async function POST(req) {
           expertises,
         });
 
-        //////////////////////////////////////////////////////////
-        // 🧩 Étape 4 : Enregistrement des tâches + expertises //
-        //////////////////////////////////////////////////////////
-        try {
-          state.tasks = tasks;
-          state.expertises = expertises;
-          state.logs.push({
-            type: 'info',
-            message: `🧠 Objectif analysé avec succès : ${tasks.length} tâches, ${expertises.length} expertises.`,
-          });
-          await updateWorkflowState(userId, workflowId, state);
-        } catch (e) {
-          throw new Error(
-            '💾 Échec updateWorkflowState (après analyse): ' + e.message
-          );
-        }
-
-        console.info('updateWorkflowState (après analyse)', state);
-
         ////////////////////////////////////////////
-        // 🧩 Étape 5 : Génération des agents IA //
+        // 🧩 Étape 4 : Génération des agents IA //
+        //      + Enregistrement des agents       //
         ////////////////////////////////////////////
         let agents;
         try {
@@ -127,16 +122,7 @@ export async function POST(req) {
             objectiveText,
             enrichedContext
           );
-        } catch (e) {
-          throw new Error('🤖 Échec createAgentsFromExpertises: ' + e.message);
-        }
 
-        console.info('createAgentsFromExpertises', agents);
-
-        /////////////////////////////////////////////
-        // 🧩 Étape 6 : Enregistrement des agents //
-        ////////////////////////////////////////////
-        try {
           state.agents = agents;
 
           state.logs.push({
@@ -144,18 +130,18 @@ export async function POST(req) {
             message: `🤖 ${agents.length} agents IA spécialisés créés à partir des expertises.`,
           });
 
+          console.info('updateWorkflowState (après création agents)', state);
+
           await updateWorkflowState(userId, workflowId, state);
         } catch (e) {
-          throw new Error(
-            '💾 Échec updateWorkflowState (après création agents): ' + e.message
-          );
+          throw new Error('🤖 Échec createAgentsFromExpertises: ' + e.message);
         }
 
-        console.info('updateWorkflowState (après création agents)', state);
+        console.info('createAgentsFromExpertises', agents);
 
-        ///////////////////////////////////////////////////////////////////////////////
-        // 🧩 Étape 6bis : Initialisation de la mémoire IA (par agent et par tâche) //
-        //////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////
+        // 🧩 Étape 5 : Initialisation de la mémoire IA (par agent et par tâche) //
+        ///////////////////////////////////////////////////////////////////////////
         try {
           state.memory = {
             version: 1,
@@ -174,6 +160,8 @@ export async function POST(req) {
             message: `🧠 Mémoire IA initialisée pour ${agents.length} agents et ${tasks.length} tâches.`,
           });
 
+          console.info('updateWorkflowState (initialisation mémoire)', state);
+
           await updateWorkflowState(userId, workflowId, state);
         } catch (e) {
           throw new Error(
@@ -182,7 +170,36 @@ export async function POST(req) {
           );
         }
 
-        console.info('updateWorkflowState (initialisation mémoire)', state);
+        /////////////////////////////////////////////////////////////////////////////
+        // 🧩 Étape 6 : Planification stratégique (assignment des tâches + ordre) //
+        /////////////////////////////////////////////////////////////////////////////
+        let plan;
+        try {
+          plan = await planChallenge({
+            objective: objectiveText,
+            tasks,
+            agents,
+          });
+
+          // On stocke le plan dans l’état
+          state.plan = plan;
+
+          // Log associé
+          state.logs.push({
+            type: 'info',
+            message: `📋 Plan stratégique généré avec ${plan.length} étapes.`,
+          });
+
+          console.info('planChallenge (steps)', state);
+
+          await updateWorkflowState(userId, workflowId, state);
+        } catch (e) {
+          throw new Error(
+            '📋 Échec planChallenge (planification stratégique): ' + e.message
+          );
+        }
+
+        console.info('planChallenge (steps)', plan);
 
         //////////////////////////////////
         // ✅ Réponse finale partielle //
@@ -192,7 +209,7 @@ export async function POST(req) {
             workflowId,
             logs: state.logs,
             memory: state.memory,
-            output: { tasks, expertises, agents },
+            output: { tasks, expertises, agents, plan },
             validation: state.validation,
           })
         );
