@@ -87,10 +87,10 @@ export async function prepareUserWorkflowContext(fields, files) {
     files
   );
 
-  const enrichedContext =
+  const filesContext =
     Array.isArray(contextFiles) && contextFiles.length > 0
       ? await summarizeContextFiles(contextFiles)
       : null;
 
-  return { userId, objectiveText, enrichedContext };
+  return { userId, objectiveText, filesContext };
 }

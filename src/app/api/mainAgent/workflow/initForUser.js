@@ -44,11 +44,11 @@ async function initWorkflow(userId, initialState, workflowId) {
  * @param {Array<{ name: string, path: string }>} contextFiles - Liste des fichiers reçus
  * @returns {Promise<{ workflowId: string, state: import('@/types').WorkflowState }>}
  */
-export async function initializeWorkflowForUser(
+export async function initializeWorkflowForUser({
   userId,
   objectiveText,
-  enrichedContext = []
-) {
+  enrichedContext = [],
+}) {
   const workflowId = generateWorkflowId();
 
   // console.info('initializeWorkflowForUser 123', {

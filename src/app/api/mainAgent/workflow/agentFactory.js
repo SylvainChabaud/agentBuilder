@@ -19,7 +19,11 @@ export async function createAgentsFromExpertises(
   objective,
   context = null
 ) {
-  console.info('createAgentsFromExpertises', { expertises, objective });
+  console.info('createAgentsFromExpertises', {
+    expertises,
+    objective,
+    context,
+  });
 
   if (!Array.isArray(expertises) || expertises.length === 0) {
     throw new Error('Aucune expertise fournie à AgentFactory');
@@ -75,7 +79,7 @@ export async function createAgentsFromExpertises(
   );
 
   console.info('✅ Agents générés avec prompts :', agents);
-  return { agents };
+  return agents;
 }
 
 /**

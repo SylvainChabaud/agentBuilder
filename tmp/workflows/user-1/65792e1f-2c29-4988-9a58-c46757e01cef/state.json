@@ -1,0 +1,211 @@
+{
+  "workflowId": "65792e1f-2c29-4988-9a58-c46757e01cef",
+  "status": "initialized",
+  "objective": {
+    "id": "65792e1f-2c29-4988-9a58-c46757e01cef",
+    "text": [
+      "Analyse ce programme de formation pour des débutants en IA. Vérifie la clarté, la progressivité et l’adéquation au public cible. Propose des ajustements pédagogiques."
+    ],
+    "context": {
+      "summary": "This training program is aimed at consultants, accountants, HR professionals, self-employed individuals, entrepreneurs, and business leaders who want to integrate AI into their professional activities to optimize their time and automate tasks. The training covers the basics of React, including components, state, and lifecycle, as well as the use of Hooks and React Router for routing and Context API for state management. The training is 1-2 days long and can be held in person or online. The cost is 1250€ HT (1500€ TTC).",
+      "keyElements": [
+        "Consultants, experts-comptables, responsables RH, professions libérales.",
+        "Entrepreneurs, dirigeants d’entreprise, gestionnaires de projet.",
+        "Toute personne souhaitant intégrer l'IA dans son activité professionnelle pour optimiser son temps et automatiser ses tâches.",
+        "Pré requis : Aucun prérequis technique n'est nécessaire. Une aisance avec les outils numériques est un plus.",
+        "Objectif(s) pédagogique(s) : Savoirs : Connaissance des concepts de base de React, Compréhension des Hooks et de leur rôle dans les composants fonctionnels, Connaissance des outils de routage avec React Router et de gestion d’état globale avec Context API.",
+        "Savoir-faire : Créer des composants réutilisables et organiser l’interface utilisateur avec JSX, Gérer l’état et les événements pour rendre une application interactive, Implémenter le routage et structurer une application en plusieurs pages avec React Router.",
+        "Durée et modalité d’organisation : Durée : 1 à 2 jours (7h ou 14h de formation). Horaires : 9h00-12h00 / 13h00-17h00. Format : En présentiel ou à distance. Taille du groupe : 5 à 10 participants.",
+        "Tarifs : 1250€ HT soit 1500€ TTC"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "name": "Understand the learning objectives",
+      "description": "Analyze and clarify the objectives of the training program in terms of the skills and knowledge that participants are expected to gain.",
+      "priority": "high"
+    },
+    {
+      "name": "Evaluate the appropriateness of the subject matter",
+      "description": "Assess the relevance and importance of the topics covered in the training program for the intended audience.",
+      "priority": "medium"
+    },
+    {
+      "name": "Analyze the prerequisites",
+      "description": "Examine the prerequisites to ensure they are suitable for the intended audience or suggest additional ones if necessary.",
+      "priority": "medium"
+    },
+    {
+      "name": "Break down the course content",
+      "description": "Divide the course content into logical and manageable sections for efficient learning.",
+      "priority": "high"
+    },
+    {
+      "name": "Determine the most appropriate teaching methods",
+      "description": "Analyze the content and the target audience to recommend suitable teaching methods for effective delivery.",
+      "priority": "medium"
+    },
+    {
+      "name": "Review the clarity and progressiveness of the program",
+      "description": "Examine the organization of the course content to ensure it is easily understood and progressive, providing the right balance for the participants.",
+      "priority": "high"
+    },
+    {
+      "name": "Recommend aids and materials",
+      "description": "Recommend learning materials and aids that may facilitate the understanding and retention of the content for the participants.",
+      "priority": "medium"
+    },
+    {
+      "name": "Analyze the cost and time allocation",
+      "description": "Assess the cost and duration of the training program to determine its value for money and suggest improvements if necessary.",
+      "priority": "high"
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-1-educational-analysis-and-design",
+      "name": "Agent Educational analysis and design",
+      "role": "coWorker",
+      "expertise": "Educational analysis and design",
+      "systemPrompt": "Vous êtes un agent IA spécialisé dans l'analyse et le design pédagogique. Vous êtes rigoureux, expert et collaboratif. Vous faites partie d'un écosystème d'agents IA complémentaires, et vous jouez un rôle important dans l'atteinte d'un objectif complexe. Vous êtes autonome et vous travaillez en collaboration avec d'autres agents IA pour analyser ce programme de formation pour des débutants en IA, vérifier sa clarté, sa progressivité et son adéquation au public cible, et proposer des ajustements pédagogiques.",
+      "userPrompt": "Analysez ce programme de formation pour des débutants en IA. Vérifiez la clarté, la progressivité et l'adéquation au public cible. Proposez des ajustements pédagogiques pour optimiser l'apprentissage des participants, en particulier pour les consultants, experts-comptables, responsables RH, professions libérales, entrepreneurs, dirigeants d'entreprise, gestionnaires de projet, et toute personne souhaitant intégrer l'IA dans son activité professionnelle pour optimiser son temps et automatiser ses tâches. Le programme couvre les concepts de base de React, l'utilisation de Hooks et React Router pour routing, et la gestion d'état avec Context API. Le programme est de 1 à 2 jours de durée et peut être organisé en présentiel ou à distance. Le coût est de 1250€ HT (1500€ TTC).",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": [
+            "Analyse ce programme de formation pour des débutants en IA. Vérifie la clarté, la progressivité et l’adéquation au public cible. Propose des ajustements pédagogiques."
+          ],
+          "summary": "This training program is aimed at consultants, accountants, HR professionals, self-employed individuals, entrepreneurs, and business leaders who want to integrate AI into their professional activities to optimize their time and automate tasks. The training covers the basics of React, including components, state, and lifecycle, as well as the use of Hooks and React Router for routing and Context API for state management. The training is 1-2 days long and can be held in person or online. The cost is 1250€ HT (1500€ TTC).",
+          "keyElements": [
+            "Consultants, experts-comptables, responsables RH, professions libérales.",
+            "Entrepreneurs, dirigeants d’entreprise, gestionnaires de projet.",
+            "Toute personne souhaitant intégrer l'IA dans son activité professionnelle pour optimiser son temps et automatiser ses tâches.",
+            "Pré requis : Aucun prérequis technique n'est nécessaire. Une aisance avec les outils numériques est un plus.",
+            "Objectif(s) pédagogique(s) : Savoirs : Connaissance des concepts de base de React, Compréhension des Hooks et de leur rôle dans les composants fonctionnels, Connaissance des outils de routage avec React Router et de gestion d’état globale avec Context API.",
+            "Savoir-faire : Créer des composants réutilisables et organiser l’interface utilisateur avec JSX, Gérer l’état et les événements pour rendre une application interactive, Implémenter le routage et structurer une application en plusieurs pages avec React Router.",
+            "Durée et modalité d’organisation : Durée : 1 à 2 jours (7h ou 14h de formation). Horaires : 9h00-12h00 / 13h00-17h00. Format : En présentiel ou à distance. Taille du groupe : 5 à 10 participants.",
+            "Tarifs : 1250€ HT soit 1500€ TTC"
+          ]
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    },
+    {
+      "id": "agent-2-knowledge-of-ia-and-related-fields",
+      "name": "Agent Knowledge of IA and related fields",
+      "role": "coWorker",
+      "expertise": "Knowledge of IA and related fields",
+      "systemPrompt": "Vous êtes un expert en intelligence artificielle avec une solide compréhension de ses applications dans le domaine des affaires et de la formation. Vous êtes rigoureux, collaboratif et mettez l'accent sur la précision et la pertinence de vos analyses. Vous œuvrez en harmonie avec d'autres agents IA pour atteindre des objectifs complexes. Vous apportez votre expertise à l'analyse de ce programme de formation en vue d'identifier des ajustements pédagogiques nécessaires pour une meilleure expérience de formation.",
+      "userPrompt": "Analysez ce programme de formation pour des débutants en IA. Vérifiez si la clarté, la progressivité et l'adéquation du contenu sont adaptés au public cible. Suggestez des ajustements pédagogiques si nécessaire.",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": [
+            "Analyse ce programme de formation pour des débutants en IA. Vérifie la clarté, la progressivité et l’adéquation au public cible. Propose des ajustements pédagogiques."
+          ],
+          "summary": "This training program is aimed at consultants, accountants, HR professionals, self-employed individuals, entrepreneurs, and business leaders who want to integrate AI into their professional activities to optimize their time and automate tasks. The training covers the basics of React, including components, state, and lifecycle, as well as the use of Hooks and React Router for routing and Context API for state management. The training is 1-2 days long and can be held in person or online. The cost is 1250€ HT (1500€ TTC).",
+          "keyElements": [
+            "Consultants, experts-comptables, responsables RH, professions libérales.",
+            "Entrepreneurs, dirigeants d’entreprise, gestionnaires de projet.",
+            "Toute personne souhaitant intégrer l'IA dans son activité professionnelle pour optimiser son temps et automatiser ses tâches.",
+            "Pré requis : Aucun prérequis technique n'est nécessaire. Une aisance avec les outils numériques est un plus.",
+            "Objectif(s) pédagogique(s) : Savoirs : Connaissance des concepts de base de React, Compréhension des Hooks et de leur rôle dans les composants fonctionnels, Connaissance des outils de routage avec React Router et de gestion d’état globale avec Context API.",
+            "Savoir-faire : Créer des composants réutilisables et organiser l’interface utilisateur avec JSX, Gérer l’état et les événements pour rendre une application interactive, Implémenter le routage et structurer une application en plusieurs pages avec React Router.",
+            "Durée et modalité d’organisation : Durée : 1 à 2 jours (7h ou 14h de formation). Horaires : 9h00-12h00 / 13h00-17h00. Format : En présentiel ou à distance. Taille du groupe : 5 à 10 participants.",
+            "Tarifs : 1250€ HT soit 1500€ TTC"
+          ]
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    },
+    {
+      "id": "agent-3-instructional-design",
+      "name": "Agent Instructional design",
+      "role": "coWorker",
+      "expertise": "Instructional design",
+      "systemPrompt": "Vous êtes un expert en design d'apprentissage, rigoureux et collaboratif. Votre mission consiste à examiner ce programme de formation destiné aux professionnels désirant intégrer l'IA à leur activité professionnelle. Vous travaillez dans un écosystème d'agents IA complémentaires pour atteindre les objectifs du projet. Vous avez la responsabilité de déterminer s'il existe des améliorations pédagogiques dans ce programme de formation. Votre autonomie vous permet d'étudier les méthodes pédagogiques les plus adaptées et d'effectuer les modifications nécessaires pour le rendre accessible et pertinent pour les professionnels visés.",
+      "userPrompt": "Examinez ce programme de formation destiné aux consultants, comptables, professionnels libéraux, entrepreneurs et dirigeants d'entreprise. Évaluez s'il existe des possibilités d'améliorations pédagogiques, notamment en ce qui concerne la clarté, la progressivité et l'adéquation à son public cible. Identifiez des possibilités d'ajustements pour faciliter la compréhension de ces participants dans leur parcours de maîtrise des bases de React.",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": [
+            "Analyse ce programme de formation pour des débutants en IA. Vérifie la clarté, la progressivité et l’adéquation au public cible. Propose des ajustements pédagogiques."
+          ],
+          "summary": "This training program is aimed at consultants, accountants, HR professionals, self-employed individuals, entrepreneurs, and business leaders who want to integrate AI into their professional activities to optimize their time and automate tasks. The training covers the basics of React, including components, state, and lifecycle, as well as the use of Hooks and React Router for routing and Context API for state management. The training is 1-2 days long and can be held in person or online. The cost is 1250€ HT (1500€ TTC).",
+          "keyElements": [
+            "Consultants, experts-comptables, responsables RH, professions libérales.",
+            "Entrepreneurs, dirigeants d’entreprise, gestionnaires de projet.",
+            "Toute personne souhaitant intégrer l'IA dans son activité professionnelle pour optimiser son temps et automatiser ses tâches.",
+            "Pré requis : Aucun prérequis technique n'est nécessaire. Une aisance avec les outils numériques est un plus.",
+            "Objectif(s) pédagogique(s) : Savoirs : Connaissance des concepts de base de React, Compréhension des Hooks et de leur rôle dans les composants fonctionnels, Connaissance des outils de routage avec React Router et de gestion d’état globale avec Context API.",
+            "Savoir-faire : Créer des composants réutilisables et organiser l’interface utilisateur avec JSX, Gérer l’état et les événements pour rendre une application interactive, Implémenter le routage et structurer une application en plusieurs pages avec React Router.",
+            "Durée et modalité d’organisation : Durée : 1 à 2 jours (7h ou 14h de formation). Horaires : 9h00-12h00 / 13h00-17h00. Format : En présentiel ou à distance. Taille du groupe : 5 à 10 participants.",
+            "Tarifs : 1250€ HT soit 1500€ TTC"
+          ]
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    }
+  ],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {
+        "agent-1-educational-analysis-and-design": [],
+        "agent-2-knowledge-of-ia-and-related-fields": [],
+        "agent-3-instructional-design": []
+      },
+      "byTask": {
+        "task-1": [],
+        "task-2": [],
+        "task-3": [],
+        "task-4": [],
+        "task-5": [],
+        "task-6": [],
+        "task-7": [],
+        "task-8": []
+      }
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : Analyse ce programme de formation pour des débutants en IA. Vérifie la clarté, la progressivité et l’adéquation au public cible. Propose des ajustements pédagogiques."
+    },
+    {
+      "type": "info",
+      "message": "🧠 Objectif analysé avec succès : 8 tâches, 3 expertises."
+    },
+    {
+      "type": "info",
+      "message": "🤖 3 agents IA spécialisés créés à partir des expertises."
+    },
+    {
+      "type": "info",
+      "message": "🧠 Mémoire IA initialisée pour 3 agents et 8 tâches."
+    }
+  ],
+  "output": null,
+  "validation": null,
+  "expertises": [
+    "Educational analysis and design",
+    "Knowledge of IA and related fields",
+    "Instructional design"
+  ]
+}
