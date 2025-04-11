@@ -56,15 +56,14 @@ export async function planChallenge({ objective, tasks, agents }) {
 
   const iaRequest = {
     messages,
-    model: DEFAULT_IA_MODEL,
-    isOpenRouter: true,
+    ...DEFAULT_IA_MODEL,
   };
 
-  const { result } = await callModelAndExtract(iaRequest);
+  const { result, tokenUsage } = await callModelAndExtract(iaRequest);
 
   if (!result?.steps || !Array.isArray(result.steps)) {
     throw new Error("Le plan retourné par l'IA est invalide ou vide.");
   }
 
-  return result;
+  return { plan: result, tokenUsage };
 }

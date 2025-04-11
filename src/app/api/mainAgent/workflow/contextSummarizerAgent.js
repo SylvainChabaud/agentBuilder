@@ -31,8 +31,7 @@ export async function summarizeOne(file) {
 
   const iaRequest = {
     messages,
-    model: DEFAULT_IA_MODEL,
-    isOpenRouter: true,
+    ...DEFAULT_IA_MODEL,
   };
 
   const { result } = await callModelAndExtract(iaRequest);
@@ -73,14 +72,14 @@ export async function consolidateSummaries(fileSummaries) {
 
   const iaRequest = {
     messages,
-    model: DEFAULT_IA_MODEL,
-    isOpenRouter: true,
+    ...DEFAULT_IA_MODEL,
   };
 
-  const { result } = await callModelAndExtract(iaRequest);
+  const { result, tokenUsage } = await callModelAndExtract(iaRequest);
 
   return {
     summary: result.summary,
     keyElements: result.keyElements || [],
+    tokenUsage,
   };
 }

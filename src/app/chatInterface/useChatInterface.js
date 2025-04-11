@@ -63,7 +63,7 @@ export const useChatInterface = () => {
           // messages: inputMessage,
           messages: [...messages, newMessage],
           model: selectedModel.model,
-          isOpenRouter: selectedModel?.isOpenRouter,
+          modelSource: selectedModel?.modelSource,
         }),
       });
 

@@ -1,0 +1,124 @@
+{
+  "workflowId": "3a8b7a0c-42fc-4c1a-be80-42639083ea82",
+  "status": "initialized",
+  "objective": {
+    "id": "3a8b7a0c-42fc-4c1a-be80-42639083ea82",
+    "text": [
+      "Analyse ces données de formation pour des pro en IA. Et rédige une nouvelle version de mon programme de formation. Il doit répondre aux critères qualiopi et doit être conforme à la quête de la formation parfaite."
+    ],
+    "context": {
+      "rawFiles": [
+        {
+          "name": "Détails de formation.docx",
+          "path": "C:\\Users\\UTILIS~1\\AppData\\Local\\Temp\\96110489ec71f26b071b7be02",
+          "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "content": "Maîtrisez l'IA pour Booster Votre ProductivitéOptimisez votre temps, automatisez vos tâches et améliorez votre efficacité avec l'intelligence artificielle.\n\n\n\nObjectifs pédagogiques\n\n✅ Comprendre le fonctionnement et les enjeux de l’IA dans un contexte professionnel✅ Maîtriser les fonctionnalités avancées de ChatGPT✅ Concevoir des prompts optimisés✅ Intégrer ChatGPT dans son activité professionnelle✅ Appréhender les enjeux éthiques, de conformité et de sécurité✅ Analyser des scénarios réels d’automatisation et optimiser sa productivité\n\n\n\nProgramme de la formation\n\n📍 Module 1 : Comprendre l'IA et ses enjeux dans un contexte professionnel\n\nIntroduction aux fondamentaux de l’IA et son impact sur les métiers.\n\nEnjeux éthiques et conformité : RGPD, confidentialité des données, responsabilités.\n\nÉtudes de cas : Utilisation concrète de l’IA dans différentes professions.\n\n📍 Module 2 : Maîtriser les outils IA et les fonctionnalités avancées de ChatGPT\n\nFonctionnalités avancées de ChatGPT : Groupes, Canvas, Web browsing, Reasoning, DALL·E.\n\nExploitation des API et GPT Experts pour la personnalisation d’outils.\n\nRédaction et analyse assistées par l’IA : Génération de rapports, synthèses, recommandations.\n\n📍 Module 3 : Automatisation et optimisation des tâches\n\nCréation et utilisation de prompts optimisés pour la rédaction et l’analyse.\n\nAutomatisation des emails et gestion documentaire via des workflows intégrés.\n\nÉtudes de scénarios réels : Génération automatisée de synthèses, analyse de données et préparation de documents.\n\n📍 Module 4 : Bonnes pratiques, éthique et limites\n\nComprendre et anticiper les biais et limites de l’IA dans la pratique professionnelle.\n\nRéglementation et mise en conformité des pratiques IA avec les exigences du secteur.\n\nÉtudes de cas et mises en situation : Identification des erreurs potentielles et corrections adaptées.\n\n\n\nPour qui ?\n\n✅ Consultants, experts-comptables, responsables RH, professions libérales, entrepreneurs, dirigeants d’entreprise, gestionnaires de projet.✅ Toute personne souhaitant intégrer l'IA dans son activité professionnelle.\n\n\n\nInformations pratiques\n\n📅 Durée : 1 à 2 jours📍 Format : En présentiel ou à distance💰 Tarif : (sur demande)🎓 Organisme de formation certifié Qualiopi\n\n📞 Contact : 06 80 35 94 17📧 Email : sylvain.chabaud@hotmail.com🌐 Site web : [Votre site web]\n\n👉 Réservez votre place maintenant !"
+        }
+      ],
+      "fileSummaries": [
+        {
+          "name": "Détails de formation.docx",
+          "summary": "La formation 'Maîtrisez l'IA pour Booster Votre Productivité' vise à aider les professionnels à optimiser leur temps et automatiser leurs tâches grâce à l'intelligence artificielle. Elle couvre les fondamentaux de l'IA, les fonctionnalités avancées de ChatGPT, l'automatisation des tâches, et les enjeux éthiques et de conformité. La formation s'adresse aux consultants, experts-comptables, responsables RH, entrepreneurs, et autres professionnels souhaitant intégrer l'IA dans leur activité. Elle est disponible en présentiel ou à distance, dure 1 à 2 jours, et est proposée par un organisme certifié Qualiopi.",
+          "keyElements": [
+            "Objectifs pédagogiques: Comprendre l'IA, maîtriser ChatGPT, concevoir des prompts optimisés, intégrer l'IA dans son activité, appréhender les enjeux éthiques et de sécurité.",
+            "Programme: 4 modules couvrant les fondamentaux de l'IA, les outils avancés de ChatGPT, l'automatisation des tâches, et les bonnes pratiques éthiques.",
+            "Public cible: Consultants, experts-comptables, responsables RH, entrepreneurs, dirigeants d'entreprise, gestionnaires de projet.",
+            "Informations pratiques: Durée de 1 à 2 jours, formats présentiel ou à distance, tarif sur demande, organisme certifié Qualiopi.",
+            "Contact: 06 80 35 94 17, sylvain.chabaud@hotmail.com, site web non spécifié."
+          ]
+        }
+      ],
+      "enrichedContext": {
+        "summary": "La formation 'Maîtrisez l'IA pour Booster Votre Productivité' vise à aider les professionnels à optimiser leur temps et automatiser leurs tâches grâce à l'intelligence artificielle. Elle couvre les fondamentaux de l'IA, les fonctionnalités avancées de ChatGPT, l'automatisation des tâches, et les enjeux éthiques et de conformité. La formation s'adresse aux consultants, experts-comptables, responsables RH, entrepreneurs, et autres professionnels souhaitant intégrer l'IA dans leur activité. Elle est disponible en présentiel ou à distance, dure 1 à 2 jours, et est proposée par un organisme certifié Qualiopi.",
+        "keyElements": [
+          "Objectifs pédagogiques: Comprendre l'IA, maîtriser ChatGPT, concevoir des prompts optimisés, intégrer l'IA dans son activité, appréhender les enjeux éthiques et de sécurité.",
+          "Programme: 4 modules couvrant les fondamentaux de l'IA, les outils avancés de ChatGPT, l'automatisation des tâches, et les bonnes pratiques éthiques.",
+          "Public cible: Consultants, experts-comptables, responsables RH, entrepreneurs, dirigeants d'entreprise, gestionnaires de projet.",
+          "Informations pratiques: Durée de 1 à 2 jours, formats présentiel ou à distance, tarif sur demande, organisme certifié Qualiopi.",
+          "Contact: 06 80 35 94 17, sylvain.chabaud@hotmail.com, site web non spécifié."
+        ]
+      }
+    },
+    "customText": "Restructurer le programme de formation 'Maîtrisez l'IA pour Booster Votre Productivité' pour qu'il réponde aux critères Qualiopi et optimise l'apprentissage des professionnels visés, en intégrant les dernières avancées et exigences en IA."
+  },
+  "tasks": [
+    {
+      "name": "Analyse des données existantes",
+      "description": "Examiner les données de formation actuelles pour identifier les forces, faiblesses et axes d'amélioration.",
+      "priority": "high"
+    },
+    {
+      "name": "Benchmark des critères Qualiopi",
+      "description": "Recenser et comprendre les exigences spécifiques de la certification Qualiopi pour les formations en IA.",
+      "priority": "high"
+    },
+    {
+      "name": "Identification des besoins des apprenants",
+      "description": "Analyser les profils des professionnels ciblés pour adapter le contenu à leurs besoins spécifiques.",
+      "priority": "high"
+    },
+    {
+      "name": "Conception du nouveau programme",
+      "description": "Élaborer une structure de formation révisée, intégrant les critères Qualiopi et les retours d'analyse.",
+      "priority": "high"
+    },
+    {
+      "name": "Développement des contenus pédagogiques",
+      "description": "Créer ou mettre à jour les supports de cours, exercices et études de cas pour refléter le nouveau programme.",
+      "priority": "high"
+    },
+    {
+      "name": "Intégration des aspects éthiques et conformité",
+      "description": "S'assurer que la formation aborde adéquatement les enjeux éthiques et de conformité liés à l'IA.",
+      "priority": "medium"
+    },
+    {
+      "name": "Validation interne du programme",
+      "description": "Faire vérifier le nouveau programme par des experts internes pour s'assurer de sa qualité et conformité.",
+      "priority": "medium"
+    },
+    {
+      "name": "Préparation des modalités pédagogiques",
+      "description": "Définir les méthodes d'enseignement (présentiel, distanciel) et les outils nécessaires à la formation.",
+      "priority": "medium"
+    },
+    {
+      "name": "Test pilote du programme",
+      "description": "Organiser une session test avec un groupe réduit pour évaluer l'efficacité du nouveau programme.",
+      "priority": "low"
+    },
+    {
+      "name": "Révision finale et déploiement",
+      "description": "Apporter les ajustements nécessaires suite au test pilote et finaliser le programme pour déploiement.",
+      "priority": "low"
+    }
+  ],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : Analyse ces données de formation pour des pro en IA. Et rédige une nouvelle version de mon programme de formation. Il doit répondre aux critères qualiopi et doit être conforme à la quête de la formation parfaite."
+    },
+    {
+      "type": "info",
+      "message": "🧠 Objectif analysé avec succès : 10 tâches, 6 expertises."
+    }
+  ],
+  "output": null,
+  "validation": null,
+  "expertises": [
+    "Analyse de données éducatives",
+    "Conception pédagogique",
+    "Expertise en certification Qualiopi",
+    "Maîtrise des technologies IA",
+    "Droit et éthique de l'IA",
+    "Gestion de projet de formation"
+  ]
+}

@@ -11,6 +11,10 @@ import { createAgentsFromExpertises } from '../workflow/agentFactory';
 import { prepareUserWorkflowContext } from '../workflow/prepareUserWorkflowContext';
 import { updateWorkflowState } from '../workflow/utils';
 import { planChallenge } from '../workflow/strategyPlannerAgent';
+import { runWorkflowPlan } from '../workflow/runWorkflowPlan';
+import { MOCK_RUN_WORKFLOW } from '../workflow/mocks';
+import { info } from 'console';
+import { generateFinalOutputWithWriter } from '../workflow/outputBuilderAgent';
 
 export const config = {
   api: {
@@ -44,9 +48,13 @@ export async function POST(req) {
         ///////////////////////////////////////////////////////////////////
         // 🧩 Étape 1 : Extraction et résumé IA du contexte utilisateur //
         ///////////////////////////////////////////////////////////////////
-        let userId, objectiveText, filesContext;
+        let userId,
+          objectiveText,
+          contextFiles,
+          tokenUsages = [];
+
         try {
-          ({ userId, objectiveText, filesContext } =
+          ({ userId, objectiveText, contextFiles } =
             await prepareUserWorkflowContext(fields, files));
         } catch (e) {
           throw new Error('🧩 Échec prepareUserWorkflowContext: ' + e.message);
@@ -55,19 +63,18 @@ export async function POST(req) {
         console.info('prepareUserWorkflowContext', {
           userId,
           objectiveText,
-          filesContext,
+          contextFiles,
         });
 
         //////////////////////////////////////////////
         // 🧩 Étape 2 : Initialisation du workflow //
         //////////////////////////////////////////////
         let workflowId, state;
-        const enrichedContext = filesContext?.enrichedContext ?? {};
         try {
           ({ workflowId, state } = await initializeWorkflowForUser({
             userId,
             objectiveText,
-            enrichedContext,
+            contextFiles,
           }));
         } catch (e) {
           throw new Error('⚙️ Échec initializeWorkflowForUser: ' + e.message);
@@ -82,18 +89,24 @@ export async function POST(req) {
         //  🧩 Étape 3 : Analyse IA de l’objectif    //
         //  + Enregistrement des tâches + expertises //
         ///////////////////////////////////////////////
-        let tasks, expertises;
+        let tasks, expertises, customObjective;
+        const enrichedContext = contextFiles?.enrichedContext ?? {};
         try {
+          let tokenUsage;
           const summary = enrichedContext?.summary || '';
           const keyElements = enrichedContext?.keyElements || null;
 
-          ({ tasks, expertises } = await analyzeObjective({
-            objective: objectiveText,
-            context: { summary, keyElements },
-          }));
+          ({ tasks, expertises, customObjective, tokenUsage } =
+            await analyzeObjective({
+              objective: objectiveText,
+              context: { summary, keyElements },
+            }));
+
+          tokenUsages.push(tokenUsage);
 
           state.tasks = tasks;
           state.expertises = expertises;
+          state.objective.customText = customObjective;
           state.logs.push({
             type: 'info',
             message: `🧠 Objectif analysé avec succès : ${tasks.length} tâches, ${expertises.length} expertises.`,
@@ -117,12 +130,14 @@ export async function POST(req) {
         ////////////////////////////////////////////
         let agents;
         try {
-          agents = await createAgentsFromExpertises(
+          const result = await createAgentsFromExpertises(
             expertises,
-            objectiveText,
+            customObjective,
             enrichedContext
           );
 
+          agents = result.agents;
+          tokenUsages = [...tokenUsages, ...result.tokenUsages];
           state.agents = agents;
 
           state.logs.push({
@@ -175,22 +190,26 @@ export async function POST(req) {
         /////////////////////////////////////////////////////////////////////////////
         let plan;
         try {
-          plan = await planChallenge({
-            objective: objectiveText,
+          const result = await planChallenge({
+            objective: customObjective,
             tasks,
             agents,
           });
 
+          plan = result.plan;
+          tokenUsages.push(result.tokenUsage);
+
           // On stocke le plan dans l’état
-          state.plan = plan;
+          const securedPlan = plan?.steps ?? [];
+          state.plan = securedPlan;
 
           // Log associé
           state.logs.push({
             type: 'info',
-            message: `📋 Plan stratégique généré avec ${plan.length} étapes.`,
+            message: `📋 Plan stratégique généré avec ${securedPlan.length} étapes.`,
           });
 
-          console.info('planChallenge (steps)', state);
+          console.info('planChallenge securedPlan', securedPlan);
 
           await updateWorkflowState(userId, workflowId, state);
         } catch (e) {
@@ -199,7 +218,73 @@ export async function POST(req) {
           );
         }
 
-        console.info('planChallenge (steps)', plan);
+        console.info('planChallenge plan', plan);
+
+        // MOCK //
+        // const { userId, workflowId, state } = MOCK_RUN_WORKFLOW;
+        // let tokenUsages = [];
+        //////////////////////////////////////
+
+        ///////////////////////////////////////
+        // 🧩 Étape 7 : Exécute le WORKFLOW //
+        ///////////////////////////////////////
+        try {
+          const { state: updatedState, tokenUsages: planTokens } =
+            await runWorkflowPlan(userId, workflowId, state);
+
+          tokenUsages = [...tokenUsages, ...planTokens];
+
+          state.status = updatedState.status;
+          state.memory = updatedState.memory;
+          state.logs = updatedState.logs;
+
+          console.info('✅ runWorkflowPlan terminé', { state });
+
+          // Si besoin, tu peux ici stocker une `output` finale
+          // state.output = ... (à implémenter plus tard)
+        } catch (e) {
+          throw new Error('🚀 Échec runWorkflowPlan (exécution): ' + e.message);
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        // 🧩 Étape 8 : Génération du livrable final (OutputBuilderAgent) //
+        /////////////////////////////////////////////////////////////////////
+        let finalOutput;
+        try {
+          const result = await generateFinalOutputWithWriter({
+            objective: state.objective.customText,
+            byAgent: state.memory.content.byAgent,
+          });
+
+          const tokenUsage = result.tokenUsage;
+          finalOutput = result.finalOutput;
+
+          console.info(
+            'generateFinalOutputWithWriter',
+            finalOutput,
+            tokenUsage
+          );
+
+          tokenUsages.push(tokenUsage);
+
+          state.memory.finalOutput = {
+            // version: state.memory.version,
+            generatedAt: new Date().toISOString(),
+            content: finalOutput,
+          };
+
+          state.logs.push({
+            type: 'info',
+            message: `📄 Livrable final généré avec succès.`,
+          });
+
+          await updateWorkflowState(userId, workflowId, state);
+        } catch (e) {
+          throw new Error(
+            '📄 Échec OutputBuilderAgent (génération livrable) : ' + e.message
+          );
+        }
+        console.info('Workflow Tokens Usages', tokenUsages);
 
         //////////////////////////////////
         // ✅ Réponse finale partielle //
@@ -209,8 +294,11 @@ export async function POST(req) {
             workflowId,
             logs: state.logs,
             memory: state.memory,
-            output: { tasks, expertises, agents, plan },
+            output: { tasks, expertises, agents, plan, finalOutput },
+            // output: { finalOutput },
             validation: state.validation,
+            status: state.status,
+            usage: tokenUsages,
           })
         );
       } catch (err) {

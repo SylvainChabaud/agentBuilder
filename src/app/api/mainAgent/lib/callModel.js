@@ -1,22 +1,24 @@
 // lib/ia/callModelAndExtract.js
 
-import { fetchOpenRouter } from 'lib/services/openRouter/fetchOpenRouter';
-import { extractObject } from '../../../agentBuilder/components/run/utils';
-import { fetchOllama } from 'lib/services/ollama/fetchOllama';
+import { fetchOpenRouter } from '../../../../../lib/services/openRouter/fetchOpenRouter';
+import { fetchOpenIa } from '../../../../../lib/services/openIa/fetchOpenIa';
+// import { extractObject } from '../../../agentBuilder/components/run/utils';
+import { fetchOllama } from '../../../../../lib/services/ollama/fetchOllama';
+import { MODEL_SOURCES } from 'app/constants';
 
 /**
  * Appelle un modèle IA avec un jeu de messages et extrait un objet JSON propre.
  * @param {Object} params
  * @param {Array<{ role: 'user' | 'system' | 'assistant', content: string }>} params.messages
  * @param {string} params.model - Nom du modèle à utiliser (Ollama, GPT, DeepSeek...)
- * @param {boolean} params.isOpenRouter - Indique si l’appel passe par OpenRouter
+ * @param {boolean} params.modelSource - Indique si l’appel passe par OpenRouter
  * @param {string[]} expectedKeys - Liste des clés attendues dans l’objet retourné
  * @returns {Promise<Object>} - Objet JSON parsé avec les clés extraites
  */
 export async function callModelAndExtract({
   messages,
   model,
-  isOpenRouter = true,
+  modelSource = MODEL_SOURCES.OLLAMA,
 }) {
   if (!messages || !model) {
     return NextResponse.json(
@@ -24,16 +26,29 @@ export async function callModelAndExtract({
       { status: 400 }
     );
   }
-  // console.info('callModelAndExtract', { model, messages });
+  console.info('callModelAndExtract', { model, messages, modelSource });
 
-  const fetchFunc = isOpenRouter ? fetchOpenRouter : fetchOllama;
-  const { data } = await fetchFunc({ model, messages });
+  let fetchFunc;
+  switch (modelSource) {
+    case MODEL_SOURCES.OPEN_ROUTER:
+      fetchFunc = fetchOpenRouter;
+      break;
+    case MODEL_SOURCES.OLLAMA:
+      fetchFunc = fetchOllama;
+      break;
+    case MODEL_SOURCES.OPEN_IA:
+      fetchFunc = fetchOpenIa;
+      break;
+    default:
+      throw new Error(`Source du modèle IA inconnue: ${modelSource}`);
+  }
+  const { data, tokenUsage } = await fetchFunc({ model, messages });
 
   // console.info('contentWithoutThink 1 ', data);
 
   const content = data?.message?.content || '';
 
-  // console.info('contentWithoutThink 2 ', content);
+  console.info('contentWithoutThink 2 ', content);
 
   const contentWithoutThink = content
     .replace(/<think>[\s\S]*?<\/think>/g, '')
@@ -51,7 +66,7 @@ export async function callModelAndExtract({
 
   const parsed = cleaned && JSON.parse(cleaned);
 
-  console.info('contentWithoutThink 3 bis bis', parsed);
+  console.info('callModelAndExtract OUTPUT', parsed);
 
-  return { result: parsed };
+  return { result: parsed, tokenUsage };
 }

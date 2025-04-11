@@ -88,10 +88,61 @@ export async function updateWorkflowState(userId, workflowId, state) {
   const basePath = path.join(WORKFLOW_ROOT, userId, workflowId);
   const filePath = path.join(basePath, 'state.json');
 
-  console.info('filePath 999', filePath);
+  console.info('updateWorkflowState filePath', filePath);
 
   await fs.writeFile(filePath, JSON.stringify(state, null, 2));
+}
 
-  // const filePath = path.join(WORKFLOW_ROOT, userId, workflowId, 'state.json');
-  // await fs.writeFile(filePath, JSON.stringify(state, null, 2), 'utf-8');
+/**
+ * Construit dynamiquement le prompt utilisateur final pour une tâche donnée d'un agent IA.
+ * @param {Object} params
+ * @param {Object} params.agent - L'agent IA (incluant userPrompt de base)
+ * @param {Object} params.task - La tâche à exécuter (name, description, priority)
+ * @param {string} params.objective - Objectif utilisateur global
+ * @param {Object} params.context - Résumé et éléments clés (summary, keyElements)
+ * @param {Array} [params.dependencyOutputs] - Résultats des dépendances (si la tâche dépend d'autres étapes)
+ * @returns {string} prompt utilisateur final formaté
+ */
+export function buildFinalUserPrompt({
+  basePrompt,
+  task,
+  objective,
+  context,
+  dependencyOutputs = [],
+}) {
+  const summary = context?.summary?.trim();
+  // const keyElements = context?.keyElements || [];
+
+  // const depsSection = dependencyOutputs.length
+  //   ? `Résultats préalables fournis par d'autres agents :\n${dependencyOutputs
+  //       .map((d, i) => `\n- Étape ${i + 1}: ${d}`)
+  //       .join('\n')}`
+  //   : '';
+
+  const contextSection = summary
+    ? `\n\nContexte global :\n"""\n${summary}\n"""`
+    : '';
+
+  const taskIntro = `Ta tâche actuelle : \n"${task.name}"\n\n${task.description}`;
+
+  const finalPrompt = `
+${basePrompt ? basePrompt + '\n\n' : ''}${taskIntro}${contextSection}
+
+Réponds uniquement au format JSON texte clair, utile et structuré pour répondre à la tâche.
+Format de réponse (JSON uniquement) :
+{
+  "result": {
+    "summary": "Résumé clair de la tâche accomplie",
+    "recommendations": ["Recommandation 1", "Recommandation 2"],
+    "justification": "Explication du raisonnement",
+    "rating": {
+      "clarity": 1 à 5,
+      "relevance": 1 à 5,
+      "impact": 1 à 5
+    }
+  }
+}
+`.trim();
+
+  return finalPrompt;
 }

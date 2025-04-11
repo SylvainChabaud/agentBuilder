@@ -1,0 +1,73 @@
+{
+  "workflowId": "2f0052eb-0a3e-4aed-9eec-1907e7bd89fb",
+  "objective": {
+    "customText": "Proposer une stratégie pour améliorer le suivi des patients chroniques dans un cabinet de médecine générale"
+  },
+  "memory": {
+    "content": {
+      "byAgent": {
+        "agent-1-organisation": [
+          {
+            "task": {
+              "name": "Identification des obstacles actuels",
+              "description": "Recenser les difficultés rencontrées dans le suivi des patients chroniques (temps, outils, coordination).",
+              "priority": "high"
+            },
+            "output": {
+              "result": {
+                "summary": "Trois obstacles majeurs ont été identifiés : manque de temps en consultation, absence d’outils centralisés et difficulté de coordination avec les autres professionnels de santé.",
+                "recommendations": [
+                  "Mettre en place des consultations dédiées aux patients chroniques.",
+                  "Utiliser un logiciel de suivi partagé avec rappels automatisés.",
+                  "Créer un canal de communication avec les infirmiers et pharmaciens de ville."
+                ],
+                "justification": "Ces freins sont fréquents dans les cabinets de médecine générale et nuisent à la continuité et à la qualité du suivi à long terme."
+              }
+            }
+          }
+        ],
+        "agent-2-stratégie": [
+          {
+            "task": {
+              "name": "Élaboration d'un plan d'action structuré",
+              "description": "Définir une feuille de route pour la mise en œuvre progressive de mesures d'amélioration.",
+              "priority": "high"
+            },
+            "output": {
+              "result": {
+                "summary": "Un plan en trois étapes a été proposé pour améliorer durablement le suivi des patients chroniques dans le cabinet.",
+                "recommendations": [
+                  "Phase 1 : Sensibilisation de l’équipe médicale et recueil des besoins.",
+                  "Phase 2 : Test d’un outil de suivi partagé sur un échantillon de patients.",
+                  "Phase 3 : Généralisation et intégration dans les pratiques courantes."
+                ],
+                "justification": "Cette démarche progressive permet d’ajuster les solutions au terrain et d’assurer leur acceptation par les soignants.",
+                "rating": {
+                  "clarity": 5,
+                  "relevance": 5,
+                  "impact": 4
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "finalOutput": {
+      "generatedAt": "2025-04-10T21:26:11.674Z",
+      "content": {
+        "result": "Stratégie pour améliorer le suivi des patients chroniques en médecine générale\n\nIntroduction\nLe suivi des patients chroniques dans un cabinet de médecine générale fait souvent face à des difficultés organisationnelles. Une approche structurée permet d'améliorer la qualité et la continuité des soins tout en optimisant le temps médical.\n\nPrincipaux obstacles identifiés\nTrois freins majeurs ont été relevés :\n1. Le manque de temps lors des consultations standard\n2. L'absence d'outils centralisés pour le suivi longitudinal\n3. Les difficultés de coordination avec les autres professionnels de santé (infirmiers, pharmaciens)\n\nPlan d'action en trois phases\nPhase 1 : Préparation (1-2 mois)\n- Sensibiliser l'équipe médicale aux enjeux du suivi chronique\n- Recueillir les besoins spécifiques du cabinet et des patients\n\nPhase 2 : Expérimentation (3-6 mois)\n- Mettre en place des consultations dédiées aux patients chroniques\n- Tester un logiciel de suivi partagé avec fonctionnalités de rappels\n- Établir des canaux de communication avec les paramédicaux\n\nPhase 3 : Généralisation (à partir du 7e mois)\n- Adapter les outils selon les retours d'expérience\n- Intégrer les nouvelles pratiques dans le fonctionnement courant\n- Former l'ensemble du personnel aux procédures établies\n\nBénéfices attendus\nCette approche progressive permettra :\n- Une meilleure coordination entre soignants\n- Un suivi plus régulier des patients chroniques\n- Une optimisation du temps médical\n- Une amélioration globale de la qualité des soins\n\nConclusion\nEn combinant organisation des consultations, outils numériques adaptés et travail en réseau, le cabinet peut mettre en place un suivi chronique efficace et pérenne, au bénéfice tant des patients que des professionnels."
+      }
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : Proposer une stratégie pour améliorer le suivi des patients chroniques dans un cabinet de médecine générale."
+    },
+    {
+      "type": "info",
+      "message": "📄 Livrable final généré avec succès."
+    }
+  ]
+}

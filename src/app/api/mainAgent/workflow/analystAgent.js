@@ -21,7 +21,7 @@ import { callModelAndExtract } from '../lib/callModel';
  */
 
 export const analyzeObjective = async ({ objective, context = [] }) => {
-  console.info('analyzeObjective', { objective, context });
+  // console.info('analyzeObjective', { objective, context });
 
   const messages = [
     { role: 'system', content: SYSTEM_MESSAGE },
@@ -30,15 +30,19 @@ export const analyzeObjective = async ({ objective, context = [] }) => {
 
   const iaRequest = {
     messages,
-    model: DEFAULT_IA_MODEL,
-    isOpenRouter: true,
+    ...DEFAULT_IA_MODEL,
   };
 
   const {
-    result: { tasks, expertises },
+    result: { tasks, expertises, customObjective },
+    tokenUsage,
   } = await callModelAndExtract(iaRequest);
 
-  console.info('output', { tasks, expertises });
+  console.info('analyzeObjective output', {
+    tasks,
+    expertises,
+    customObjective,
+  });
 
-  return { tasks, expertises };
+  return { tasks, expertises, customObjective, tokenUsage };
 };

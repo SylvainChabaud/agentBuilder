@@ -22,15 +22,15 @@ export const generatePromptForExpertise = (
   expertise,
   context = null
 ) => {
-  const summary = context?.summary?.trim?.() || null;
-  const keyElements = context?.keyElements || null;
+  // const summary = context?.summary?.trim?.() || null;
+  // const keyElements = context?.keyElements || null;
 
-  const contextSection = summary
-    ? `
-  Contexte utile pour cet agent :
-  Résumé : "${summary}"
-  ${keyElements ? `Éléments clés : ${JSON.stringify(keyElements)}` : ''}`
-    : '';
+  // const contextSection = summary
+  //   ? `
+  // Contexte utile pour cet agent :
+  // Résumé : "${summary}"
+  // ${keyElements ? `Éléments clés : ${JSON.stringify(keyElements)}` : ''}`
+  //   : '';
 
   return `
   Voici l’objectif utilisateur à traiter :
@@ -38,9 +38,7 @@ export const generatePromptForExpertise = (
   
   Voici l’expertise concernée :
   "${expertise}"
-  
-  ${contextSection}
-  
+    
   Génère maintenant un couple de prompts ('system' et 'user') adaptés à un agent IA expert dans ce domaine, qui doit collaborer à l’atteinte de cet objectif avec d’autres agents IA.
   
   Réponds uniquement au format JSON demandé.`;

@@ -19,15 +19,17 @@ export async function createAgentsFromExpertises(
   objective,
   context = null
 ) {
-  console.info('createAgentsFromExpertises', {
-    expertises,
-    objective,
-    context,
-  });
+  // console.info('createAgentsFromExpertises', {
+  //   expertises,
+  //   objective,
+  //   context,
+  // });
 
   if (!Array.isArray(expertises) || expertises.length === 0) {
     throw new Error('Aucune expertise fournie à AgentFactory');
   }
+
+  const tokenUsages = [];
 
   const agents = await Promise.all(
     expertises.map(async (expertise, index) => {
@@ -45,13 +47,15 @@ export async function createAgentsFromExpertises(
 
       const iaRequest = {
         messages,
-        model: DEFAULT_IA_MODEL,
-        isOpenRouter: true,
+        ...DEFAULT_IA_MODEL,
       };
 
       const {
         result: { system, user },
+        tokenUsage,
       } = await callModelAndExtract(iaRequest);
+
+      tokenUsages.push(tokenUsage);
 
       const agentId = `agent-${index + 1}-${expertise.toLowerCase().replace(/\s+/g, '-')}`;
 
@@ -79,7 +83,7 @@ export async function createAgentsFromExpertises(
   );
 
   console.info('✅ Agents générés avec prompts :', agents);
-  return agents;
+  return { agents, tokenUsages };
 }
 
 /**

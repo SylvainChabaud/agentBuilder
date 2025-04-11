@@ -1,3 +1,4 @@
+import { MODEL_SOURCES } from 'app/constants';
 import { handleWebSearch } from 'lib/services/gmail/webSearch';
 import { handleScrapesPages } from 'lib/services/pupperteer/scrapePages';
 import { useState } from 'react';
@@ -10,7 +11,7 @@ export const useRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   // Variables pour l'API
   const iaModel = MODELS[10]?.model || 'qwen2.5:1.5b';
-  const isOpenRouter = MODELS[10]?.isOpenRouter || false;
+  const modelSource = MODELS[1]?.modelSource || MODEL_SOURCES.OLLAMA;
   const outputs = {
     titre: 'string',
     description: 'string',
@@ -161,7 +162,7 @@ export const useRecipes = () => {
               body: JSON.stringify({
                 messages,
                 model: iaModel,
-                isOpenRouter,
+                modelSource,
               }),
             });
 

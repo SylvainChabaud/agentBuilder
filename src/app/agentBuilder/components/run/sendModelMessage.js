@@ -46,7 +46,7 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
       model,
     });
 
-    const { model: iaModel, isOpenRouter } = MODELS.find(
+    const { model: iaModel, modelSource } = MODELS.find(
       ({ id }) => id === model
     );
 
@@ -107,7 +107,7 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
         body: JSON.stringify({
           messages: newMessage,
           model: iaModel,
-          isOpenRouter,
+          modelSource,
         }),
       });
 

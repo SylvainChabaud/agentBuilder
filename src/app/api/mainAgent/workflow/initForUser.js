@@ -32,7 +32,7 @@ async function initWorkflow(userId, initialState, workflowId) {
   const filePath = path.join(basePath, 'state.json');
   await fs.writeFile(filePath, JSON.stringify(initialState, null, 2));
 
-  // console.info('initWorkflow 789', filePath);
+  console.info('initWorkflow PATH', filePath);
 
   return workflowId;
 }
@@ -47,14 +47,14 @@ async function initWorkflow(userId, initialState, workflowId) {
 export async function initializeWorkflowForUser({
   userId,
   objectiveText,
-  enrichedContext = [],
+  contextFiles = [],
 }) {
   const workflowId = generateWorkflowId();
 
   // console.info('initializeWorkflowForUser 123', {
   //   userId,
   //   workflowId,
-  //   enrichedContext,
+  //   contextFiles,
   // });
 
   /** @type {import('@/types').WorkflowState} */
@@ -64,7 +64,7 @@ export async function initializeWorkflowForUser({
     objective: {
       id: workflowId,
       text: objectiveText,
-      context: enrichedContext,
+      context: contextFiles,
     },
     tasks: [],
     agents: [],
