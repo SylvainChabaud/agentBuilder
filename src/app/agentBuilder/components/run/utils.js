@@ -208,3 +208,36 @@ function cleanInputText(text) {
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
+export function mixData(input) {
+  const mixedResults = [
+    {
+      id: 'mixer', // Un seul objet 'input' avec l'ID 'mixer'
+      data: [], // Tableau 'data' contenant un seul objet avec toutes les clés
+    },
+  ];
+
+  const combinedData = {};
+
+  // Parcours de chaque source dans 'input' pour mixer les résultats
+  input.forEach((source) => {
+    source.data.forEach((data) => {
+      // Récupérer toutes les clés de l'objet 'data' et les ajouter dans combinedData
+      Object.keys(data).forEach((key) => {
+        if (!combinedData[key]) {
+          combinedData[key] = data[key]; // Ajouter la première valeur rencontrée pour chaque clé
+        }
+        // Si la clé existe déjà, tu peux ajouter la logique de fusion ici si nécessaire
+        // Par exemple, si tu veux concaténer les valeurs pour les mêmes clés, voici un exemple :
+        // else {
+        //   combinedData[key] = [].concat(combinedData[key], data[key]);
+        // }
+      });
+    });
+  });
+
+  // Ajouter l'objet combiné au tableau 'data' de l'objet 'mixer'
+  mixedResults[0].data.push(combinedData);
+
+  return mixedResults; // Retourner les résultats mixés
+}

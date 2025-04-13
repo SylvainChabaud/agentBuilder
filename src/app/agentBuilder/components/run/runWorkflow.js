@@ -5,7 +5,7 @@ import { handleWebSearch } from '../../../../../lib/services/gmail/webSearch';
 import { NODE_STATUS } from '../../constants';
 import { APPS_LABELS } from '../../../../../lib/constants';
 import { handleFetchSheetContent } from '../../../../../lib/services/sheets/getFileContent';
-import { convertRowsToObjects } from './utils';
+import { convertRowsToObjects, mixData } from './utils';
 import { sendModelMessage } from './sendModelMessage';
 
 /**
@@ -109,8 +109,15 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
       return [{ search: searchQuery, results }];
     }
   } else if (node.app === APPS_LABELS.IA_MODEL) {
+    // TODO:
+    // Si l'option MIXER alors Envoie les résultats de chaque source au destinataire
+    // dans un tableau d'un seul objet (toutes les sources dans l'objet sous plusieurs clés)
+    // Et non pas dans un tableau de plusieurs objets (chaque source)
+    const formattedInput = node.option === 'MIXER' ? mixData(input) : input;
+    console.info('executeNode formattedInput', formattedInput);
+
     const modelMessage = await sendModelMessage({
-      input,
+      input: formattedInput,
       node,
       expertisesList,
     });

@@ -117,13 +117,37 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
       }
       let iaContent = (message && message.content) || '';
 
-      // Supprimer les balises <think>...</think> si présentes
+      // // Supprimer les balises <think>...</think> si présentes
       iaContent = iaContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
 
-      const iaContentObj = extractObject(iaContent, outputs);
+      // // const iaContentObj = extractObject(iaContent, outputs);
 
-      console.info('iaContentObj', iaContentObj);
-      console.info('iaContent', iaContent);
+      // console.info('sendModelMessage 3', iaContent);
+
+      // // const contentObject = extractObject(content, expectedKeys);
+
+      console.info('Original content:', iaContent);
+
+      // Nettoyer les caractères de contrôle comme les retours à la ligne, tabulations, etc.
+      let cleaned = iaContent
+        .replace(/```json/g, '') // Supprime la balise d'ouverture markdown
+        .replace(/```/g, '') // Supprime la balise de fermeture markdown
+        .replace(/[\x00-\x1F\x7F]/g, '') // Supprime les caractères de contrôle
+        .replace(/[\u2018\u2019\u201C\u201D]/g, "'") // Remplace les apostrophes typographiques et guillemets par des caractères simples
+        .replace(/\\n/g, '\\n') // Garde les retours à la ligne en format JSON
+        .trim(); // Supprime les espaces superflus aux extrémités
+
+      console.info('Cleaned content:', cleaned);
+
+      // Maintenant, essayer de parser le JSON nettoyé
+      let iaContentObj = {};
+      try {
+        iaContentObj = cleaned ? JSON.parse(cleaned) : {};
+      } catch (error) {
+        console.error('Erreur lors du parsing du JSON:', error);
+      }
+
+      console.info('Parsed JSON object:', iaContentObj);
 
       results.push(iaContentObj);
     }

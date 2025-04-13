@@ -24,13 +24,15 @@ export const generatePrompt = ({ inputs, outputs }) => {
 
   // Construire la partie sur les entrées seulement si elles existent
   const inputSection = formattedInputs
-    ? `Ta mission est d'analyser les entrées suivantes : "${formattedInputs}" et de générer une sortie en Français sous la forme : "${formattedOutputs}".`
-    : `Ta mission est de générer une sortie en Français sous la forme : "${formattedOutputs}".`;
+    ? `Ta mission est d'analyser les entrées suivantes : { ${formattedInputs} } et de générer une sortie en Français au format JSON! Voici les clés de sortie : { ${formattedOutputs} }`
+    : `Ta mission est de générer une sortie en Français au format JSON ! Voici les clés de sortie : { ${formattedOutputs} }
+    Exemple de sortie JSON attendue:
+    { "key1": "string1", "key2": "string2", "key3": "string3" }`;
 
   return `### Instructions précises :
   1. Comprends le contexte : analyse soigneusement les entrées.
   2. Applique ton expertise : utilise les meilleures pratiques pour structurer ta réponse.
-  3. Respecte le format attendu en sortie.
+  3. Respecte le format JSON attendu en sortie.
   4. N'ajoute pas de text autre que le format de sortie souhaité
   
   ${inputSection}
