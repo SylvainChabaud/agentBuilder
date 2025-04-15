@@ -209,10 +209,10 @@ function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-export function mixData(input) {
+export function mixData({ input, expertisesList }) {
   const mixedResults = [
     {
-      id: 'mixer', // Un seul objet 'input' avec l'ID 'mixer'
+      id: 'X-mixer', // Un seul objet 'input' avec l'ID 'mixer', 'X' est pour respecter le format de id
       data: [], // Tableau 'data' contenant un seul objet avec toutes les clés
     },
   ];
@@ -236,8 +236,24 @@ export function mixData(input) {
     });
   });
 
+  ////////////
+  const replacedData = Object.keys(combinedData).reduce((acc, key) => {
+    acc[key] = 'string'; // Remplace la valeur par "string"
+    return acc;
+  }, {});
+
+  const currentElement = {
+    id: 'mixer',
+    name: 'mixer',
+    outputs: replacedData,
+  };
+
+  console.info('currentElement', currentElement);
+
+  const mixedExpertisesList = [...expertisesList, currentElement];
+
   // Ajouter l'objet combiné au tableau 'data' de l'objet 'mixer'
   mixedResults[0].data.push(combinedData);
 
-  return mixedResults; // Retourner les résultats mixés
+  return { mixedResults, mixedExpertisesList }; // Retourner les résultats mixés
 }

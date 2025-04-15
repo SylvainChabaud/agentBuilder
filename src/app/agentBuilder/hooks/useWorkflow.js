@@ -90,7 +90,7 @@ export const useWorkflow = ({
         },
       } = node;
 
-      const { app, expertise, name } = props;
+      const { app = '', expertise = '', name = '' } = props || {};
 
       console.info('handleRecWorkflow 1', {
         props,

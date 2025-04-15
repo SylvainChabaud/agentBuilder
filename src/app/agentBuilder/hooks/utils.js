@@ -77,7 +77,7 @@ export function getExecutionPlan({ nodes, edges }) {
     }
   });
 
-  // console.info('getExecutionPlan 4', { validEdges, inDegree });
+  console.info('getExecutionPlan 4', { validEdges, inDegree });
 
   // Initialiser une map pour stocker le niveau (level) de chaque node et une queue pour le tri topologique
   const levelMap = {};
@@ -128,6 +128,10 @@ export function getExecutionPlan({ nodes, edges }) {
     const fileId = node.data.fileId ? node.data.fileId.toString() : '';
     const fileName = node.data.fileName ? node.data.fileName.toString() : '';
     const appValue = node.data.app ? node.data.app.toString() : '';
+    const mixerValue = node.data.isMixerEnabled ?? false;
+
+    console.info('ooooo', { data: node.data, mixerValue });
+
     const expertiseValue = node.data.expertise
       ? node.data.expertise.toString()
       : '';
@@ -135,6 +139,7 @@ export function getExecutionPlan({ nodes, edges }) {
       id: node.id,
       app: appValue,
       expertise: expertiseValue,
+      isMixerEnabled: mixerValue,
       fileName: fileName,
       fileId: fileId,
       sheet: sheet,
@@ -147,10 +152,27 @@ export function getExecutionPlan({ nodes, edges }) {
   const steps = Object.keys(eventsMap)
     .map(Number)
     .sort((a, b) => a - b)
-    .map((step) => ({
-      step,
-      nodes: eventsMap[step],
-    }));
+    .map((step) => {
+      const nodesWithInputs = eventsMap[step].map((node) => {
+        // Initialiser le tableau des inputs pour chaque nœud
+        const nodeWithInputs = { ...node, inputs: [] };
+
+        // Parcourir les arêtes pour déterminer les nœuds sources (dépendances)
+        validEdges.forEach((edge) => {
+          if (edge.target === node.id) {
+            // Si le nœud courant est la cible, ajoute le source comme input
+            nodeWithInputs.inputs.push(edge.source);
+          }
+        });
+
+        return nodeWithInputs;
+      });
+
+      return {
+        step,
+        nodes: nodesWithInputs,
+      };
+    });
 
   console.info('getExecutionPlan 8', { steps });
 

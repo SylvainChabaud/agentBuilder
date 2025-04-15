@@ -1,4 +1,4 @@
-import { APPS_LIST, NODE_PARAMS } from '../constants';
+import { APPS_LIST, MIXER_LIST, NODE_PARAMS } from '../constants';
 import {
   DeleteNodeButtonStyled,
   NodeParametersPanel,
@@ -17,6 +17,7 @@ const NodeParameters = ({
   nodeBg,
   nodeApp,
   nodeExpertise,
+  nodeMixer,
   nodeFile,
   nodeSheet,
   expertisesList,
@@ -51,6 +52,8 @@ const NodeParameters = ({
 
   const shouldDisplaysSheetsFiles =
     nodeApp === APPS_LABELS.SHEET && nodeExpertise === 'sheets';
+
+  const shouldDisplaysMixerOption = nodeApp === APPS_LABELS.IA_MODEL;
 
   const currentExpertiseList = useMemo(() => {
     console.info('🔄 Recalcul de currentExpertiseList', {
@@ -92,6 +95,7 @@ const NodeParameters = ({
   const currentFiles = files?.find((file) => file?.id === nodeFile?.id);
 
   console.info('currentFiles 2', currentFiles);
+  console.info('nodeMixer 999', nodeMixer);
 
   return (
     <NodeParametersPanel>
@@ -203,6 +207,31 @@ const NodeParameters = ({
             </StyledSelect>
           </ParameterRow>
         </>
+      )}
+
+      {shouldDisplaysMixerOption && (
+        <ParameterRow>
+          <label>MIXER</label>
+          <StyledSelect
+            value={nodeMixer}
+            onChange={({ target: { value } }) => {
+              const mixerValue = value === 'true' || value === true;
+              onChangeNodeParams({
+                type: NODE_PARAMS.MIXER,
+                value: mixerValue,
+              });
+            }}
+          >
+            <option value="" disabled>
+              Sélectionner une option
+            </option>
+            {MIXER_LIST.map((isMix) => (
+              <option key={isMix?.id} value={isMix?.id}>
+                {isMix?.name}
+              </option>
+            ))}
+          </StyledSelect>
+        </ParameterRow>
       )}
 
       <ParameterRow>

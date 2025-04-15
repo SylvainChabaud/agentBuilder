@@ -36,6 +36,8 @@ export async function POST(request) {
       const nextId =
         Array.isArray(data) && data.length ? data[data.length - 1].id + 1 : 0;
 
+      console.info('FEEEEETCH nextId', nextId);
+
       // ✅ Ajout du workflow
       data.push({ id: nextId, ...workflow });
       await fs.writeFile(filePath, JSON.stringify(data, null, 2));

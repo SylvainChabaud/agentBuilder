@@ -113,13 +113,19 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
     // Si l'option MIXER alors Envoie les résultats de chaque source au destinataire
     // dans un tableau d'un seul objet (toutes les sources dans l'objet sous plusieurs clés)
     // Et non pas dans un tableau de plusieurs objets (chaque source)
-    const formattedInput = node.option === 'MIXER' ? mixData(input) : input;
-    console.info('executeNode formattedInput', formattedInput);
+    const { mixedResults, mixedExpertisesList } = node.isMixerEnabled
+      ? mixData({ input, expertisesList })
+      : { mixedResults: input, mixedExpertisesList: expertisesList };
+
+    console.info('executeNode formattedInput', {
+      mixedResults,
+      mixedExpertisesList,
+    });
 
     const modelMessage = await sendModelMessage({
-      input: formattedInput,
       node,
-      expertisesList,
+      input: mixedResults,
+      expertisesList: mixedExpertisesList,
     });
     console.info('modelMessage', modelMessage);
 
@@ -177,21 +183,53 @@ export async function runWorkflow(
   if (!Array.isArray(executionPlan)) {
     throw new Error("Le plan d'exécution doit être un tableau.");
   }
-  let currentInput = [{ id: '', data: [initialInput] }];
+
+  let currentOutputs = [];
+  // let currentOutputs = [];
 
   // Parcourir chaque étape dans l'ordre (le plan est supposé trié par "step" croissant)
   for (const event of executionPlan) {
+    console.info('nodes 24', { event, currentOutputs });
+    // currentOutputs = [{ id: '', data: [''] }];
+
     // Pour chaque node de l'étape, exécuter en parallèle.
     const outputs = await Promise.all(
       event.nodes.map(async (node) => {
-        console.info('nodes 25', node);
+        console.info('nodes 25', { node });
+
+        const inputsIds = node.inputs;
+        // Récupérer les inputs nécessaires pour chaque nœud
+        const inputToExecute = inputsIds
+          .map((inputId) => {
+            // Extraire l'ID avant le tiret pour chaque input dans currentOutputs
+            const input = currentOutputs.find(({ id }) => {
+              const inputIdWithoutSuffix = id.split('-')[0]; // Récupère la partie avant le tiret
+              return inputIdWithoutSuffix === inputId;
+            });
+
+            if (!input) {
+              console.warn(
+                `Input avec id ${inputId} non trouvé dans currentOutputs`
+              );
+            }
+
+            return input;
+          })
+          // Filtrer les valeurs undefined pour ne garder que les entrées valides
+          .filter((input) => input !== undefined);
 
         onExcecutedNode({ nodeId: node.id, status: NODE_STATUS.RUN });
 
-        console.info('expertisesList 123', { node, expertisesList });
+        console.info('expertisesList 123', {
+          inputToExecute,
+          node,
+          expertisesList,
+          inputsIds,
+        });
+
         const data = await executeNode({
           node,
-          input: currentInput,
+          input: inputToExecute,
           expertisesList,
           onRedirect,
         });
@@ -214,10 +252,13 @@ export async function runWorkflow(
       })
     );
     // Concaténer toutes les sorties pour constituer l'input de la prochaine étape.
-    // currentInput = outputs.join('\n');
-    currentInput = outputs;
-    console.log(`Étape ${event.step} exécutée. Sortie combinée:`, currentInput);
+    // currentOutputs = outputs.join('\n');
+    currentOutputs = [...currentOutputs, ...outputs];
+    console.log(
+      `Étape ${event.step} exécutée. Sortie combinée:`,
+      currentOutputs
+    );
   }
 
-  return currentInput;
+  return currentOutputs;
 }

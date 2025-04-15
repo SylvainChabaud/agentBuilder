@@ -62,6 +62,7 @@ const AgentBuilder = () => {
     nodeBg,
     nodeApp,
     nodeExpertise,
+    nodeMixer,
     nodeFile,
     nodeSheet,
     selectedWorkflowName,
@@ -93,7 +94,7 @@ const AgentBuilder = () => {
     setNodes,
   });
 
-  console.info('workflowsList', { output, nodes, workflowsList });
+  console.info('workflowsList', { output, nodes, workflowsList, nodeMixer });
 
   return (
     <StyledReactFlow
@@ -293,6 +294,7 @@ const AgentBuilder = () => {
           nodeBg={nodeBg}
           nodeApp={nodeApp}
           nodeExpertise={nodeExpertise}
+          nodeMixer={nodeMixer}
           nodeFile={nodeFile}
           nodeSheet={nodeSheet}
           expertisesList={expertisesList}

@@ -22,14 +22,14 @@ const WorkflowsList = ({
       }}
     >
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-        {workflowsList.map((workflow) => {
+        {workflowsList.map((workflow, id) => {
           console.info('workflow', workflow);
           // Vérifie si ce workflow est le workflow sélectionné
           const isSelected = workflow.name === selectedWorkflowName;
 
           return (
             <div
-              key={workflow.id}
+              key={id}
               onClick={() => onSelectWorkflow(workflow)}
               style={{
                 display: 'flex',

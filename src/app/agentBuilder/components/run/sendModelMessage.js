@@ -16,9 +16,13 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
     const arrayAppSource = messagesSource.split('-');
     const expertiseSource = arrayAppSource[1];
     const currentExpertise = node.expertise;
+    // const isMixerEnabled = node.isMixerEnabled;
 
     console.info('node.app', node);
 
+    // if (isMixerEnabled) {
+
+    // }
     const foundedExpertise = expertisesList.find(
       ({ id }) => id === expertiseSource
     );
@@ -134,7 +138,9 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
         .replace(/```/g, '') // Supprime la balise de fermeture markdown
         .replace(/[\x00-\x1F\x7F]/g, '') // Supprime les caractères de contrôle
         .replace(/[\u2018\u2019\u201C\u201D]/g, "'") // Remplace les apostrophes typographiques et guillemets par des caractères simples
-        .replace(/\\n/g, '\\n') // Garde les retours à la ligne en format JSON
+        .replace(/\\n/g, '\n') // Remplace les "\n" échappés par des retours à la ligne réels
+        .replace(/\\u[\dA-Fa-f]{4}/g, '') // Supprime les séquences Unicode échappées (ex. \u4e00, \u201C)
+        .replace(/[\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF\uac00-\ud7af]/g, '') // Supprime les caractères chinois, japonais et coréens
         .trim(); // Supprime les espaces superflus aux extrémités
 
       console.info('Cleaned content:', cleaned);
@@ -152,6 +158,8 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
       results.push(iaContentObj);
     }
   }
+
+  console.info('results sendModelMessage', results);
 
   return results;
 };

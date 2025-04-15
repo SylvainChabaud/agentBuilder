@@ -28,6 +28,7 @@ const useAgentBuilder = ({
   const [nodeExpertise, setNodeExpertise] = useState('');
   const [nodeFile, setNodeFile] = useState({});
   const [nodeSheet, setNodeSheet] = useState([]);
+  const [nodeMixer, setNodeMixer] = useState(false);
   const [selectedWorkflowName, setSelectedWorkflowName] = useState('');
 
   const lastSelectionRef = useRef(null);
@@ -45,7 +46,7 @@ const useAgentBuilder = ({
     };
 
     const fetchWorkflows = async () => {
-      const workflows = await getWorkflows();
+      const workflows = (await getWorkflows()) || [];
       console.info('getWorkflows', workflows);
 
       setWorkflowsList((prev) => (prev.length === 0 ? [...workflows] : prev)); // ✅ Évite la boucle infinie
@@ -99,12 +100,12 @@ const useAgentBuilder = ({
 
     console.info('onSelectionChange test', node);
 
-    if (!node) {
-      // setSelectedNodeId('');
-      // setIsWorkflowOpen(false);
-      // setIsTerminalOpen(false);
-      // return;
-    } // ✅ Évite de mettre à jour un état null
+    // if (!node) {
+    //   // setSelectedNodeId('');
+    //   // setIsWorkflowOpen(false);
+    //   // setIsTerminalOpen(false);
+    //   // return;
+    // } // ✅ Évite de mettre à jour un état null
 
     const newSelection = {
       id: node?.id || '',
@@ -114,6 +115,7 @@ const useAgentBuilder = ({
       fileId: node?.data?.fileId || '',
       fileName: node?.data?.fileName || '',
       sheet: node?.data?.sheet || '',
+      isMixerEnabled: node?.data?.isMixerEnabled || false,
       backgroundColor: node?.style?.backgroundColor || '',
     };
 
@@ -135,6 +137,7 @@ const useAgentBuilder = ({
     setNodeApp(newSelection.app);
     setNodeExpertise(newSelection.expertise);
     setNodeSheet(newSelection.sheet);
+    setNodeMixer(newSelection.isMixerEnabled);
     setNodeFile({
       id: newSelection.fileId,
       name: newSelection.fileName,
@@ -214,6 +217,7 @@ const useAgentBuilder = ({
               data: {
                 app = '',
                 expertise = '',
+                isMixerEnabled = false,
                 fileName = '',
                 fileId = '',
                 sheet = '',
@@ -232,6 +236,7 @@ const useAgentBuilder = ({
                       expertise,
                       fileId,
                       fileName,
+                      isMixerEnabled,
                       sheet,
                       label: (
                         <NodeLabel
@@ -239,6 +244,7 @@ const useAgentBuilder = ({
                           name={value}
                           expertise={expertise}
                           fileName={fileName || ''}
+                          isMixerEnabled={isMixerEnabled}
                         />
                       ),
                     },
@@ -254,6 +260,7 @@ const useAgentBuilder = ({
         setNodeExpertise('');
         setNodeSheet([]);
         setNodeFile({});
+        setNodeMixer(false);
 
         setNodeApp(value);
         setNodes((nodes) =>
@@ -274,6 +281,7 @@ const useAgentBuilder = ({
                       app: value,
                       expertise: '',
                       fileName: '',
+                      isMixerEnabled: false,
                       fileId: '',
                       sheet: '',
                       label: <NodeLabel app={value} name={name} />,
@@ -309,10 +317,60 @@ const useAgentBuilder = ({
                       name,
                       app,
                       fileName: '',
+                      isMixerEnabled: false,
                       fileId: '',
                       sheet: '',
                       label: (
                         <NodeLabel app={app} name={name} expertise={value} />
+                      ),
+                    },
+                  }
+                : {}),
+            };
+          })
+        );
+        break;
+
+      case NODE_PARAMS.MIXER:
+        setNodeMixer(value);
+        setNodes((nodes) =>
+          nodes.map((node) => {
+            const {
+              id,
+              data: {
+                name = '',
+                app = '',
+                expertise = '',
+                fileName = '',
+                fileId = '',
+                sheet = '',
+              },
+            } = node;
+
+            const shouldChange = id === selectedNodeId;
+
+            console.info('isMixerEnabled 123', value);
+
+            return {
+              ...node,
+              ...(shouldChange
+                ? {
+                    data: {
+                      name,
+                      app,
+                      expertise,
+                      fileId,
+                      fileName,
+                      isMixerEnabled: value,
+                      sheet,
+                      label: (
+                        <NodeLabel
+                          app={app}
+                          name={name}
+                          expertise={expertise}
+                          fileName={fileName || ''}
+                          isMixerEnabled={value}
+                        />
                       ),
                     },
                   }
@@ -332,7 +390,12 @@ const useAgentBuilder = ({
           nodes.map((node) => {
             const {
               id,
-              data: { app = '', name = '', expertise = '' },
+              data: {
+                app = '',
+                name = '',
+                expertise = '',
+                isMixerEnabled = false,
+              },
             } = node;
 
             const shouldChange = id === selectedNodeId;
@@ -345,6 +408,7 @@ const useAgentBuilder = ({
                       expertise,
                       name,
                       app,
+                      isMixerEnabled,
                       fileName: file.name,
                       fileId: file.id,
                       sheet: file.sheetNames[0],
@@ -353,6 +417,7 @@ const useAgentBuilder = ({
                           app={app}
                           name={name}
                           expertise={expertise}
+                          isMixerEnabled={isMixerEnabled}
                           fileName={file.name}
                         />
                       ),
@@ -376,6 +441,7 @@ const useAgentBuilder = ({
                 app = '',
                 name = '',
                 expertise = '',
+                isMixerEnabled = false,
                 fileId = '',
                 fileName = '',
               },
@@ -392,6 +458,7 @@ const useAgentBuilder = ({
                       name,
                       app,
                       fileName,
+                      isMixerEnabled,
                       fileId,
                       sheet: value,
                       label: (
@@ -399,6 +466,7 @@ const useAgentBuilder = ({
                           app={app}
                           name={name}
                           expertise={expertise}
+                          isMixerEnabled={isMixerEnabled}
                           fileName={fileName}
                         />
                       ),
@@ -446,7 +514,15 @@ const useAgentBuilder = ({
     setNodes(() => {
       return selectedNodes.map((node) => {
         const {
-          data: { app, expertise, name, fileName, fileId, sheet },
+          data: {
+            app,
+            expertise,
+            name,
+            fileName,
+            fileId,
+            sheet,
+            isMixerEnabled,
+          },
         } = node;
 
         console.info('onSelectWorkflow', node);
@@ -460,6 +536,7 @@ const useAgentBuilder = ({
                 app={app}
                 expertise={expertise}
                 fileName={fileName}
+                isMixerEnabled={isMixerEnabled}
               />
             ),
             app,
@@ -468,6 +545,7 @@ const useAgentBuilder = ({
             fileName,
             fileId,
             sheet,
+            isMixerEnabled,
           },
         };
       });
@@ -513,6 +591,7 @@ const useAgentBuilder = ({
     nodeBg,
     nodeApp,
     nodeExpertise,
+    nodeMixer,
     nodeFile,
     nodeSheet,
   };

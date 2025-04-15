@@ -65,6 +65,7 @@ export const NODE_PARAMS = {
   DELETE: 'nodeDelete',
   SELECT_APP: 'nodeAppSelector',
   EXPERTISE: 'nodeExpertise',
+  MIXER: 'nodeMixer',
   FILE: 'nodeFile',
   SHEET: 'nodeSheet',
 };
@@ -76,6 +77,11 @@ export const APPS_LIST = [
   { id: 'jira', name: 'Jira' },
   { id: 'sheet', name: 'Sheet' },
   { id: 'displays', name: 'Displays' },
+];
+
+export const MIXER_LIST = [
+  { id: true, name: 'Mixer les entrées' },
+  { id: false, name: 'Entrée indépendante' },
 ];
 
 export const EXPERTISES_LIST = [
