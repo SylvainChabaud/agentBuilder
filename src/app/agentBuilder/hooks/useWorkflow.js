@@ -19,7 +19,7 @@ export const useWorkflow = ({
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
 
-  console.log('Events to execute 1:', { nodes, edges });
+  console.log('useWorkflow', { nodes, edges });
 
   const onExcecutedNode = ({ nodeId, status, result }) => {
     console.info('onExcecutedNode', { nodeId, status, result });

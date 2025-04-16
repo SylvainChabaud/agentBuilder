@@ -133,25 +133,7 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
       console.info('Original content:', iaContent);
 
       // Nettoyer les caractères de contrôle comme les retours à la ligne, tabulations, etc.
-      let cleaned = iaContent
-        .replace(/```json/g, '') // Supprime la balise d'ouverture markdown
-        .replace(/```/g, '') // Supprime la balise de fermeture markdown
-        .replace(/[\x00-\x1F\x7F]/g, '') // Supprime les caractères de contrôle
-        .replace(/[\u2018\u2019\u201C\u201D]/g, "'") // Remplace les apostrophes typographiques et guillemets par des caractères simples
-        .replace(/\\n/g, '\n') // Remplace les "\n" échappés par des retours à la ligne réels
-        .replace(/\\u[\dA-Fa-f]{4}/g, '') // Supprime les séquences Unicode échappées (ex. \u4e00, \u201C)
-        .replace(/[\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF\uac00-\ud7af]/g, '') // Supprime les caractères chinois, japonais et coréens
-        .trim(); // Supprime les espaces superflus aux extrémités
-
-      console.info('Cleaned content:', cleaned);
-
-      // Maintenant, essayer de parser le JSON nettoyé
-      let iaContentObj = {};
-      try {
-        iaContentObj = cleaned ? JSON.parse(cleaned) : {};
-      } catch (error) {
-        console.error('Erreur lors du parsing du JSON:', error);
-      }
+      const iaContentObj = safeParseOrExtract(iaContent, outputs);
 
       console.info('Parsed JSON object:', iaContentObj);
 
@@ -163,3 +145,22 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
 
   return results;
 };
+
+export function safeParseOrExtract(text, outputs = []) {
+  let cleaned = text
+    .replace(/```json/g, '')
+    .replace(/```/g, '')
+    .replace(/[\x00-\x1F\x7F]/g, '')
+    .replace(/[\u2018\u2019\u201C\u201D]/g, "'")
+    .replace(/\\n/g, '\n')
+    .replace(/\\u[\dA-Fa-f]{4}/g, '')
+    .replace(/[\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF\uac00-\ud7af]/g, '')
+    .trim();
+
+  try {
+    return cleaned ? JSON.parse(cleaned) : {};
+  } catch (e) {
+    console.warn('⚠️ JSON.parse() échoué, fallback extractObject');
+    return extractObject(cleaned, outputs);
+  }
+}

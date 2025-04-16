@@ -11,7 +11,7 @@ import {
 } from 'data/constants';
 import RankingDisplay from '../displays/ranking/page';
 
-export const INITIAL_COLOR = '#dbdbdb';
+export const INITIAL_COLOR = '#f7f4ed';
 
 export const NODE_POSITION_OFFSET = 25;
 
@@ -81,7 +81,7 @@ export const APPS_LIST = [
 
 export const MIXER_LIST = [
   { id: true, name: 'Mixer les entrées' },
-  { id: false, name: 'Entrée indépendante' },
+  { id: false, name: 'Entrées indépendantes' },
 ];
 
 export const EXPERTISES_LIST = [

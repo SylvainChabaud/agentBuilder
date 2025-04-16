@@ -18,10 +18,10 @@ const useAgentBuilder = ({
   addEdge,
   setExpertisesList,
   setWorkflowsList,
-  setIsWorkflowOpen,
-  setIsTerminalOpen,
+  // setIsWorkflowOpen,
+  // setIsTerminalOpen,
 }) => {
-  const [selectedNodeId, setSelectedNodeId] = useState(null);
+  const [selectedNodeId, setSelectedNodeId] = useState('');
   const [nodeName, setNodeName] = useState('');
   const [nodeBg, setNodeBg] = useState('');
   const [nodeApp, setNodeApp] = useState('');
@@ -36,18 +36,17 @@ const useAgentBuilder = ({
   console.info('useAgentBuilder');
 
   useEffect(() => {
-    console.info('useAgentBuilder useEffect');
+    console.info('fetchExpertises & fetchWorkflows');
 
     const fetchExpertises = async () => {
       const expertises = (await getExpertises()) || [];
-      console.info('fetchExpertise', expertises);
+      // console.info('fetchExpertise', expertises);
 
       setExpertisesList((prev) => [...prev, ...expertises]);
     };
 
     const fetchWorkflows = async () => {
       const workflows = (await getWorkflows()) || [];
-      console.info('getWorkflows', workflows);
 
       setWorkflowsList((prev) => (prev.length === 0 ? [...workflows] : prev)); // ✅ Évite la boucle infinie
     };
@@ -57,7 +56,7 @@ const useAgentBuilder = ({
   }, []);
 
   const onAddNode = () => {
-    console.info('onAddNode 1');
+    // console.info('onAddNode 1');
     setNodes((prevNodes) => {
       const hasNoLastNode = !prevNodes || prevNodes.length === 0;
 
@@ -78,7 +77,7 @@ const useAgentBuilder = ({
             y: lastNode.position.y + NODE_POSITION_OFFSET,
           };
 
-      console.info('onAddNode 2', { newNodeId });
+      // console.info('onAddNode 2', { newNodeId });
 
       const newNode = {
         ...lastNode,
@@ -89,106 +88,60 @@ const useAgentBuilder = ({
         ...INITIAL_EDGES_POSITION,
       };
 
-      console.info('onAddNode 3', newNode);
+      // console.info('onAddNode 3', newNode);
 
       return [...prevNodes, newNode];
     });
   };
 
-  const onSelectionChange = ({ nodes, edges }) => {
-    const [node] = nodes;
-
-    console.info('onSelectionChange test', node);
-
-    // if (!node) {
-    //   // setSelectedNodeId('');
-    //   // setIsWorkflowOpen(false);
-    //   // setIsTerminalOpen(false);
-    //   // return;
-    // } // ✅ Évite de mettre à jour un état null
-
-    const newSelection = {
-      id: node?.id || '',
-      name: node?.data?.name || '',
-      app: node?.data?.app || '',
-      expertise: node?.data?.expertise || '',
-      fileId: node?.data?.fileId || '',
-      fileName: node?.data?.fileName || '',
-      sheet: node?.data?.sheet || '',
-      isMixerEnabled: node?.data?.isMixerEnabled || false,
-      backgroundColor: node?.style?.backgroundColor || '',
-    };
-
-    // Vérifier si la nouvelle sélection est identique à la précédente
-    if (
-      JSON.stringify(newSelection) === JSON.stringify(lastSelectionRef.current)
-    ) {
-      console.info(
-        "⏭️ Aucun changement dans la sélection, on ignore l'update."
-      );
-      return; // Sortir de la fonction si les données sont les mêmes
+  const onEdgeClick = (event, edge) => {
+    // Confirm suppression
+    const shouldDelete = window.confirm(
+      `Are you sure you want to delete this edge?`
+    );
+    if (shouldDelete) {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id)); // Suppression de l'edge par son id
     }
+  };
 
-    // Mise à jour des valeurs
-    lastSelectionRef.current = newSelection; // Stocker la nouvelle sélection pour le prochain rendu
-    setSelectedNodeId(newSelection.id);
-    setNodeName(newSelection.name);
-    setNodeBg(newSelection.backgroundColor);
-    setNodeApp(newSelection.app);
-    setNodeExpertise(newSelection.expertise);
-    setNodeSheet(newSelection.sheet);
-    setNodeMixer(newSelection.isMixerEnabled);
-    setNodeFile({
-      id: newSelection.fileId,
-      name: newSelection.fileName,
-      sheetNames: [newSelection.sheet],
-    });
+  const onNodeClick = (event, node) => {
+    // Si des nodes sont sélectionnés et aucun edge n'est présent
+    if (node) {
+      const newSelection = {
+        id: node?.id || '',
+        name: node?.data?.name || '',
+        app: node?.data?.app || '',
+        expertise: node?.data?.expertise || '',
+        fileId: node?.data?.fileId || '',
+        fileName: node?.data?.fileName || '',
+        sheet: node?.data?.sheet || '',
+        isMixerEnabled: node?.data?.isMixerEnabled || false,
+        backgroundColor: node?.style?.backgroundColor || '',
+      };
 
-    // setSelectedNodeId((prev) => (prev !== node.id ? node.id : prev));
-    // setNodeName((prev) => (prev !== node.data.name ? node.data.name : prev));
-    // setNodeBg((prev) =>
-    //   prev !== node.style.backgroundColor ? node.style.backgroundColor : prev
-    // );
-    // setNodeApp((prev) => (prev !== node.data.app ? node.data.app : prev));
-    // setNodeExpertise((prev) =>
-    //   prev !== node.data.expertise ? node.data.expertise : prev
-    // );
-    // setNodeSheet((prev) => (prev !== node.data.sheet ? node.data.sheet : prev));
-    // setNodeFile((prev) =>
-    //   prev.id !== node.data.fileId
-    //     ? {
-    //         id: node.data.fileId,
-    //         name: node.data.fileName,
-    //         sheetNames: [node.data.sheet],
-    //       }
-    //     : prev
-    // );
+      // Vérifier si la nouvelle sélection est identique à la précédente
+      if (
+        JSON.stringify(newSelection) ===
+        JSON.stringify(lastSelectionRef.current)
+      ) {
+        return; // Sortir de la fonction si les données sont les mêmes
+      }
 
-    // const {
-    //   id,
-    //   data: {
-    //     name = '',
-    //     app = '',
-    //     expertise = '',
-    //     fileId = '',
-    //     fileName = '',
-    //     sheet,
-    //     label = '',
-    //   },
-    //   style: { backgroundColor },
-    // } = node || INITIAL_NODE;
-
-    // setSelectedNodeId(id);
-    // setNodeName(name);
-    // setNodeBg(backgroundColor);
-    // setNodeApp(app);
-    // setNodeExpertise(expertise);
-    // setNodeSheet(sheet);
-    // setNodeFile({
-    //   id: fileId,
-    //   name: fileName,
-    //   sheetNames: [sheet],
-    // });
+      // Mise à jour des valeurs
+      lastSelectionRef.current = newSelection; // Stocker la nouvelle sélection pour le prochain rendu
+      setSelectedNodeId(newSelection.id);
+      setNodeName(newSelection.name);
+      setNodeBg(newSelection.backgroundColor);
+      setNodeApp(newSelection.app);
+      setNodeExpertise(newSelection.expertise);
+      setNodeSheet(newSelection.sheet);
+      setNodeMixer(newSelection.isMixerEnabled);
+      setNodeFile({
+        id: newSelection.fileId,
+        name: newSelection.fileName,
+        sheetNames: [newSelection.sheet],
+      });
+    }
   };
 
   const onChangeNodeParams = ({ type, value, file }) => {
@@ -503,7 +456,7 @@ const useAgentBuilder = ({
   );
 
   const onSelectWorkflow = (workflow) => {
-    console.info('onSelectWorkflow', workflow);
+    // console.info('onSelectWorkflow', workflow);
 
     // setWorkflowId(workflow.id);
     onWorkflowName(workflow.name);
@@ -525,7 +478,7 @@ const useAgentBuilder = ({
           },
         } = node;
 
-        console.info('onSelectWorkflow', node);
+        // console.info('onSelectWorkflow', node);
 
         return {
           ...node,
@@ -551,24 +504,8 @@ const useAgentBuilder = ({
       });
     });
 
-    // onSelectionChange({ nodes });
-
     // setNodes(INITIAL_NODES);
     setEdges(selectedEdges);
-
-    // const selectedNodes = workflow.data?.nodes;
-    // const selectedEdges = workflow.data?.edges;
-
-    // setNodes((prevNodes) =>
-    //   JSON.stringify(prevNodes) !== JSON.stringify(selectedNodes)
-    //     ? selectedNodes
-    //     : prevNodes
-    // );
-    // setEdges((prevEdges) =>
-    //   JSON.stringify(prevEdges) !== JSON.stringify(selectedEdges)
-    //     ? selectedEdges
-    //     : prevEdges
-    // );
   };
 
   const onWorkflowName = (value) => {
@@ -576,17 +513,15 @@ const useAgentBuilder = ({
     setSelectedWorkflowName(value);
   };
 
-  console.info('selectedNodeId', selectedNodeId);
-
   return {
     onWorkflowName,
     onSelectWorkflow,
-    onSelectionChange,
+    onEdgeClick,
+    onNodeClick,
     onChangeNodeParams,
     onAddNode,
     onConnect,
     selectedWorkflowName,
-    showNodeParameters: selectedNodeId !== '',
     nodeName,
     nodeBg,
     nodeApp,

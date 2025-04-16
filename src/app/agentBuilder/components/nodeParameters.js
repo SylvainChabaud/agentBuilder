@@ -27,17 +27,15 @@ const NodeParameters = ({
 
   useEffect(() => {
     if (nodeApp === APPS_LABELS.SHEET && nodeExpertise === 'sheets') {
-      console.info('NodeParameters useEffect');
-
       const handleListSheets = async () => {
         try {
           setError(null);
 
           const accessToken = await handleGmailLoginClient('/sheets/');
-          console.info('gmail access token (list)', accessToken);
+          // console.info('gmail access token (list)', accessToken);
 
           const { data } = await handleFetchSheets(accessToken);
-          console.info('json', data);
+          // console.info('json', data);
 
           setFiles(data);
         } catch (err) {
@@ -90,12 +88,9 @@ const NodeParameters = ({
     });
   }, [expertisesList, nodeApp]);
 
-  console.info('currentFiles 1', { nodeSheet, nodeFile, files });
-
   const currentFiles = files?.find((file) => file?.id === nodeFile?.id);
 
-  console.info('currentFiles 2', currentFiles);
-  console.info('nodeMixer 999', nodeMixer);
+  console.info('NodeParameters', { nodeSheet, nodeFile, files, currentFiles });
 
   return (
     <NodeParametersPanel>
@@ -211,7 +206,7 @@ const NodeParameters = ({
 
       {shouldDisplaysMixerOption && (
         <ParameterRow>
-          <label>MIXER</label>
+          <label>Mixer</label>
           <StyledSelect
             value={nodeMixer}
             onChange={({ target: { value } }) => {

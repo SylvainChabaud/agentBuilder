@@ -34,12 +34,6 @@ const AgentBuilder = () => {
   const [isWorkflowOpen, setIsWorkflowOpen] = useState(true);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
-  console.info('AgentBuilder', {
-    expertisesList,
-    nodes,
-    edges,
-  });
-
   const onRedirect = ({ path, data = [] }) => {
     console.info('onRedirect', { path, data });
 
@@ -53,11 +47,11 @@ const AgentBuilder = () => {
   const {
     onWorkflowName,
     onSelectWorkflow,
-    onSelectionChange,
+    onEdgeClick,
+    onNodeClick,
     onChangeNodeParams,
     onAddNode,
     onConnect,
-    showNodeParameters,
     nodeName,
     nodeBg,
     nodeApp,
@@ -94,7 +88,18 @@ const AgentBuilder = () => {
     setNodes,
   });
 
-  console.info('workflowsList', { output, nodes, workflowsList, nodeMixer });
+  console.info('AgentBuilder', {
+    output,
+    nodes,
+    edges,
+    workflowsList,
+    expertisesList,
+  });
+
+  const selectedNodes = nodes.filter((node) => node.selected);
+  const selectedEdges = edges.filter((edge) => edge.selected);
+  const showNodeParameters =
+    selectedNodes.length !== 0 || selectedEdges.length !== 0;
 
   return (
     <StyledReactFlow
@@ -102,7 +107,8 @@ const AgentBuilder = () => {
       edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
-      onSelectionChange={onSelectionChange}
+      onEdgeClick={onEdgeClick}
+      onNodeClick={onNodeClick}
       onConnect={onConnect}
       style={{ background: '#F7F9FB', flex: 1 }}
       minZoom={1}
@@ -184,54 +190,6 @@ const AgentBuilder = () => {
       </div>
 
       {/* DISPLAY WORKFLOWS LIST */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          position: 'absolute',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 10,
-          width: '30%',
-          // maxWidth: '500px',
-          // On peut ajuster la hauteur maximale si ouvert, et la réduire si fermé
-          maxHeight: '400px',
-          backgroundColor: 'white',
-          borderRadius: '8px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          // On peut animer l'ouverture/fermeture
-          transition: 'max-height 0.3s ease, padding 0.3s ease',
-          // Si c’est fermé, on retire le padding pour un effet plus compact
-          padding: isTerminalOpen ? '16px' : '4px',
-          overflowY: 'auto',
-          backgroundColor: 'azure',
-        }}
-      >
-        {/* Bouton pour ouvrir/fermer l'accordéon */}
-        <button
-          onClick={() => setIsTerminalOpen(!isTerminalOpen)}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#333',
-            cursor: 'pointer',
-            fontSize: '1.2rem',
-            alignSelf: 'flex-end',
-          }}
-        >
-          Terminal {isTerminalOpen ? '▼' : '▲'}
-        </button>
-
-        {isTerminalOpen &&
-          (isRunning ? (
-            'Le workflow est en cours d’exécution...'
-          ) : (
-            <DisplayResults data={output} />
-          ))}
-      </div>
-
-      {/* DISPLAY TERMINAL */}
       {!isRunning && (
         <div
           style={{
@@ -285,6 +243,54 @@ const AgentBuilder = () => {
           )}
         </div>
       )}
+
+      {/* DISPLAY TERMINAL */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          position: 'absolute',
+          bottom: '20px',
+          right: '20px',
+          zIndex: 10,
+          width: '30%',
+          // maxWidth: '500px',
+          // On peut ajuster la hauteur maximale si ouvert, et la réduire si fermé
+          maxHeight: '400px',
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          // On peut animer l'ouverture/fermeture
+          transition: 'max-height 0.3s ease, padding 0.3s ease',
+          // Si c’est fermé, on retire le padding pour un effet plus compact
+          padding: isTerminalOpen ? '16px' : '4px',
+          overflowY: 'auto',
+          backgroundColor: 'azure',
+        }}
+      >
+        {/* Bouton pour ouvrir/fermer l'accordéon */}
+        <button
+          onClick={() => setIsTerminalOpen(!isTerminalOpen)}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#333',
+            cursor: 'pointer',
+            fontSize: '1.2rem',
+            alignSelf: 'flex-end',
+          }}
+        >
+          Terminal {isTerminalOpen ? '▼' : '▲'}
+        </button>
+
+        {isTerminalOpen &&
+          (isRunning ? (
+            'Le workflow est en cours d’exécution...'
+          ) : (
+            <DisplayResults data={output} />
+          ))}
+      </div>
 
       {/* DISPLAY NODE PARAMETERS */}
       {showNodeParameters && (
