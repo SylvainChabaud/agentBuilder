@@ -50,8 +50,8 @@ export default function AppLayout({ children }) {
     <div className={`${geistSans.variable} ${geistMono.variable}`}>
       <GlobalStyle />
       <LayoutWrapper>
-        {session ? (
-          isPermittedUser ? (
+        {!session ? (
+          !isPermittedUser ? (
             <>
               <HeaderWrapper
                 openLoginModal={openLoginModal}

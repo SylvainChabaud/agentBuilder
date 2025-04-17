@@ -51,6 +51,7 @@ export async function POST(request) {
       id: userId,
       username,
       password: hashedPassword,
+      permission: '',
     };
 
     users.push(newUser);

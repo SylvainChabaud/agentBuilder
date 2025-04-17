@@ -5,11 +5,12 @@ import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { Header, DropdownContent, LoginButton } from './styles';
 
-export default function HeaderWrapper({ openLoginModal }) {
+export default function HeaderWrapper({ openLoginModal, userName }) {
   const [isGmailDropdownVisible, setIsGmailDropdownVisible] = useState(false);
   const [isEmailsDropdownVisible, setIsEmailsDropdownVisible] = useState(false);
+  const [isLogoutDropdownVisible, setLogoutDropdownVisible] = useState(false);
 
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   // S'assurer que l'URL de base est définie pour la redirection
   const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/`;
@@ -55,11 +56,25 @@ export default function HeaderWrapper({ openLoginModal }) {
           </DropdownContent>
         </div>
 
-        {session ? (
+        <div
+          className="nav-item"
+          onMouseEnter={() => setLogoutDropdownVisible(true)}
+          onMouseLeave={() => setLogoutDropdownVisible(false)}
+        >
+          {userName || 'user'}
+          <DropdownContent
+            className={isLogoutDropdownVisible ? 'visible' : ''}
+            style={{ left: '89%' }}
+          >
+            <Link href="/api/auth/signout">Déconnexion</Link>
+            <Link href="/userSettings">Settings</Link>
+          </DropdownContent>
+        </div>
+        {/* {session ? (
           <Link href="/api/auth/signout">Déconnexion</Link>
         ) : (
           <LoginButton onClick={openLoginModal}>Connexion</LoginButton>
-        )}
+        )} */}
       </nav>
     </Header>
   );
