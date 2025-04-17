@@ -4,8 +4,18 @@ import SecureInput from './components/secureInput';
 import { useApiKeyManager } from './hooks/useApiKeyManager';
 
 export default function UserSettings() {
-  const { apiKey, setApiKey, saveKey, clearKey, saved, deleted } =
-    useApiKeyManager();
+  const {
+    inputValue,
+    userApiKey,
+    handleInput,
+    saveKey,
+    clearKey,
+    saved,
+    deleted,
+  } = useApiKeyManager();
+
+  console.info('inputValue', inputValue);
+  console.info('userApiKey', userApiKey);
 
   return (
     <div style={styles.wrapper}>
@@ -13,16 +23,18 @@ export default function UserSettings() {
         Votre clé API personnelle :
       </label>
 
-      <SecureInput value={apiKey} onChange={setApiKey} />
+      <SecureInput value={inputValue} onChange={handleInput} />
 
       <div style={styles.buttonRow}>
         <button onClick={saveKey} style={styles.saveButton}>
           💾 Enregistrer
         </button>
 
-        <button onClick={clearKey} style={styles.clearButton}>
-          🗑 Purger la clé existante
-        </button>
+        {userApiKey && (
+          <button onClick={clearKey} style={styles.clearButton}>
+            🗑 Purger la clé existante
+          </button>
+        )}
 
         {saved && <span style={styles.savedMessage}>✔️ Clé enregistrée</span>}
         {deleted && <span style={styles.deletedMessage}>🗑 Clé supprimée</span>}
