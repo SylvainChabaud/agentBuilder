@@ -42,11 +42,14 @@ export async function POST(request) {
       );
     }
 
+    console.info('permission BACK', user.permission);
+
     // ✅ Utilisateur authentifié
     return new Response(
       JSON.stringify({
         id: user.id,
         username: user.username,
+        permission: user.permission,
       }),
       { status: 200 }
     );

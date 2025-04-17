@@ -97,7 +97,7 @@ const useAgentBuilder = ({
   const onEdgeClick = (event, edge) => {
     // Confirm suppression
     const shouldDelete = window.confirm(
-      `Are you sure you want to delete this edge?`
+      `Êtes-vous sûr de vouloir supprimer cette liaison ?`
     );
     if (shouldDelete) {
       setEdges((eds) => eds.filter((e) => e.id !== edge.id)); // Suppression de l'edge par son id

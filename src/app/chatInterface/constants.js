@@ -4,12 +4,12 @@ export const MODELS = [
   ///////////////////
   // OLLAMA MODELS //
   ///////////////////
-  {
-    id: 'qwen 7b',
-    model: 'qwen2.5:7b',
-    name: 'Qwen 2.5 7B (gratuit)',
-    modelSource: MODEL_SOURCES.OLLAMA,
-  },
+  // {
+  //   id: 'qwen 7b',
+  //   model: 'qwen2.5:7b',
+  //   name: 'Qwen 2.5 7B (gratuit)',
+  //   modelSource: MODEL_SOURCES.OLLAMA,
+  // },
   {
     id: 'qwen 1.5b',
     model: 'qwen2.5:1.5b',
@@ -22,24 +22,24 @@ export const MODELS = [
     name: 'Qwen 2.5 3B (gratuit)',
     modelSource: MODEL_SOURCES.OLLAMA,
   },
-  {
-    id: 'deepseek 7b',
-    model: 'deepseek-r1:7b',
-    name: 'DeepSeek R1 7B (gratuit)',
-    modelSource: MODEL_SOURCES.OLLAMA,
-  },
+  // {
+  //   id: 'deepseek 7b',
+  //   model: 'deepseek-r1:7b',
+  //   name: 'DeepSeek R1 7B (gratuit)',
+  //   modelSource: MODEL_SOURCES.OLLAMA,
+  // },
   {
     id: 'deepseek 1.5b',
     model: 'deepseek-r1:1.5b',
     name: 'DeepSeek R1 1.5B (gratuit)',
     modelSource: MODEL_SOURCES.OLLAMA,
   },
-  {
-    id: 'mistral 7b',
-    model: 'mistral:7b',
-    name: 'Mistra l 7B (gratuit)',
-    modelSource: MODEL_SOURCES.OLLAMA,
-  },
+  // {
+  //   id: 'mistral 7b',
+  //   model: 'mistral:7b',
+  //   name: 'Mistra l 7B (gratuit)',
+  //   modelSource: MODEL_SOURCES.OLLAMA,
+  // },
   {
     id: 'llama 3b',
     model: 'llama3.2:3b',
