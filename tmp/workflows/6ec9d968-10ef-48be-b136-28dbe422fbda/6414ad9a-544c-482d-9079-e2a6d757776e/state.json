@@ -1,0 +1,28 @@
+{
+  "workflowId": "6414ad9a-544c-482d-9079-e2a6d757776e",
+  "status": "initialized",
+  "objective": {
+    "id": "6414ad9a-544c-482d-9079-e2a6d757776e",
+    "text": [
+      "www"
+    ],
+    "context": null
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : www"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

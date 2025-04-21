@@ -18,7 +18,13 @@ import { sendModelMessage } from './sendModelMessage';
  * @param {any} input - L'input courant (la sortie de l'étape précédente).
  * @returns {Promise<string>} La sortie produite par le nœud.
  */
-export async function executeNode({ node, input, expertisesList, onRedirect }) {
+export async function executeNode({
+  userId,
+  node,
+  input,
+  expertisesList,
+  onRedirect,
+}) {
   console.info('executeNode', { node, input, expertisesList });
 
   // Exécution selon le type d'application (défini dans node.app)
@@ -65,7 +71,12 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
       const accessToken = await handleGmailLoginClient('/agentBuilder');
       console.info('gmail access token', 'accessToken');
 
-      const emails = await sendModelMessage({ input, node, expertisesList });
+      const emails = await sendModelMessage({
+        userId,
+        input,
+        node,
+        expertisesList,
+      });
 
       console.info('emails 123', emails);
 
@@ -123,6 +134,7 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
     });
 
     const modelMessage = await sendModelMessage({
+      userId,
       node,
       input: mixedResults,
       expertisesList: mixedExpertisesList,
@@ -134,6 +146,7 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
     console.info('DISPLAYS', { node, input, expertisesList });
 
     const modelMessage = await sendModelMessage({
+      userId,
       input,
       node,
       expertisesList,
@@ -172,6 +185,7 @@ export async function executeNode({ node, input, expertisesList, onRedirect }) {
  * @returns {Promise<any>} La sortie finale du workflow.
  */
 export async function runWorkflow(
+  userId,
   executionPlan,
   initialInput,
   expertisesList,
@@ -228,6 +242,7 @@ export async function runWorkflow(
         });
 
         const data = await executeNode({
+          userId,
           node,
           input: inputToExecute,
           expertisesList,

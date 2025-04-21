@@ -34,7 +34,7 @@ export default function HeaderWrapper({ openLoginModal, userName }) {
           Apps
           <DropdownContent
             className={isEmailsDropdownVisible ? 'visible' : ''}
-            style={{ left: '75%' }}
+            style={{ left: '80%' }}
           >
             <Link href="/sheets">Sheets</Link>
             <Link href="/webSearch">WebSearch</Link>
@@ -47,7 +47,7 @@ export default function HeaderWrapper({ openLoginModal, userName }) {
               Gmail
               <DropdownContent
                 className={isGmailDropdownVisible ? 'visible' : ''}
-                style={{ right: '0%', top: '50%' }}
+                style={{ left: '100%', top: '55%' }}
               >
                 <Link href="/gmail/emails">Mes emails</Link>
                 <Link href="/gmail/sendEmail">Envoyer un email</Link>
@@ -55,27 +55,31 @@ export default function HeaderWrapper({ openLoginModal, userName }) {
             </div>
           </DropdownContent>
         </div>
-
-        <div
-          className="nav-item"
-          onMouseEnter={() => setLogoutDropdownVisible(true)}
-          onMouseLeave={() => setLogoutDropdownVisible(false)}
-        >
-          {userName || 'user'}
-          <DropdownContent
-            className={isLogoutDropdownVisible ? 'visible' : ''}
-            style={{ left: '89%' }}
-          >
-            <Link href="/api/auth/signout">Déconnexion</Link>
-            <Link href="/userSettings">Settings</Link>
-          </DropdownContent>
-        </div>
-        {/* {session ? (
-          <Link href="/api/auth/signout">Déconnexion</Link>
-        ) : (
-          <LoginButton onClick={openLoginModal}>Connexion</LoginButton>
-        )} */}
       </nav>
+
+      <div
+        className="user-nav-item"
+        onMouseEnter={() => setLogoutDropdownVisible(true)}
+        onMouseLeave={() => setLogoutDropdownVisible(false)}
+      >
+        <div
+          style={{
+            display: 'flex',
+            fontSize: '12px',
+            alignItems: 'center',
+            color: isLogoutDropdownVisible ? 'black' : 'Moccasin',
+          }}
+        >
+          {userName || 'User'}
+        </div>
+        <DropdownContent
+          className={isLogoutDropdownVisible ? 'visible' : ''}
+          style={{ left: '0' }}
+        >
+          <Link href="/userSettings">Settings</Link>
+          <Link href="/api/auth/signout">Déconnexion</Link>
+        </DropdownContent>
+      </div>
     </Header>
   );
 }

@@ -20,7 +20,7 @@ import { callModelAndExtract } from '../lib/callModel';
  * @returns {Promise<{ tasks: Task[], expertises: string[] }>}
  */
 
-export const analyzeObjective = async ({ objective, context = [] }) => {
+export const analyzeObjective = async ({ userId, objective, context = [] }) => {
   // console.info('analyzeObjective', { objective, context });
 
   const messages = [
@@ -29,6 +29,7 @@ export const analyzeObjective = async ({ objective, context = [] }) => {
   ];
 
   const iaRequest = {
+    userId,
     messages,
     ...DEFAULT_IA_MODEL,
   };

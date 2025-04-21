@@ -1,0 +1,28 @@
+{
+  "workflowId": "9a7b82f9-fc17-4b86-ab60-39f01753dac4",
+  "status": "initialized",
+  "objective": {
+    "id": "9a7b82f9-fc17-4b86-ab60-39f01753dac4",
+    "text": [
+      "sss"
+    ],
+    "context": null
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : sss"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

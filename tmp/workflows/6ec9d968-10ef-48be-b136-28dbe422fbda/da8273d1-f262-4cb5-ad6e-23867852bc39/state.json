@@ -1,0 +1,28 @@
+{
+  "workflowId": "da8273d1-f262-4cb5-ad6e-23867852bc39",
+  "status": "initialized",
+  "objective": {
+    "id": "da8273d1-f262-4cb5-ad6e-23867852bc39",
+    "text": [
+      "Concevoir un programme de formation en intelligence artificielle destiné aux professionnels, structuré de manière progressive et opérationnelle, répondant aux critères de certification Qualiopi.\r\n\r\nLe programme doit inclure :\r\n\r\nUne montée en compétences sur l’IA adaptée aux secteurs professionnels cibles (santé, finance, assurance, juridique, etc.)\r\n\r\nUne structuration en modules indépendants, avec pour chaque module :\r\n\r\nun titre clair\r\n\r\ndes objectifs pédagogiques mesurables\r\n\r\nla durée\r\n\r\nla modalité (présentiel, distanciel, hybride)\r\n\r\nun prix par module\r\n\r\nles méthodes pédagogiques utilisées\r\n\r\nles moyens techniques et humains\r\n\r\nles modalités d’évaluation\r\n\r\nDes cas d’usage professionnels concrets\r\n\r\nUne logique de transfert en situation de travail\r\n\r\nUn dispositif d’évaluation continue et de satisfaction\r\n\r\nUne conformité avec les critères qualité (indicateurs du Référentiel National Qualité)"
+    ],
+    "context": null
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : Concevoir un programme de formation en intelligence artificielle destiné aux professionnels, structuré de manière progressive et opérationnelle, répondant aux critères de certification Qualiopi.\r\n\r\nLe programme doit inclure :\r\n\r\nUne montée en compétences sur l’IA adaptée aux secteurs professionnels cibles (santé, finance, assurance, juridique, etc.)\r\n\r\nUne structuration en modules indépendants, avec pour chaque module :\r\n\r\nun titre clair\r\n\r\ndes objectifs pédagogiques mesurables\r\n\r\nla durée\r\n\r\nla modalité (présentiel, distanciel, hybride)\r\n\r\nun prix par module\r\n\r\nles méthodes pédagogiques utilisées\r\n\r\nles moyens techniques et humains\r\n\r\nles modalités d’évaluation\r\n\r\nDes cas d’usage professionnels concrets\r\n\r\nUne logique de transfert en situation de travail\r\n\r\nUn dispositif d’évaluation continue et de satisfaction\r\n\r\nUne conformité avec les critères qualité (indicateurs du Référentiel National Qualité)"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

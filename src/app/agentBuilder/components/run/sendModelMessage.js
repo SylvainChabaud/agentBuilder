@@ -2,8 +2,14 @@ import { MODELS } from 'src/app/chatInterface/constants';
 import { getIaContext, getIaPrompt } from './contracts/contracts';
 import { extractObject } from './utils';
 
-export const sendModelMessage = async ({ input, node, expertisesList }) => {
+export const sendModelMessage = async ({
+  userId,
+  input,
+  node,
+  expertisesList,
+}) => {
   console.info('sendModelMessage', {
+    userId,
     input,
     node,
   });
@@ -34,7 +40,7 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
     const {
       outputs = {},
       context = [],
-      model = MODELS[1].model,
+      model = MODELS[0].model,
     } = expertisesList.find(({ id }) => id === currentExpertise);
 
     console.info('node.app 2', outputs);
@@ -109,6 +115,7 @@ export const sendModelMessage = async ({ input, node, expertisesList }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          userId,
           messages: newMessage,
           model: iaModel,
           modelSource,

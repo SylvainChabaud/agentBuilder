@@ -47,11 +47,17 @@ export async function POST(request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const userId = randomUUID();
+
     const newUser = {
       id: userId,
       username,
       password: hashedPassword,
       permission: '',
+      llmSettings: {
+        apiKey: '',
+        baseUrl: '',
+        model: '',
+      },
     };
 
     users.push(newUser);

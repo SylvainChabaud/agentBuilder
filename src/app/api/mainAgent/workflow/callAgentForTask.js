@@ -10,7 +10,12 @@ import { buildFinalUserPrompt } from './utils';
  * @param {Array<any>} dependencyOutputs
  * @returns {Promise<any>} Résultat IA
  */
-export async function callAgentForTask(agent, task, dependencyOutputs = []) {
+export async function callAgentForTask(
+  userId,
+  agent,
+  task,
+  dependencyOutputs = []
+) {
   const finalPrompt = buildFinalUserPrompt({
     basePrompt: agent.userPrompt?.trim(),
     task,
@@ -25,6 +30,7 @@ export async function callAgentForTask(agent, task, dependencyOutputs = []) {
   ];
 
   const iaRequest = {
+    userId,
     messages,
     ...DEFAULT_IA_MODEL,
   };

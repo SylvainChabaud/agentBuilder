@@ -15,6 +15,7 @@ import { callModelAndExtract } from '../lib/callModel';
  * @returns {Promise<Agent[]>}
  */
 export async function createAgentsFromExpertises(
+  userId,
   expertises,
   objective,
   context = null
@@ -46,6 +47,7 @@ export async function createAgentsFromExpertises(
       ];
 
       const iaRequest = {
+        userId,
         messages,
         ...DEFAULT_IA_MODEL,
       };

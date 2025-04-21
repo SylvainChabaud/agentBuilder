@@ -1,4 +1,5 @@
 // hooks/useMainAgent.js
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 /**
@@ -10,6 +11,12 @@ const useMainAgent = () => {
   const [output, setOutput] = useState(null);
   const [memory, setMemory] = useState(null);
   const [validation, setValidation] = useState(null);
+
+  // TODO
+  // const userId = '6ec9d968-10ef-48be-b136-28dbe422fbda';
+
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   /**
    * Lancement complet d’un cycle d’orchestration
@@ -26,7 +33,7 @@ const useMainAgent = () => {
 
     try {
       const formData = new FormData();
-      formData.append('userId', 'user-1');
+      formData.append('userId', userId);
       formData.append('objective', objective);
       contextFiles.forEach((file) => {
         formData.append('files', file); // Champ multiple côté back
@@ -58,6 +65,7 @@ const useMainAgent = () => {
     } catch (err) {
       console.error('Erreur mainAgent:', err);
       setLogs((prev) => [...prev, { type: 'error', message: err.message }]);
+      return { error: err.message };
     } finally {
       setIsRunning(false);
     }

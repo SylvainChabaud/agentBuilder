@@ -1,10 +1,11 @@
 // lib/ia/callModelAndExtract.js
 
 import { fetchOpenRouter } from '../../../../../lib/services/openRouter/fetchOpenRouter';
-import { fetchOpenIa } from '../../../../../lib/services/openIa/fetchOpenIa';
+// import { fetchOpenIa } from '../../../../../lib/services/openIa/fetchOpenIa';
 // import { extractObject } from '../../../agentBuilder/components/run/utils';
 import { fetchOllama } from '../../../../../lib/services/ollama/fetchOllama';
 import { MODEL_SOURCES } from 'app/constants';
+import { openIaWrapper } from '../../chat/openIaWrapper';
 
 /**
  * Appelle un modèle IA avec un jeu de messages et extrait un objet JSON propre.
@@ -16,6 +17,7 @@ import { MODEL_SOURCES } from 'app/constants';
  * @returns {Promise<Object>} - Objet JSON parsé avec les clés extraites
  */
 export async function callModelAndExtract({
+  userId,
   messages,
   model,
   modelSource = MODEL_SOURCES.OLLAMA,
@@ -37,12 +39,12 @@ export async function callModelAndExtract({
       fetchFunc = fetchOllama;
       break;
     case MODEL_SOURCES.OPEN_IA:
-      fetchFunc = fetchOpenIa;
+      fetchFunc = openIaWrapper;
       break;
     default:
       throw new Error(`Source du modèle IA inconnue: ${modelSource}`);
   }
-  const { data, tokenUsage } = await fetchFunc({ model, messages });
+  const { data, tokenUsage } = await fetchFunc({ userId, model, messages });
 
   // console.info('contentWithoutThink 1 ', data);
 

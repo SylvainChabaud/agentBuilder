@@ -1,0 +1,28 @@
+{
+  "workflowId": "ec0300ae-e247-45a4-b2ca-d5a060bab255",
+  "status": "initialized",
+  "objective": {
+    "id": "ec0300ae-e247-45a4-b2ca-d5a060bab255",
+    "text": [
+      "fff"
+    ],
+    "context": null
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : fff"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

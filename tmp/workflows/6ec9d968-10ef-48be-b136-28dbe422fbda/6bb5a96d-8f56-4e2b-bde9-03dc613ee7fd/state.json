@@ -1,0 +1,65 @@
+{
+  "workflowId": "6bb5a96d-8f56-4e2b-bde9-03dc613ee7fd",
+  "status": "initialized",
+  "objective": {
+    "id": "6bb5a96d-8f56-4e2b-bde9-03dc613ee7fd",
+    "text": [
+      "Donne la meilleur formation IA pour les pro"
+    ],
+    "context": null,
+    "customText": "Identifier et recommander la formation en intelligence artificielle la plus adaptée aux besoins des professionnels, basée sur des critères de qualité pertinents."
+  },
+  "tasks": [
+    {
+      "name": "Définir les critères de qualité",
+      "description": "Identifier les critères qui définissent une 'meilleure' formation IA pour les professionnels (contenu, durée, reconnaissance, etc.)",
+      "priority": "high"
+    },
+    {
+      "name": "Rechercher les formations disponibles",
+      "description": "Collecter une liste des formations IA existantes destinées aux professionnels",
+      "priority": "high"
+    },
+    {
+      "name": "Évaluer les formations",
+      "description": "Analyser chaque formation selon les critères définis pour déterminer leur pertinence et qualité",
+      "priority": "high"
+    },
+    {
+      "name": "Comparer les options",
+      "description": "Mettre en regard les différentes formations évaluées pour identifier la meilleure option",
+      "priority": "medium"
+    },
+    {
+      "name": "Préparer une recommandation",
+      "description": "Formuler une réponse claire et argumentée présentant la meilleure formation identifiée",
+      "priority": "medium"
+    }
+  ],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : Donne la meilleur formation IA pour les pro"
+    },
+    {
+      "type": "info",
+      "message": "🧠 Objectif analysé avec succès : 5 tâches, 4 expertises."
+    }
+  ],
+  "output": null,
+  "validation": null,
+  "expertises": [
+    "Recherche d'information",
+    "Analyse comparative",
+    "Connaissance du domaine IA",
+    "Évaluation pédagogique"
+  ]
+}

@@ -4,6 +4,7 @@ import { runWorkflow } from '../components/run/runWorkflow';
 import { setWorkflow } from '../../../../lib/workflowManager/setWorkflow';
 import { deleteWorkflow } from '../../../../lib/workflowManager/removeWorkflow';
 import { NODE_STATUS } from '../constants';
+import { useSession } from 'next-auth/react';
 
 export const useWorkflow = ({
   nodes,
@@ -18,6 +19,11 @@ export const useWorkflow = ({
 }) => {
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+  // TODO
+  // const userId = '6ec9d968-10ef-48be-b136-28dbe422fbda';
+
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   console.log('useWorkflow', { nodes, edges });
 
@@ -61,6 +67,7 @@ export const useWorkflow = ({
       setIsWorkflowOpen(false);
 
       const finalOutput = await runWorkflow(
+        userId,
         plan,
         initialInput,
         expertisesList,

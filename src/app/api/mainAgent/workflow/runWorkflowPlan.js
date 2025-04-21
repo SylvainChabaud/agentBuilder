@@ -29,6 +29,7 @@ export async function runWorkflowPlan(userId, workflowId, state) {
 
     // 🧩 Exécute l’agent IA avec sa tâche et les résultats dont il dépend
     const { result, tokenUsage } = await callAgentForTask(
+      userId,
       agent,
       task,
       dependencyOutputs

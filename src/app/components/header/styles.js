@@ -17,6 +17,7 @@ export const Header = styled.header`
 
     a,
     .nav-item {
+      display: flex;
       font-family: var(--font-geist-mono);
       color: var(--background);
       text-decoration: none;
@@ -31,6 +32,29 @@ export const Header = styled.header`
         color: var(--foreground);
         border-color: var(--foreground);
       }
+    }
+  }
+
+  .user-nav-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    font-family: var(--font-geist-mono);
+    color: var(--background);
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+
+    &:hover {
+      background-color: var(--background);
+      color: var(--foreground);
+      border-color: var(--foreground);
     }
   }
 `;
@@ -54,9 +78,8 @@ export const LoginButton = styled.button`
 
 export const DropdownContent = styled.div`
   position: absolute;
-  top: 100%;
-  left: 100%;
-  transform: translateX(-50%, -50%);
+  top: 100%; /* Directement sous l'élément parent */
+  left: 0; /* Aligné à gauche de l'élément parent */
   background-color: var(--foreground);
   border: 2px solid var(--background);
   border-radius: 5px;
@@ -72,7 +95,7 @@ export const DropdownContent = styled.div`
   &.visible {
     opacity: 1;
     visibility: visible;
-    transform: translate(0, 5px);
+    transform: translate(0, 5px); /* légèrement décalé pour un effet smooth */
   }
 
   a {

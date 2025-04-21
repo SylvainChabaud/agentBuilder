@@ -10,7 +10,7 @@ Tu dois toujours répondre en respectant strictement le format JSON spécifié.`
  * @param {Object} file - { name, content }
  * @returns {Promise<string>} résumé texte
  */
-export async function summarizeOne(file) {
+export async function summarizeOne(userId, file) {
   const prompt = `Voici un document nommé "${file.name}".
   
   Ta mission est de résumer ce document de façon structurée et exploitable pour la suite d'un projet.
@@ -30,6 +30,7 @@ export async function summarizeOne(file) {
   ];
 
   const iaRequest = {
+    userId,
     messages,
     ...DEFAULT_IA_MODEL,
   };
@@ -47,7 +48,7 @@ export async function summarizeOne(file) {
  * @param {Array<{ name: string, summary: string }>} fileSummaries
  * @returns {Promise<string>} résumé global consolidé
  */
-export async function consolidateSummaries(fileSummaries) {
+export async function consolidateSummaries(userId, fileSummaries) {
   const intro = `Tu es un agent IA qui doit fusionner plusieurs résumés de documents pour créer une synthèse globale utile à la suite d’un projet.
   
   Voici les résumés individuels :\n\n`;
@@ -71,6 +72,7 @@ export async function consolidateSummaries(fileSummaries) {
   ];
 
   const iaRequest = {
+    userId,
     messages,
     ...DEFAULT_IA_MODEL,
   };

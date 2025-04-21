@@ -22,14 +22,16 @@ export async function POST(request) {
     if (index === -1) {
       return new Response(
         JSON.stringify({ error: 'Utilisateur introuvable' }),
-        {
-          status: 404,
-        }
+        { status: 404 }
       );
     }
 
-    // Supprime la clé si elle existe
-    delete users[index].apiKey;
+    // Vider les champs de llmSettings proprement
+    users[index].llmSettings = {
+      apiKey: '',
+      baseUrl: '',
+      model: '',
+    };
 
     await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
 
@@ -37,9 +39,7 @@ export async function POST(request) {
   } catch (err) {
     return new Response(
       JSON.stringify({ error: 'Erreur serveur : ' + err.message }),
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }

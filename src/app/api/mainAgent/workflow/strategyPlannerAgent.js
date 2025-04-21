@@ -45,7 +45,7 @@ Format de réponse (JSON uniquement) :
  * @param {Agent[]} params.agents
  * @returns {Promise<{ steps: { task: Task, assignedAgentId: string, dependencies?: string[] }[] }>}
  */
-export async function planChallenge({ objective, tasks, agents }) {
+export async function planChallenge({ userId, objective, tasks, agents }) {
   const messages = [
     { role: 'system', content: SYSTEM_MESSAGE },
     {
@@ -55,6 +55,7 @@ export async function planChallenge({ objective, tasks, agents }) {
   ];
 
   const iaRequest = {
+    userId,
     messages,
     ...DEFAULT_IA_MODEL,
   };

@@ -98,6 +98,7 @@ export async function POST(req) {
 
           ({ tasks, expertises, customObjective, tokenUsage } =
             await analyzeObjective({
+              userId,
               objective: objectiveText,
               context: { summary, keyElements },
             }));
@@ -131,6 +132,7 @@ export async function POST(req) {
         let agents;
         try {
           const result = await createAgentsFromExpertises(
+            userId,
             expertises,
             customObjective,
             enrichedContext
@@ -191,6 +193,7 @@ export async function POST(req) {
         let plan;
         try {
           const result = await planChallenge({
+            userId,
             objective: customObjective,
             tasks,
             agents,
@@ -252,6 +255,7 @@ export async function POST(req) {
         let finalOutput;
         try {
           const result = await generateFinalOutputWithWriter({
+            userId,
             objective: state.objective.customText,
             byAgent: state.memory.content.byAgent,
           });
@@ -291,6 +295,7 @@ export async function POST(req) {
         /////////////////////////////////
         return resolve(
           NextResponse.json({
+            userId,
             workflowId,
             logs: state.logs,
             memory: state.memory,

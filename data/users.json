@@ -7,6 +7,11 @@
   {
     "id": "6ec9d968-10ef-48be-b136-28dbe422fbda",
     "username": "dsp_fx_9999@hotmail.com",
-    "password": "$2b$10$hr31gihCIdd5ql5.ptgtGO2ogogwLTW5WWcqnCo34VjFkh2/X/t9K"
+    "password": "$2b$10$hr31gihCIdd5ql5.ptgtGO2ogogwLTW5WWcqnCo34VjFkh2/X/t9K",
+    "llmSettings": {
+      "apiKey": "8e2455a5469a9467ab462d094bc16a3e:ed17f04d03ea6e107c0028f48f4747944bfe63e82b15ccfcbaebfb8d94c278fe71f7193d28b14dd6f6b8d3358c3d9b5c",
+      "baseUrl": "https://api.deepseek.com",
+      "model": "deepseek-chat"
+    }
   }
 ]

@@ -1,0 +1,28 @@
+{
+  "workflowId": "741b219c-0f40-4652-b163-3741de75c736",
+  "status": "initialized",
+  "objective": {
+    "id": "741b219c-0f40-4652-b163-3741de75c736",
+    "text": [
+      "Cré la formation IA idéale pour les professionnelles de la santé."
+    ],
+    "context": null
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : Cré la formation IA idéale pour les professionnelles de la santé."
+    }
+  ],
+  "output": null,
+  "validation": null
+}

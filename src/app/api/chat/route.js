@@ -1,45 +1,61 @@
 import { MODEL_SOURCES } from 'app/constants';
 import { fetchOllama } from 'lib/services/ollama/fetchOllama';
-import { fetchOpenIa } from 'lib/services/openIa/fetchOpenIa';
 import { fetchOpenRouter } from 'lib/services/openRouter/fetchOpenRouter';
 import { NextResponse } from 'next/server';
+import { openIaWrapper } from './openIaWrapper';
 
 export async function POST(request) {
   try {
-    const { messages, model, modelSource } = await request.json();
+    const { userId, messages, model, modelSource } = await request.json();
 
-    console.info('POST', { messages, model, modelSource });
-
-    if (!messages || !model) {
+    if (!messages || !modelSource) {
       return NextResponse.json(
         { error: 'Paramètres manquants' },
         { status: 400 }
       );
     }
 
-    let fetchFunc;
-    switch (modelSource) {
-      case MODEL_SOURCES.OPEN_ROUTER:
-        fetchFunc = fetchOpenRouter;
-        break;
-      case MODEL_SOURCES.OLLAMA:
-        fetchFunc = fetchOllama;
-        break;
-      case MODEL_SOURCES.OPEN_IA:
-        fetchFunc = fetchOpenIa;
-        break;
-      default:
-        throw new Error(`Source du modèle IA inconnue: ${modelSource}`);
-    }
-    const { data, tokenUsage } = await fetchFunc({ model, messages });
+    console.info('POST IA', { userId, model, modelSource });
 
-    console.info('data', { data, tokenUsage });
+    let result;
+
+    switch (modelSource) {
+      case MODEL_SOURCES.OPEN_IA:
+        if (!userId) {
+          return NextResponse.json(
+            { error: 'userId requis pour OPEN_IA' },
+            { status: 400 }
+          );
+        }
+        result = await openIaWrapper({ userId, messages });
+        break;
+
+      case MODEL_SOURCES.OPEN_ROUTER:
+        result = await fetchOpenRouter({ model, messages });
+        break;
+
+      case MODEL_SOURCES.OLLAMA:
+        result = await fetchOllama({ model, messages });
+        break;
+
+      default:
+        return NextResponse.json(
+          { error: `Source du modèle IA inconnue: ${modelSource}` },
+          { status: 400 }
+        );
+    }
+
+    const { data, tokenUsage, error } = result;
+
+    if (error) {
+      return NextResponse.json({ error }, { status: 500 });
+    }
 
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error('Erreur API Chat:', error);
+    console.error('❌ Erreur API Chat:', error);
     return NextResponse.json(
-      { error: 'Échec de la génération de la réponse' },
+      { error: 'Erreur serveur durant la génération' },
       { status: 500 }
     );
   }

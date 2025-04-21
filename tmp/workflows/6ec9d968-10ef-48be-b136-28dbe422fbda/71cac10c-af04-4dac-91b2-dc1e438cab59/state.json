@@ -1,0 +1,28 @@
+{
+  "workflowId": "71cac10c-af04-4dac-91b2-dc1e438cab59",
+  "status": "initialized",
+  "objective": {
+    "id": "71cac10c-af04-4dac-91b2-dc1e438cab59",
+    "text": [
+      "xxxx"
+    ],
+    "context": null
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : xxxx"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

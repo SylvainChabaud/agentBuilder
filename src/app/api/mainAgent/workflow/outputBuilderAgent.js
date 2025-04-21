@@ -2,7 +2,11 @@
 import { DEFAULT_IA_MODEL } from '../constants';
 import { callModelAndExtract } from '../lib/callModel';
 
-export async function generateFinalOutputWithWriter({ objective, byAgent }) {
+export async function generateFinalOutputWithWriter({
+  userId,
+  objective,
+  byAgent,
+}) {
   const prompt = buildOutputPrompt(objective, byAgent);
 
   const messages = [
@@ -31,6 +35,7 @@ Tu réponds uniquement en français.`,
   ];
 
   const iaRequest = {
+    userId,
     messages,
     ...DEFAULT_IA_MODEL,
   };

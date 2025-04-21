@@ -11,7 +11,7 @@ import { extractFileContent } from './utils';
  */
 async function extractUserData(fields, files) {
   const objectiveText = fields.objective;
-  const userIdRaw = fields.userId ?? 'demo';
+  const userIdRaw = fields.userId ?? 'defaultUserId';
   const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
 
   const uploadedFiles = Array.isArray(files.files)
@@ -37,10 +37,10 @@ async function extractUserData(fields, files) {
  * @param {ContextFile[]} contextFiles
  * @returns {Promise<EnrichedContext>}
  */
-async function summarizeContextFiles(contextFiles) {
+async function summarizeContextFiles(userId, contextFiles) {
   const fileSummaries = await Promise.all(
     contextFiles.map(async (file) => {
-      const result = await summarizeOne(file);
+      const result = await summarizeOne(userId, file);
       return {
         name: file.name,
         summary: result.summary,
@@ -60,6 +60,7 @@ async function summarizeContextFiles(contextFiles) {
     };
   } else {
     enrichedContext = await consolidateSummaries(
+      userId,
       fileSummaries.map(({ name, summary, keyElements }) => ({
         name,
         summary,
@@ -89,7 +90,7 @@ export async function prepareUserWorkflowContext(fields, files) {
 
   const summarizedContextFiles =
     Array.isArray(contextFiles) && contextFiles.length > 0
-      ? await summarizeContextFiles(contextFiles)
+      ? await summarizeContextFiles(userId, contextFiles)
       : null;
 
   return { userId, objectiveText, contextFiles: summarizedContextFiles };

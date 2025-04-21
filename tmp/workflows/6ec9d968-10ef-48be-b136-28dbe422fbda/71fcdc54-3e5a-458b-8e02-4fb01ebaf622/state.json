@@ -1,0 +1,28 @@
+{
+  "workflowId": "71fcdc54-3e5a-458b-8e02-4fb01ebaf622",
+  "status": "initialized",
+  "objective": {
+    "id": "71fcdc54-3e5a-458b-8e02-4fb01ebaf622",
+    "text": [
+      "fff"
+    ],
+    "context": null
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : fff"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

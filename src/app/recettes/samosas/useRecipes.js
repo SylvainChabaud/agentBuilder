@@ -10,7 +10,7 @@ export const useRecipes = () => {
   const [error, setError] = useState(null);
   const [recipes, setRecipes] = useState([]);
   // Variables pour l'API
-  const iaModel = MODELS[10]?.model || 'qwen2.5:1.5b';
+  const iaModel = MODELS[5]?.model || 'qwen2.5:1.5b';
   const modelSource = MODELS[1]?.modelSource || MODEL_SOURCES.OLLAMA;
   const outputs = {
     titre: 'string',

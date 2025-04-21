@@ -1,0 +1,28 @@
+{
+  "workflowId": "a5b4d7e9-5f30-44bb-aa87-4c4de8cd2f0c",
+  "status": "initialized",
+  "objective": {
+    "id": "a5b4d7e9-5f30-44bb-aa87-4c4de8cd2f0c",
+    "text": [
+      "ljlkjk"
+    ],
+    "context": null
+  },
+  "tasks": [],
+  "agents": [],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {},
+      "byTask": {}
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : ljlkjk"
+    }
+  ],
+  "output": null,
+  "validation": null
+}

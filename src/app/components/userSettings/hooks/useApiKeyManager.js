@@ -1,70 +1,83 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { saveApiKey } from '../../../../../lib/usersManager/saveApiKey';
-import { deleteApiKey } from '../../../../../lib/usersManager/deleteApiKey';
-import { getUserById } from '../../../../../lib/usersManager/getUserById';
-// import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
+import { saveApiKey } from '/lib/usersManager/saveApiKey';
+import { deleteApiKey } from '/lib/usersManager/deleteApiKey';
+import { getUserById } from '/lib/usersManager/getUserById';
 
 export function useApiKeyManager() {
-  const [userApiKey, setUserApiKey] = useState('');
-  const [inputValue, setInputValue] = useState('');
+  // TODO
+  // const userId = '6ec9d968-10ef-48be-b136-28dbe422fbda';
+  const { data: session, status } = useSession(); // 👈 auth session
+  const userId = session?.user?.id;
+
+  const [llmSettings, setLlmSettings] = useState({
+    apiKeyInput: '',
+    hasKey: false,
+    baseUrl: '',
+    model: '',
+  });
+
   const [saved, setSaved] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
-  // const { data: session } = useSession();
-
-  // const userId = session?.user?.id;
-  const userId = '6ec9d968-10ef-48be-b136-28dbe422fbda';
-
   useEffect(() => {
-    const fetchUserApiKey = async () => {
+    const fetchData = async () => {
+      if (!userId) return;
       const user = await getUserById(userId);
-
-      console.info('fetchUserApiKey', user);
-
-      if (user?.apiKey) {
-        setUserApiKey(user.apiKey);
-        setInputValue(user.apiKey);
+      if (user?.llmSettings) {
+        setLlmSettings((prev) => ({
+          ...prev,
+          hasKey: user.llmSettings.hasKey,
+          baseUrl: user.llmSettings.baseUrl,
+          model: user.llmSettings.model,
+        }));
       }
     };
 
-    fetchUserApiKey();
-  }, []);
+    fetchData();
+  }, [userId]);
 
-  const handleInput = (e) => {
-    setInputValue(e);
+  const handleChange = (field, value) => {
+    setLlmSettings((prev) => ({ ...prev, [field]: value }));
   };
 
   const saveKey = async () => {
-    console.info('saveKey');
-    if (userId && inputValue) {
-      const result = await saveApiKey(userId, inputValue);
-      if (result) {
-        setSaved(true);
-        setUserApiKey(inputValue);
-        setTimeout(() => setSaved(false), 1500);
-      }
+    if (!userId) return;
+
+    const payload = {
+      apiKey: llmSettings.apiKeyInput,
+      baseUrl: llmSettings.baseUrl,
+      model: llmSettings.model,
+    };
+
+    const result = await saveApiKey(userId, payload);
+
+    if (result) {
+      setSaved(true);
+      setLlmSettings((prev) => ({ ...prev, hasKey: true }));
+      setTimeout(() => setSaved(false), 1500);
     }
   };
 
   const clearKey = async () => {
-    setInputValue('');
-    setUserApiKey('');
-    setSaved(false);
+    if (!userId) return;
 
-    if (userId) {
-      const result = await deleteApiKey(userId);
-      if (result) {
-        setDeleted(true);
-        setTimeout(() => setDeleted(false), 1500);
-      }
+    const result = await deleteApiKey(userId);
+    if (result) {
+      setLlmSettings((prev) => ({
+        ...prev,
+        apiKeyInput: '',
+        hasKey: false,
+      }));
+      setDeleted(true);
+      setTimeout(() => setDeleted(false), 1500);
     }
   };
 
   return {
-    inputValue,
-    userApiKey,
-    handleInput,
+    llmSettings,
+    handleChange,
     saveKey,
     clearKey,
     saved,

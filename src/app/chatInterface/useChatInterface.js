@@ -3,6 +3,7 @@ import { MODELS } from './constants';
 import { setExpertise } from 'lib/expertiseManager/setExpertise';
 import { getExpertises } from 'lib/expertiseManager/getExpertises';
 import { deleteExpertise } from 'lib/expertiseManager/deleteExpertise';
+import { useSession } from 'next-auth/react';
 
 export const useChatInterface = () => {
   const [builderValues, setBuilderValues] = useState({});
@@ -13,7 +14,13 @@ export const useChatInterface = () => {
   const [selectedModel, setSelectedModel] = useState(MODELS[1]);
   const [currentExpertises, setCurrentExpertises] = useState([]);
 
-  console.info('messages', { messages, inputMessage });
+  // TODO
+  // const userId = '6ec9d968-10ef-48be-b136-28dbe422fbda';
+
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  console.info('messages', { messages, inputMessage, userId });
   const messagesEndRef = useRef(null);
   const formRef = useRef(null);
 
@@ -60,7 +67,7 @@ export const useChatInterface = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          // messages: inputMessage,
+          userId,
           messages: [...messages, newMessage],
           model: selectedModel.model,
           modelSource: selectedModel?.modelSource,

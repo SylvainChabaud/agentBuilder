@@ -58,19 +58,19 @@ export const MODELS = [
   {
     id: 'deepseek llama 70b',
     model: 'deepseek/deepseek-r1-distill-llama-70b:free',
-    name: 'deepseek llama 70B (gratuit limité)',
+    name: 'Deepseek llama 70B (gratuit limité)',
     modelSource: MODEL_SOURCES.OPEN_ROUTER,
   },
   {
     id: 'deepseek R1 70b',
     model: 'deepseek/deepseek-r1:free',
-    name: 'deepseek R1 70B (gratuit limité)',
+    name: 'Deepseek R1 70B (gratuit limité)',
     modelSource: MODEL_SOURCES.OPEN_ROUTER,
   },
   {
     id: 'deepseek chat 70b',
     model: 'deepseek/deepseek-chat:free',
-    name: 'deepseek chat 70B (gratuit limité)',
+    name: 'Deepseek chat 70B (gratuit limité)',
     modelSource: MODEL_SOURCES.OPEN_ROUTER,
   },
   // {
@@ -82,40 +82,40 @@ export const MODELS = [
   {
     id: 'mistral instruct 7b',
     model: 'mistralai/mistral-7b-instruct:free',
-    name: 'mistral instruct 7b (gratuit limité)',
+    name: 'Mistral instruct 7b (gratuit limité)',
     modelSource: MODEL_SOURCES.OPEN_ROUTER,
   },
   {
     id: 'qwen instruct 72b',
     model: 'qwen/qwen2.5-vl-72b-instruct:free',
-    name: 'qwen 2.5 72b (gratuit limité)',
+    name: 'Qwen 2.5 72b (gratuit limité)',
     modelSource: MODEL_SOURCES.OPEN_ROUTER,
   },
   {
     id: 'qwen qwq 32b',
     model: 'qwen/qwq-32b:free',
-    name: 'qwen qwq 32b (gratuit limité)',
+    name: 'Qwen qwq 32b (gratuit limité)',
     modelSource: MODEL_SOURCES.OPEN_ROUTER,
   },
   {
     id: 'mistral 24b',
     model: 'cognitivecomputations/dolphin3.0-mistral-24b:free',
-    name: 'mistral 3.0 24b (gratuit limité)',
+    name: 'Mistral 3.0 24b (gratuit limité)',
     modelSource: MODEL_SOURCES.OPEN_ROUTER,
   },
   {
     id: 'mistral R1 24b',
     model: 'cognitivecomputations/dolphin3.0-r1-mistral-24b:free',
-    name: 'mistral R1 24b (gratuit limité)',
+    name: 'Mistral R1 24b (gratuit limité)',
     modelSource: MODEL_SOURCES.OPEN_ROUTER,
   },
   ////////////////////
   // OPEN IA MODELS //
   ////////////////////
   {
-    id: 'deepseek V3',
+    id: 'Clé openAI - utilisateur',
     model: 'deepseek-chat',
-    name: 'deepseek V3 (payant)',
+    name: 'Clé openAI - utilisateur',
     modelSource: MODEL_SOURCES.OPEN_IA,
   },
 ];

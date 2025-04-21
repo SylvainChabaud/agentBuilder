@@ -1,0 +1,315 @@
+{
+  "workflowId": "547666ab-1c1f-43b1-99ed-83ea175e2a10",
+  "status": "initialized",
+  "objective": {
+    "id": "547666ab-1c1f-43b1-99ed-83ea175e2a10",
+    "text": [
+      "Identifier, structurer et proposer la meilleure formation en intelligence artificielle adaptée aux professionnels, en tenant compte des niveaux de compétence, des secteurs d’activité, des cas d’usage concrets, et des objectifs métiers. La réponse doit être pratique, progressive, orientée impact terrain et accompagnée de recommandations pédagogiques pertinentes."
+    ],
+    "context": null,
+    "customText": "Concevoir une formation en IA adaptée aux professionnels, progressive et orientée impact terrain, en tenant compte de leurs compétences, secteurs et objectifs métiers."
+  },
+  "tasks": [
+    {
+      "name": "Analyse des besoins",
+      "description": "Identifier et catégoriser les besoins des professionnels en IA selon leur niveau de compétence, secteur d'activité et objectifs métiers.",
+      "priority": "high"
+    },
+    {
+      "name": "Recherche de formations existantes",
+      "description": "Recenser et évaluer les formations en IA disponibles sur le marché.",
+      "priority": "high"
+    },
+    {
+      "name": "Identification des cas d'usage",
+      "description": "Recueillir et structurer des cas d'usage concrets pertinents pour les professionnels.",
+      "priority": "high"
+    },
+    {
+      "name": "Élaboration du contenu pédagogique",
+      "description": "Développer un contenu de formation progressif et adapté aux différents niveaux de compétence.",
+      "priority": "high"
+    },
+    {
+      "name": "Recommandations pédagogiques",
+      "description": "Proposer des méthodes et outils pédagogiques adaptés pour maximiser l'impact terrain.",
+      "priority": "medium"
+    },
+    {
+      "name": "Validation par des experts",
+      "description": "Faire valider le contenu et l'approche pédagogique par des experts en IA et en formation professionnelle.",
+      "priority": "medium"
+    },
+    {
+      "name": "Présentation des résultats",
+      "description": "Structurer et présenter la formation proposée de manière claire et pratique.",
+      "priority": "medium"
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-1-pédagogie",
+      "name": "Agent Pédagogie",
+      "role": "coWorker",
+      "expertise": "Pédagogie",
+      "systemPrompt": "Tu es un expert en pédagogie spécialisé dans la conception de formations professionnelles en IA. Ton rôle est de développer des méthodes d'apprentissage efficaces, adaptatives et centrées sur les besoins concrets des apprenants. Tu dois collaborer avec d'autres agents experts (contenu IA, analyse sectorielle, évaluation) pour créer un parcours cohérent. Ta mission est d'assurer la progressivité des apprentissages, l'engagement des participants et le transfert des compétences en situation réelle. Tu es autonome dans tes choix pédagogiques mais aligné sur l'objectif global de la formation.",
+      "userPrompt": "Propose une structure pédagogique modulaire pour la formation en IA, avec une progression en 3 niveaux (débutant, intermédiaire, avancé). Pour chaque niveau, définis : les objectifs d'apprentissage concrets, les méthodes pédagogiques adaptées à des professionnels en activité, et les indicateurs d'évaluation de l'acquisition. Focus sur l'application immédiate en contexte professionnel.",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": "Concevoir une formation en IA adaptée aux professionnels, progressive et orientée impact terrain, en tenant compte de leurs compétences, secteurs et objectifs métiers.",
+          "summary": null,
+          "keyElements": []
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    },
+    {
+      "id": "agent-2-intelligence-artificielle",
+      "name": "Agent Intelligence Artificielle",
+      "role": "coWorker",
+      "expertise": "Intelligence Artificielle",
+      "systemPrompt": "Tu es un expert en Intelligence Artificielle, spécialisé dans la conception de formations adaptées aux professionnels. Ton rôle est de proposer des contenus pédagogiques rigoureux, progressifs et alignés sur les besoins terrain des apprenants. Tu dois collaborer avec d'autres agents IA (experts en pédagogie, analyse sectorielle, etc.) pour concevoir une formation complète. Ton expertise doit permettre de structurer un parcours d'apprentissage qui intègre les fondamentaux de l'IA, ses applications métiers et son impact opérationnel. Tu es autonome dans ta spécialité mais conscient de ta contribution à un objectif global plus large.",
+      "userPrompt": "Propose une structure de formation en IA pour professionnels, en 5 modules maximum, couvrant des concepts fondamentaux jusqu'à des applications concrètes dans différents secteurs. Précise pour chaque module : les objectifs pédagogiques, les prérequis et les compétences visées. Ne détaille pas encore le contenu des sessions.",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": "Concevoir une formation en IA adaptée aux professionnels, progressive et orientée impact terrain, en tenant compte de leurs compétences, secteurs et objectifs métiers.",
+          "summary": null,
+          "keyElements": []
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    },
+    {
+      "id": "agent-3-analyse-des-besoins",
+      "name": "Agent Analyse des besoins",
+      "role": "coWorker",
+      "expertise": "Analyse des besoins",
+      "systemPrompt": "Tu es un expert en analyse des besoins, spécialisé dans l'évaluation des compétences, des secteurs d'activité et des objectifs métiers des professionnels. Ton rôle est de fournir une analyse rigoureuse et détaillée pour concevoir une formation en IA adaptée. Tu es autonome dans ton domaine d'expertise mais tu collabores avec d'autres agents IA spécialisés dans la pédagogie, le contenu technique et l'évaluation pour atteindre l'objectif global de créer une formation progressive et impactante. Ta posture est méthodique, précise et orientée solutions.",
+      "userPrompt": "Identifie et analyse les besoins spécifiques des professionnels cibles pour la formation en IA. Fournis une typologie claire de leurs compétences actuelles, secteurs d'activité et objectifs métiers. Propose des recommandations pour adapter le contenu de la formation à ces besoins, sans entrer dans les détails pédagogiques ou techniques qui seront traités par d'autres agents.",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": "Concevoir une formation en IA adaptée aux professionnels, progressive et orientée impact terrain, en tenant compte de leurs compétences, secteurs et objectifs métiers.",
+          "summary": null,
+          "keyElements": []
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    },
+    {
+      "id": "agent-4-recherche-de-formations",
+      "name": "Agent Recherche de formations",
+      "role": "coWorker",
+      "expertise": "Recherche de formations",
+      "systemPrompt": "Tu es un agent IA expert en recherche de formations, spécialisé dans l'identification et l'analyse de programmes éducatifs pertinents. Ton rôle est de recenser, évaluer et recommander des formations en IA adaptées aux besoins spécifiques des professionnels. Tu dois adopter une posture rigoureuse et méthodique, en te basant sur des critères objectifs (niveau, durée, modalités, pertinence sectorielle). Tu fais partie d'un écosystème d'agents IA collaborant à la conception d'une formation sur mesure - ton travail alimentera les réflexions des autres experts (pédagogie, ingénierie de formation). Agis de manière autonome tout en gardant à l'esprit l'objectif final : créer un parcours progressif avec un impact terrain tangible.",
+      "userPrompt": "Identifie 5 formations existantes en IA (en ligne ou présentielles) particulièrement adaptées à des professionnels en activité. Pour chacune, analyse : le public cible (niveau requis/secteurs visés), la structure pédagogique, les compétences concrètes développées, et les retours d'expérience disponibles. Mets en évidence les éléments qui pourraient inspirer notre propre conception (méthodes innovantes, modalités pratiques...). Ne traite pas encore de l'assemblage des modules - concentre-toi sur la qualité de la veille formative.",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": "Concevoir une formation en IA adaptée aux professionnels, progressive et orientée impact terrain, en tenant compte de leurs compétences, secteurs et objectifs métiers.",
+          "summary": null,
+          "keyElements": []
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    },
+    {
+      "id": "agent-5-conception-pédagogique",
+      "name": "Agent Conception pédagogique",
+      "role": "coWorker",
+      "expertise": "Conception pédagogique",
+      "systemPrompt": "Tu es un expert en conception pédagogique, spécialisé dans la création de formations en IA pour les professionnels. Ton rôle est de concevoir des parcours d'apprentissage progressifs, adaptés aux compétences, secteurs et objectifs métiers des apprenants. Tu dois collaborer avec d'autres agents IA (experts en IA, en analyse des besoins métiers, etc.) pour atteindre l'objectif global de créer une formation impactante et terrain. Tu es rigoureux, méthodique et centré sur l'efficacité pédagogique. Ton autonomie est cruciale pour proposer des solutions innovantes tout en respectant les contraintes et attentes des professionnels.",
+      "userPrompt": "En tant qu'expert en conception pédagogique, propose une première ébauche de structure de formation en IA pour professionnels. Identifie 3 modules clés progressifs, en précisant pour chacun les objectifs d'apprentissage et les méthodes pédagogiques adaptées à un public actif. Ne détaille pas encore le contenu technique (un autre agent s'en chargera).",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": "Concevoir une formation en IA adaptée aux professionnels, progressive et orientée impact terrain, en tenant compte de leurs compétences, secteurs et objectifs métiers.",
+          "summary": null,
+          "keyElements": []
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    },
+    {
+      "id": "agent-6-validation-experte",
+      "name": "Agent Validation experte",
+      "role": "coWorker",
+      "expertise": "Validation experte",
+      "systemPrompt": "Tu es un expert en validation pédagogique et opérationnelle, spécialisé dans l'évaluation des formations en IA pour professionnels. Ton rôle est d'assurer la pertinence, la progressivité et l'impact terrain des contenus proposés. Tu travailles en collaboration avec d'autres agents IA (concepteurs pédagogiques, experts métiers, etc.) pour concevoir une formation optimale. Tu dois analyser rigoureusement les propositions, identifier les incohérences, valider l'adéquation avec les compétences cibles et les objectifs métiers des apprenants. Ton expertise est cruciale pour garantir la qualité finale de la formation.",
+      "userPrompt": "Évalue la progression pédagogique proposée pour le module 'Fondamentaux du Machine Learning' destiné à des managers non techniques. Vérifie particulièrement : 1) L'équilibre théorie/pratique 2) L'adaptation au niveau technique du public 3) Les liens concrets avec leurs enjeux métiers. Signale tout point de friction ou incohérence.",
+      "tools": [
+        "generic-llm"
+      ],
+      "memory": {
+        "context": {
+          "objective": "Concevoir une formation en IA adaptée aux professionnels, progressive et orientée impact terrain, en tenant compte de leurs compétences, secteurs et objectifs métiers.",
+          "summary": null,
+          "keyElements": []
+        },
+        "history": [],
+        "inputs": [],
+        "outputs": []
+      },
+      "status": "idle"
+    }
+  ],
+  "plan": [
+    {
+      "task": {
+        "name": "Analyse des besoins",
+        "description": "Identifier et catégoriser les besoins des professionnels en IA selon leur niveau de compétence, secteur d'activité et objectifs métiers.",
+        "priority": "high"
+      },
+      "assignedAgentId": "agent-3-analyse-des-besoins",
+      "dependencies": []
+    },
+    {
+      "task": {
+        "name": "Recherche de formations existantes",
+        "description": "Recenser et évaluer les formations en IA disponibles sur le marché.",
+        "priority": "high"
+      },
+      "assignedAgentId": "agent-4-recherche-de-formations",
+      "dependencies": []
+    },
+    {
+      "task": {
+        "name": "Identification des cas d'usage",
+        "description": "Recueillir et structurer des cas d'usage concrets pertinents pour les professionnels.",
+        "priority": "high"
+      },
+      "assignedAgentId": "agent-2-intelligence-artificielle",
+      "dependencies": [
+        "Analyse des besoins"
+      ]
+    },
+    {
+      "task": {
+        "name": "Élaboration du contenu pédagogique",
+        "description": "Développer un contenu de formation progressif et adapté aux différents niveaux de compétence.",
+        "priority": "high"
+      },
+      "assignedAgentId": "agent-5-conception-pédagogique",
+      "dependencies": [
+        "Analyse des besoins",
+        "Recherche de formations existantes",
+        "Identification des cas d'usage"
+      ]
+    },
+    {
+      "task": {
+        "name": "Recommandations pédagogiques",
+        "description": "Proposer des méthodes et outils pédagogiques adaptés pour maximiser l'impact terrain.",
+        "priority": "medium"
+      },
+      "assignedAgentId": "agent-1-pédagogie",
+      "dependencies": [
+        "Élaboration du contenu pédagogique"
+      ]
+    },
+    {
+      "task": {
+        "name": "Validation par des experts",
+        "description": "Faire valider le contenu et l'approche pédagogique par des experts en IA et en formation professionnelle.",
+        "priority": "medium"
+      },
+      "assignedAgentId": "agent-6-validation-experte",
+      "dependencies": [
+        "Élaboration du contenu pédagogique",
+        "Recommandations pédagogiques"
+      ]
+    },
+    {
+      "task": {
+        "name": "Présentation des résultats",
+        "description": "Structurer et présenter la formation proposée de manière claire et pratique.",
+        "priority": "medium"
+      },
+      "assignedAgentId": "agent-5-conception-pédagogique",
+      "dependencies": [
+        "Validation par des experts"
+      ]
+    }
+  ],
+  "memory": {
+    "version": 1,
+    "content": {
+      "byAgent": {
+        "agent-1-pédagogie": [],
+        "agent-2-intelligence-artificielle": [],
+        "agent-3-analyse-des-besoins": [],
+        "agent-4-recherche-de-formations": [],
+        "agent-5-conception-pédagogique": [],
+        "agent-6-validation-experte": []
+      },
+      "byTask": {
+        "task-1": [],
+        "task-2": [],
+        "task-3": [],
+        "task-4": [],
+        "task-5": [],
+        "task-6": [],
+        "task-7": []
+      }
+    }
+  },
+  "logs": [
+    {
+      "type": "info",
+      "message": "🚀 Nouveau workflow initialisé. Objectif enregistré : Identifier, structurer et proposer la meilleure formation en intelligence artificielle adaptée aux professionnels, en tenant compte des niveaux de compétence, des secteurs d’activité, des cas d’usage concrets, et des objectifs métiers. La réponse doit être pratique, progressive, orientée impact terrain et accompagnée de recommandations pédagogiques pertinentes."
+    },
+    {
+      "type": "info",
+      "message": "🧠 Objectif analysé avec succès : 7 tâches, 6 expertises."
+    },
+    {
+      "type": "info",
+      "message": "🤖 6 agents IA spécialisés créés à partir des expertises."
+    },
+    {
+      "type": "info",
+      "message": "🧠 Mémoire IA initialisée pour 6 agents et 7 tâches."
+    },
+    {
+      "type": "info",
+      "message": "📋 Plan stratégique généré avec 7 étapes."
+    }
+  ],
+  "output": null,
+  "validation": null,
+  "expertises": [
+    "Pédagogie",
+    "Intelligence Artificielle",
+    "Analyse des besoins",
+    "Recherche de formations",
+    "Conception pédagogique",
+    "Validation experte"
+  ]
+}
