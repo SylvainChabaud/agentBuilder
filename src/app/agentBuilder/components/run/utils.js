@@ -1,3 +1,5 @@
+import { NODE_STATUS } from '../../constants';
+
 export const convertRowsToObjects = (rows) => {
   if (!Array.isArray(rows) || rows.length === 0) {
     return [];
@@ -219,19 +221,35 @@ export function mixData({ input, expertisesList }) {
 
   const combinedData = {};
 
+  console.info('mixData', { input, expertisesList });
+
+  // Fonction pour formater les clés (remplacer les espaces par des tirets et nettoyer les caractères spéciaux)
+  const formatKey = (key) => {
+    return key
+      .toLowerCase() // Transformer en minuscules
+      .replace(/[\s]/g, '-') // Remplacer les espaces par des tirets
+      .replace(/[éèêë]/g, 'e') // Remplacer les accents sur les 'e'
+      .replace(/[àáâä]/g, 'a') // Remplacer les accents sur les 'a'
+      .replace(/[îï]/g, 'i') // Remplacer les accents sur les 'i'
+      .replace(/[ôö]/g, 'o') // Remplacer les accents sur les 'o'
+      .replace(/[ùúûü]/g, 'u') // Remplacer les accents sur les 'u'
+      .replace(/[^a-z0-9\-]/g, ''); // Supprimer tout caractère non alphanumérique ou tiret
+  };
+
   // Parcours de chaque source dans 'input' pour mixer les résultats
   input.forEach((source) => {
-    source.data.forEach((data) => {
+    console.info('mixData 1', source);
+
+    const sourceId = source.id; // Récupérer l'id de la source
+    source.data.forEach((data, idx) => {
+      console.info('mixData 2', data);
+
       // Récupérer toutes les clés de l'objet 'data' et les ajouter dans combinedData
       Object.keys(data).forEach((key) => {
-        if (!combinedData[key]) {
-          combinedData[key] = data[key]; // Ajouter la première valeur rencontrée pour chaque clé
-        }
-        // Si la clé existe déjà, tu peux ajouter la logique de fusion ici si nécessaire
-        // Par exemple, si tu veux concaténer les valeurs pour les mêmes clés, voici un exemple :
-        // else {
-        //   combinedData[key] = [].concat(combinedData[key], data[key]);
-        // }
+        const newKey = `${key}-${idx}-${sourceId}`; // Ajouter le suffixe basé sur l'id de la source
+        const formattedKey = formatKey(newKey);
+
+        combinedData[formattedKey] = data[key];
       });
     });
   });
@@ -257,3 +275,20 @@ export function mixData({ input, expertisesList }) {
 
   return { mixedResults, mixedExpertisesList }; // Retourner les résultats mixés
 }
+
+// Fonction pour réinitialiser les className des nœuds et les mettre en statut WAIT
+export const resetNodeStatuses = (executionPlan, onExcecutedNode) => {
+  console.info('Réinitialisation des statuts des nœuds en WAIT');
+
+  // Parcourir tous les nœuds du plan d'exécution
+  executionPlan.forEach((event) => {
+    event.nodes.forEach((node) => {
+      // Utiliser onExcecutedNode pour réinitialiser les nœuds avec un statut WAIT
+      onExcecutedNode({
+        nodeId: node.id,
+        status: NODE_STATUS.WAIT, // Définir le statut du nœud à WAIT
+        result: null, // Pas de résultat à ce stade
+      });
+    });
+  });
+};

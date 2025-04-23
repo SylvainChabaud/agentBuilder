@@ -2,157 +2,126 @@ import { MODELS } from 'src/app/chatInterface/constants';
 import { getIaContext, getIaPrompt } from './contracts/contracts';
 import { extractObject } from './utils';
 
+/**
+ * Fonction principale pour envoyer un message au modèle
+ */
 export const sendModelMessage = async ({
   userId,
   input,
   node,
   expertisesList,
 }) => {
-  console.info('sendModelMessage', {
-    userId,
-    input,
-    node,
-  });
+  console.info('sendModelMessage', { userId, input, node });
 
   const results = [];
 
-  for (const modelOutput of input) {
-    const messages = modelOutput.data;
-    const messagesSource = modelOutput.id;
-    const arrayAppSource = messagesSource.split('-');
-    const expertiseSource = arrayAppSource[1];
-    const currentExpertise = node.expertise;
-    // const isMixerEnabled = node.isMixerEnabled;
+  try {
+    for (const modelOutput of input) {
+      const messages = modelOutput.data;
+      const messagesSource = modelOutput.id;
+      const arrayAppSource = messagesSource.split('-');
+      const expertiseSource = arrayAppSource[1];
+      const currentExpertise = node.expertise;
 
-    console.info('node.app', node);
+      console.info('node.app', node);
 
-    // if (isMixerEnabled) {
+      const foundedExpertise = expertisesList.find(
+        ({ id }) => id === expertiseSource
+      );
 
-    // }
-    const foundedExpertise = expertisesList.find(
-      ({ id }) => id === expertiseSource
-    );
+      const inputs = foundedExpertise?.outputs || {};
 
-    const inputs = foundedExpertise?.outputs || {};
+      console.info('node.app 1', { currentExpertise, inputs, expertisesList });
 
-    console.info('node.app 1', { currentExpertise, inputs, expertisesList });
+      const {
+        outputs = {},
+        context = [],
+        model = MODELS[0].model,
+      } = expertisesList.find(({ id }) => id === currentExpertise);
 
-    const {
-      outputs = {},
-      context = [],
-      model = MODELS[0].model,
-    } = expertisesList.find(({ id }) => id === currentExpertise);
+      const { model: iaModel, modelSource } = MODELS.find(
+        ({ id }) => id === model
+      );
 
-    console.info('node.app 2', outputs);
+      // Boucle pour traiter chaque message
+      for (const item of messages) {
+        const formattedItem = getIaPrompt({
+          data: item,
+          inputs,
+        });
 
-    console.info('node.app 3', {
-      currentApp: node.app,
-      node,
-      expertisesList,
-      expertiseSource,
-      currentExpertise,
-      context,
-      outputs,
-      model,
-    });
+        const contextInputs =
+          inputs && Object.keys(inputs).length
+            ? inputs
+            : Object.fromEntries(
+                Object.entries(item).map(([key]) => [key, 'string'])
+              );
 
-    const { model: iaModel, modelSource } = MODELS.find(
-      ({ id }) => id === model
-    );
+        const newContext = getIaContext({
+          context,
+          inputs: formattedItem ? contextInputs : '',
+          outputs,
+        });
 
-    console.info('input', input);
+        const newMessage = [
+          ...newContext,
+          {
+            role: 'user',
+            content: formattedItem || 'GO',
+            timestamp: new Date(),
+          },
+        ];
 
-    console.info('messages', {
-      expertiseSource,
-      expertisesList,
-      iaModel,
-      messages,
-    });
+        try {
+          // Appel à l'API
+          const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              messages: newMessage,
+              model: iaModel,
+              modelSource,
+            }),
+          });
 
-    // Exécuter en série un appel fetch pour chaque élément de l'input
-    for (const item of messages) {
-      // const isFromExpertiseSheets = expertiseSource === 'sheets';
-      const formattedItem = getIaPrompt({
-        data: item,
-        inputs,
-      });
+          const { message, error } = await res.json();
+          if (!res.ok) {
+            throw new Error(error || 'Erreur lors de l’analyse par le modèle.');
+          }
 
-      // const formattedInputs = isFromExpertiseSheets ? item : inputs;
-      console.info('formattedItem', { item, formattedItem });
+          // Traitement du contenu du message
+          let iaContent = message?.content || '';
+          iaContent = iaContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
 
-      const contextInputs =
-        inputs && Object.keys(inputs).length
-          ? inputs
-          : Object.fromEntries(
-              Object.entries(item).map(([key]) => [key, 'string'])
-            );
-
-      const newContext = getIaContext({
-        context,
-        inputs: formattedItem ? contextInputs : '',
-        outputs,
-      });
-
-      console.info('newContext', newContext);
-
-      // Utiliser l'élément courant comme contenu du message
-      const newMessage = [
-        ...newContext,
-        {
-          role: 'user',
-          content: formattedItem || 'GO',
-          timestamp: new Date(),
-        },
-      ];
-
-      console.info('POST IA', {
-        context,
-        newMessage,
-        last: newMessage,
-      });
-
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          messages: newMessage,
-          model: iaModel,
-          modelSource,
-        }),
-      });
-
-      const { message, error } = await res.json();
-      if (!res.ok) {
-        throw new Error(error || 'Erreur lors de l’analyse par le model.');
+          // Essayer de parser le contenu en objet JSON
+          const iaContentObj = safeParseOrExtract(iaContent, outputs);
+          results.push(iaContentObj);
+        } catch (err) {
+          // Gestion spécifique des erreurs d'API
+          console.error(
+            "Erreur lors de l'envoi du message au modèle:",
+            err.message
+          );
+          throw new Error(
+            `Erreur dans l'envoi du message au modèle IA: ${err.message}`
+          );
+        }
       }
-      let iaContent = (message && message.content) || '';
-
-      // // Supprimer les balises <think>...</think> si présentes
-      iaContent = iaContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
-
-      // // const iaContentObj = extractObject(iaContent, outputs);
-
-      // console.info('sendModelMessage 3', iaContent);
-
-      // // const contentObject = extractObject(content, expectedKeys);
-
-      console.info('Original content:', iaContent);
-
-      // Nettoyer les caractères de contrôle comme les retours à la ligne, tabulations, etc.
-      const iaContentObj = safeParseOrExtract(iaContent, outputs);
-
-      console.info('Parsed JSON object:', iaContentObj);
-
-      results.push(iaContentObj);
     }
+  } catch (err) {
+    // Gestion des erreurs générales
+    console.error('Erreur lors de l’envoi du message au modèle:', err.message);
+    throw new Error(`Erreur dans sendModelMessage: ${err.message}`);
   }
 
   console.info('results sendModelMessage', results);
-
   return results;
 };
 
+/**
+ * Fonction pour traiter les données JSON ou effectuer un fallback
+ */
 export function safeParseOrExtract(text, outputs = []) {
   let cleaned = text
     .replace(/```json/g, '')

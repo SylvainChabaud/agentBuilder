@@ -5,7 +5,7 @@ import { handleWebSearch } from '../../../../../lib/services/gmail/webSearch';
 import { NODE_STATUS } from '../../constants';
 import { APPS_LABELS } from '../../../../../lib/constants';
 import { handleFetchSheetContent } from '../../../../../lib/services/sheets/getFileContent';
-import { convertRowsToObjects, mixData } from './utils';
+import { convertRowsToObjects, mixData, resetNodeStatuses } from './utils';
 import { sendModelMessage } from './sendModelMessage';
 
 /**
@@ -27,146 +27,139 @@ export async function executeNode({
 }) {
   console.info('executeNode', { node, input, expertisesList });
 
+  // Fonction pour gérer l'erreur
+  const handleExecutionError = async (action) => {
+    try {
+      return await action();
+    } catch (err) {
+      console.error(
+        `Erreur lors de l'exécution du nœud ${node.id}:`,
+        err.message
+      );
+      return {
+        error: `Erreur dans l'exécution du nœud ${node.id}: ${err.message}`,
+      };
+    }
+  };
+
   // Exécution selon le type d'application (défini dans node.app)
-  if (node.app === APPS_LABELS.SHEET) {
-    console.info('SHEET', { node, input, expertisesList });
-
-    console.info('SHEET 1 ', { fileId: node.fileName });
-
-    const accessToken = await handleGmailLoginClient('/agentBuilder');
-    console.info('SHEET access token', accessToken);
-
-    // const { data } = await handleFetchSheets(accessToken);
-    const { data } = await handleFetchSheetContent({
-      accessToken,
-      selectedSheetId: node.fileId,
-      selectedSheetName: node.sheet,
-    });
-
-    console.info('SHEET access token 2 ', data);
-
-    const result = convertRowsToObjects(data);
-    console.info('SHEET access token 3 ', result);
-
-    return result;
-  } else if (node.app === APPS_LABELS.GMAIL) {
-    if (node.expertise === 'gmailEmails') {
+  try {
+    if (node.app === APPS_LABELS.SHEET) {
+      console.info('SHEET', { node, input, expertisesList });
       const accessToken = await handleGmailLoginClient('/agentBuilder');
-      console.info('gmail access token', 'accessToken');
-      // Appel à l'API Gmail pour récupérer les emails
-      const { messages } = await handleFetchEmails(accessToken);
+      console.info('SHEET access token', accessToken);
 
-      console.info('POST GMAIL 1', messages);
-      const formattedEmails = messages.map(({ from, subject, snippet }) => ({
-        from,
-        subject,
-        snippet,
-      }));
-      console.info('POST GMAIL 2', formattedEmails);
+      return handleExecutionError(() =>
+        handleFetchSheetContent({
+          accessToken,
+          selectedSheetId: node.fileId,
+          selectedSheetName: node.sheet,
+        }).then(({ data }) => {
+          const result = convertRowsToObjects(data);
+          return result;
+        })
+      );
+    } else if (node.app === APPS_LABELS.GMAIL) {
+      if (node.expertise === 'gmailEmails') {
+        const accessToken = await handleGmailLoginClient('/agentBuilder');
+        console.info('gmail access token', 'accessToken');
 
-      // Retourner une chaîne formatée représentant les emails récupérés
-      return formattedEmails;
-    } else if (node.expertise === 'sendEmail') {
-      console.info('POST GMAIL sendEmail 456', node);
-      const accessToken = await handleGmailLoginClient('/agentBuilder');
-      console.info('gmail access token', 'accessToken');
+        return handleExecutionError(() =>
+          handleFetchEmails(accessToken).then(({ messages }) => {
+            const formattedEmails = messages.map(
+              ({ from, subject, snippet }) => ({ from, subject, snippet })
+            );
+            return formattedEmails;
+          })
+        );
+      } else if (node.expertise === 'sendEmail') {
+        console.info('POST GMAIL sendEmail 456', node);
+        const accessToken = await handleGmailLoginClient('/agentBuilder');
+        console.info('gmail access token', 'accessToken');
 
-      const emails = await sendModelMessage({
-        userId,
-        input,
-        node,
-        expertisesList,
-      });
+        return handleExecutionError(() =>
+          sendModelMessage({ userId, input, node, expertisesList }).then(
+            (emails) => {
+              console.info('emails 123', emails);
+              for (const email of emails) {
+                const { from = '', subject = '', body = '' } = email;
+                handleSendEmail(
+                  accessToken,
+                  'dsp_fx@hotmail.com',
+                  subject,
+                  body
+                );
+              }
+              return emails;
+            }
+          )
+        );
+      } else if (node.expertise === 'webSearch') {
+        console.info('POST GMAIL webSearch', input);
 
-      console.info('emails 123', emails);
-
-      for (const email of emails) {
-        const { from = '', subject = '', body = '' } = email;
-        console.info('emails 456', emails);
-
-        await handleSendEmail(accessToken, 'dsp_fx@hotmail.com', subject, body);
-      }
-
-      return emails;
-    } else if (node.expertise === 'webSearch') {
-      console.info('POST GMAIL webSearch', input);
-
-      // Si l'entrée contient une requête de recherche, on l'utilise
-      let searchQuery = '';
-      if (input && input.length > 0 && input[0].data) {
-        console.info('POST GMAIL webSearch 1', input);
-        // Tenter d'extraire la requête de recherche à partir de l'entrée
-        const searchData = input[0].data;
-        if (Array.isArray(searchData) && searchData.length > 0) {
-          console.info('POST GMAIL webSearch 2', searchData);
-          if (searchData[0]) {
-            console.info('POST GMAIL webSearch 3', searchData[0]);
-            searchQuery = searchData[0];
-          } else {
-            // Fallback - utiliser une chaîne de caractères ou le premier élément
-            searchQuery =
-              typeof searchData[0] === 'string'
-                ? searchData[0]
-                : JSON.stringify(searchData[0]);
-          }
+        let searchQuery = '';
+        if (input && input.length > 0 && input[0].data) {
+          const searchData = input[0].data;
+          searchQuery = searchData[0] || '';
         }
+
+        return handleExecutionError(() =>
+          handleWebSearch({
+            searchQuery: searchQuery || 'Météo à Floirac 18 mars 2025',
+          }).then(({ results }) => {
+            return [{ search: searchQuery, results }];
+          })
+        );
       }
+    } else if (node.app === APPS_LABELS.IA_MODEL) {
+      const { mixedResults, mixedExpertisesList } = node.isMixerEnabled
+        ? mixData({ input, expertisesList })
+        : { mixedResults: input, mixedExpertisesList: expertisesList };
 
-      // Effectuer la recherche web
-      const { results } = await handleWebSearch({
-        searchQuery: searchQuery || 'Météo à Floirac 18 mars 2025',
+      console.info('executeNode formattedInput', {
+        mixedResults,
+        mixedExpertisesList,
       });
+      console.info('executeNode formattedInput', { input, expertisesList });
 
-      return [{ search: searchQuery, results }];
+      return handleExecutionError(() =>
+        sendModelMessage({
+          userId,
+          node,
+          input: mixedResults,
+          expertisesList: mixedExpertisesList,
+        }).then((modelMessage) => {
+          console.info('modelMessage', modelMessage);
+
+          return modelMessage;
+        })
+      );
+    } else if (node.app === APPS_LABELS.DISPLAYS) {
+      console.info('DISPLAYS', { node, input, expertisesList });
+
+      return handleExecutionError(() =>
+        sendModelMessage({
+          userId,
+          input,
+          node,
+          expertisesList,
+        }).then((modelMessage) => {
+          const currentExpertise = node.expertise;
+          // const { inputs = {}, component = <></> } = expertisesList.find(
+          //   ({ id }) => id === currentExpertise
+          // );
+          if (currentExpertise === 'displaysRanking') {
+            onRedirect({ path: '/displays/ranking', data: modelMessage });
+          }
+          return modelMessage;
+        })
+      );
+    } else {
+      return `Aucune logique définie pour le node ${node.id} (app: ${node.app}).`;
     }
-  } else if (node.app === APPS_LABELS.IA_MODEL) {
-    // TODO:
-    // Si l'option MIXER alors Envoie les résultats de chaque source au destinataire
-    // dans un tableau d'un seul objet (toutes les sources dans l'objet sous plusieurs clés)
-    // Et non pas dans un tableau de plusieurs objets (chaque source)
-    const { mixedResults, mixedExpertisesList } = node.isMixerEnabled
-      ? mixData({ input, expertisesList })
-      : { mixedResults: input, mixedExpertisesList: expertisesList };
-
-    console.info('executeNode formattedInput', {
-      mixedResults,
-      mixedExpertisesList,
-    });
-
-    const modelMessage = await sendModelMessage({
-      userId,
-      node,
-      input: mixedResults,
-      expertisesList: mixedExpertisesList,
-    });
-    console.info('modelMessage', modelMessage);
-
-    return modelMessage;
-  } else if (node.app === APPS_LABELS.DISPLAYS) {
-    console.info('DISPLAYS', { node, input, expertisesList });
-
-    const modelMessage = await sendModelMessage({
-      userId,
-      input,
-      node,
-      expertisesList,
-    });
-
-    const currentExpertise = node.expertise;
-    const { inputs = {}, component = <></> } = expertisesList.find(
-      ({ id }) => id === currentExpertise
-    );
-
-    console.info('DISPLAYS', { currentExpertise, inputs, component });
-
-    if (currentExpertise === 'displaysRanking') {
-      console.info('displaysRanking', modelMessage);
-      onRedirect({ path: '/displays/ranking', data: modelMessage });
-    }
-    // return input;
-  } else {
-    // Si aucune logique n'est définie pour ce node, retourner un message par défaut.
-    return `Aucune logique définie pour le node ${node.id} (app: ${node.app}).`;
+  } catch (err) {
+    console.error("Erreur lors de l'exécution du nœud:", err.message);
+    return { error: `Erreur dans executeNode: ${err.message}` };
   }
 }
 
@@ -194,86 +187,90 @@ export async function runWorkflow(
 ) {
   console.info('runWorkflow', { executionPlan, initialInput });
 
-  if (!Array.isArray(executionPlan)) {
-    throw new Error("Le plan d'exécution doit être un tableau.");
-  }
+  try {
+    if (!Array.isArray(executionPlan)) {
+      throw new Error("Le plan d'exécution doit être un tableau.");
+    }
 
-  let currentOutputs = [];
-  // let currentOutputs = [];
+    resetNodeStatuses(executionPlan, onExcecutedNode); // Réinitialisation des nœuds
+    let currentOutputs = [];
 
-  // Parcourir chaque étape dans l'ordre (le plan est supposé trié par "step" croissant)
-  for (const event of executionPlan) {
-    console.info('nodes 24', { event, currentOutputs });
-    // currentOutputs = [{ id: '', data: [''] }];
+    for (const event of executionPlan) {
+      console.info('nodes 24', { event, currentOutputs });
 
-    // Pour chaque node de l'étape, exécuter en parallèle.
-    const outputs = await Promise.all(
-      event.nodes.map(async (node) => {
-        console.info('nodes 25', { node });
+      const outputs = await Promise.all(
+        event.nodes.map(async (node) => {
+          console.info('nodes 25', { node });
 
-        const inputsIds = node.inputs;
-        // Récupérer les inputs nécessaires pour chaque nœud
-        const inputToExecute = inputsIds
-          .map((inputId) => {
-            // Extraire l'ID avant le tiret pour chaque input dans currentOutputs
-            const input = currentOutputs.find(({ id }) => {
-              const inputIdWithoutSuffix = id.split('-')[0]; // Récupère la partie avant le tiret
-              return inputIdWithoutSuffix === inputId;
+          const inputsIds = node.inputs;
+          const inputToExecute = inputsIds
+            .map((inputId) => {
+              const input = currentOutputs.find(({ id }) => {
+                const inputIdWithoutSuffix = id.split('-')[0];
+                return inputIdWithoutSuffix === inputId;
+              });
+
+              if (!input) {
+                console.warn(
+                  `Input avec id ${inputId} non trouvé dans currentOutputs`
+                );
+              }
+
+              return input;
+            })
+            .filter((input) => input !== undefined);
+
+          onExcecutedNode({ nodeId: node.id, status: NODE_STATUS.RUN });
+
+          let data;
+          try {
+            // Exécuter le nœud et gérer les erreurs spécifiques
+            data = await executeNode({
+              userId,
+              node,
+              input: inputToExecute,
+              expertisesList,
+              onRedirect,
             });
 
-            if (!input) {
-              console.warn(
-                `Input avec id ${inputId} non trouvé dans currentOutputs`
-              );
-            }
+            const isValidResult =
+              data && !(Array.isArray(data) && data.length === 0);
 
-            return input;
-          })
-          // Filtrer les valeurs undefined pour ne garder que les entrées valides
-          .filter((input) => input !== undefined);
+            onExcecutedNode({
+              nodeId: node.id,
+              status: isValidResult ? NODE_STATUS.FINISH : NODE_STATUS.ERROR,
+            });
 
-        onExcecutedNode({ nodeId: node.id, status: NODE_STATUS.RUN });
+            return isValidResult
+              ? { id: `${node.id}-${node.expertise}`, data }
+              : {
+                  error: `Erreur: Le noeud ${node.id} n'a renvoyé aucune réponse.`,
+                };
+          } catch (err) {
+            console.error("Erreur lors de l'exécution du nœud:", err.message);
+            onExcecutedNode({
+              nodeId: node.id,
+              status: NODE_STATUS.ERROR,
+            });
 
-        console.info('expertisesList 123', {
-          inputToExecute,
-          node,
-          expertisesList,
-          inputsIds,
-        });
+            return {
+              error: `Erreur dans l'exécution du nœud ${node.id}: ${err.message}`,
+            };
+          }
+        })
+      );
 
-        const data = await executeNode({
-          userId,
-          node,
-          input: inputToExecute,
-          expertisesList,
-          onRedirect,
-        });
+      currentOutputs = [...currentOutputs, ...outputs];
+      console.log(
+        `Étape ${event.step} exécutée. Sortie combinée:`,
+        currentOutputs
+      );
+    }
 
-        const result = {
-          id: `${node.id}-${node.expertise}`,
-          data,
-        };
-
-        onExcecutedNode({
-          nodeId: node.id,
-          status: NODE_STATUS.FINISH,
-          // result,
-        });
-
-        console.info('expertisesList 123456', result);
-
-        // Formatage de la sortie pour inclure l'identifiant du node et son app.
-        return result;
-      })
-    );
-    // Concaténer toutes les sorties pour constituer l'input de la prochaine étape.
-    // currentOutputs = outputs.join('\n');
-    currentOutputs = [...currentOutputs, ...outputs];
-    console.log(
-      `Étape ${event.step} exécutée. Sortie combinée:`,
-      currentOutputs
-    );
+    return currentOutputs;
+  } catch (err) {
+    // Si une erreur générale survient dans runWorkflow, on la retourne avec un message explicite
+    console.error("Erreur lors de l'exécution du workflow:", err.message);
+    return { error: `Erreur dans runWorkflow: ${err.message}` };
   }
-
-  return currentOutputs;
 }

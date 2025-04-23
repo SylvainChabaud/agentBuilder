@@ -21,11 +21,25 @@ export const handleGmailLoginClient = async (redirect) => {
 
     console.info('handleGmailLoginClient', { redirect });
 
-    handleGmailAuth(redirect);
-    return null;
+    // Essayer de lancer l'authentification Gmail
+    try {
+      await handleGmailAuth(redirect);
+      return null;
+    } catch (authError) {
+      // Gestion spécifique des erreurs d'authentification
+      console.error("Erreur d'authentification Gmail :", authError);
+      throw new Error("L'authentification Gmail a échoué. Veuillez réessayer.");
+    }
   } catch (error) {
+    // Gestion générale des erreurs (token, authentification, etc.)
     console.error("Erreur lors de l'authentification Gmail :", error);
+
+    // Supprimer le token s'il y en a un, pour éviter les conflits futurs
     await deleteTokenFromAPI(APPS_LABELS.GMAIL);
-    throw error;
+
+    // Relancer une erreur avec un message explicite
+    throw new Error(
+      `Une erreur s'est produite : ${error.message || 'Erreur inconnue'}`
+    );
   }
 };

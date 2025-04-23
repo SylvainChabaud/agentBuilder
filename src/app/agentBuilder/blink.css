@@ -1,15 +1,27 @@
-@keyframes blink-border {
-  0% {
-    border-color: green;
-  }
-  50% {
-    border-color: transparent;
-  }
-  100% {
-    border-color: green;
-  }
+/* Classe CSS pour un nœud avec erreur */
+.error-border {
+  border: 1px solid rgb(245, 93, 93); /* Bordure rouge pour les erreurs */
 }
 
+/* Classe CSS pour un nœud en cours d'exécution (bordure clignotante) */
 .blinking-border {
-  animation: blink-border 1s infinite;
+  border: 2px solid rgb(214, 85, 253); /* Bordure verte au départ */
+  animation: blink-border 1s infinite; /* Animation de clignotement */
+}
+
+/* Bordure pour un nœud terminé */
+.finished-border {
+  border: 1px solid rgb(90, 183, 245); /* Par exemple, bordure bleue pour les nœuds terminés */
+}
+/* Animation de clignotement */
+@keyframes blink-border {
+  0% {
+    border-color: rgb(136, 253, 136); /* Bordure verte au début */
+  }
+  50% {
+    border-color: transparent; /* Bordure invisible à 50% */
+  }
+  100% {
+    border-color: rgb(136, 253, 136); /* Retour à la couleur verte */
+  }
 }

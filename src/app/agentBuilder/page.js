@@ -101,6 +101,19 @@ const AgentBuilder = () => {
   const showNodeParameters =
     selectedNodes.length !== 0 || selectedEdges.length !== 0;
 
+  const downloadOutput = () => {
+    const blob = new Blob([JSON.stringify(output, null, 2)], {
+      type: 'application/json',
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `workflow-output-${Date.now()}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <StyledReactFlow
       nodes={nodes}
@@ -270,19 +283,45 @@ const AgentBuilder = () => {
         }}
       >
         {/* Bouton pour ouvrir/fermer l'accordéon */}
-        <button
-          onClick={() => setIsTerminalOpen(!isTerminalOpen)}
+        <div
           style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#333',
-            cursor: 'pointer',
-            fontSize: '1.2rem',
-            alignSelf: 'flex-end',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-          Terminal {isTerminalOpen ? '▼' : '▲'}
-        </button>
+          <button
+            onClick={() => setIsTerminalOpen(!isTerminalOpen)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#333',
+              cursor: 'pointer',
+              fontSize: '1.2rem',
+            }}
+          >
+            Terminal {isTerminalOpen ? '▼' : '▲'}
+          </button>
+
+          {!isRunning &&
+            output &&
+            Array.isArray(output) &&
+            output.length > 0 && (
+              <button
+                onClick={downloadOutput}
+                style={{
+                  backgroundColor: '#f0f0f0',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                  padding: '4px 8px',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                }}
+              >
+                📥 Télécharger
+              </button>
+            )}
+        </div>
 
         {isTerminalOpen &&
           (isRunning ? (

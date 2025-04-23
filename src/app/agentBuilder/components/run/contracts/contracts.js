@@ -109,7 +109,13 @@ export const getIaPrompt = ({ data, inputs, hasConvertToString = true }) => {
     if (typeof data === 'object' && data !== null) {
       parsedData = Object.keys(inputs).reduce((acc, key) => {
         const lowercaseKey = key.toLowerCase();
-        acc[lowercaseKey] = data[lowercaseKey] || ''; // Prend la valeur si elle existe, sinon ''
+        // Utiliser la clé en minuscules dans inputs pour vérifier si elle existe dans data
+        const matchingKey = Object.keys(data).find(
+          (dataKey) => dataKey.toLowerCase() === lowercaseKey
+        );
+
+        // Si la clé correspond, on prend la valeur correspondante de data, sinon ''
+        acc[lowercaseKey] = matchingKey ? data[matchingKey] : '';
         return acc;
       }, {});
     }

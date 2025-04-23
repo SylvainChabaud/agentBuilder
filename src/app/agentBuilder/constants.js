@@ -182,6 +182,8 @@ export const APPS_SVG = {
 };
 
 export const NODE_STATUS = {
+  WAIT: 'wait',
   RUN: 'run',
   FINISH: 'finish',
+  ERROR: 'error',
 };
