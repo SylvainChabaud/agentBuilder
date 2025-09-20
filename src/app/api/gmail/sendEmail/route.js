@@ -46,7 +46,7 @@ export async function POST(request) {
     // Optionnel: un From (sinon Gmail utilisera le compte authentifié)
     // messageParts.push(`From: "Moi" <moncompte@gmail.com>`);
     messageParts.push(`Subject: ${subject}`);
-    messageParts.push(`Content-Type: text/plain; charset="UTF-8"`);
+    messageParts.push('Content-Type: text/html; charset="UTF-8"');
     messageParts.push(''); // ligne vide
     messageParts.push(body);
 

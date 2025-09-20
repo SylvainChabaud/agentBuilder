@@ -5,8 +5,11 @@ import { NextResponse } from 'next/server';
 import { openIaWrapper } from './openIaWrapper';
 
 export async function POST(request) {
+  console.info('POST CHAT');
   try {
     const { userId, messages, model, modelSource } = await request.json();
+
+    console.info('POST data', { userId, messages, model, modelSource });
 
     if (!messages || !modelSource) {
       return NextResponse.json(

@@ -6,7 +6,7 @@ cd /root/workspace/ia_models/agentBuilder_api || { echo "Répertoire introuvable
 
 # 1. Arrêter tous les processus PM2
 echo "Arrêt de tous les processus PM2..."
-pm2 stop all
+pm2 stop agentBuilder-api
 
 # 2. Lancer la construction de l'application Next.js
 echo "Lancement de npm run build..."
@@ -14,6 +14,6 @@ npm run build
 
 # 1. Arrêter tous les processus PM2
 echo "Lance tous les processus PM2..."
-pm2 start all
+pm2 start agentBuilder-api
 
 echo "Déploiement terminé."

@@ -44,6 +44,7 @@ export default function SamosaRecipes() {
         }}
         onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#d35400')}
         onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#e67e22')}
+        disabled={loading}
       >
         Découvrir de Nouvelles Recettes
       </button>

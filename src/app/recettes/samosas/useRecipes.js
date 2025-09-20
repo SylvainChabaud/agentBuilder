@@ -1,17 +1,23 @@
 import { MODEL_SOURCES } from 'app/constants';
 import { handleWebSearch } from 'lib/services/gmail/webSearch';
 import { handleScrapesPages } from 'lib/services/pupperteer/scrapePages';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { extractObject } from 'src/app/agentBuilder/components/run/utils';
 import { MODELS } from 'src/app/chatInterface/constants';
 
 export const useRecipes = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  console.info('userId', userId);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [recipes, setRecipes] = useState([]);
   // Variables pour l'API
-  const iaModel = MODELS[5]?.model || 'qwen2.5:1.5b';
-  const modelSource = MODELS[1]?.modelSource || MODEL_SOURCES.OLLAMA;
+  const iaModel = MODELS[13]?.model || 'qwen2.5:1.5b';
+  const modelSource = MODELS[13]?.modelSource || MODEL_SOURCES.OLLAMA;
   const outputs = {
     titre: 'string',
     description: 'string',
@@ -160,6 +166,7 @@ export const useRecipes = () => {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
+                userId,
                 messages,
                 model: iaModel,
                 modelSource,

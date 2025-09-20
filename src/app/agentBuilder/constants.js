@@ -70,11 +70,20 @@ export const NODE_PARAMS = {
   SHEET: 'nodeSheet',
 };
 
+export const NODE_APPLIS = {
+  GMAIL: 'gmail',
+  OUTLOOK: 'outlook',
+  SHEET: 'sheet',
+  JIRA: 'jira',
+  IA_MODEL: 'iaModel',
+  DISPLAYS: 'displays',
+};
+
 export const APPS_LIST = [
   { id: 'gmail', name: 'Gmail' },
-  { id: 'outlook', name: 'Outlook' },
+  // { id: 'outlook', name: 'Outlook' },
   { id: 'iaModel', name: 'IaModel' },
-  { id: 'jira', name: 'Jira' },
+  // { id: 'jira', name: 'Jira' },
   { id: 'sheet', name: 'Sheet' },
   { id: 'displays', name: 'Displays' },
 ];
@@ -114,7 +123,7 @@ export const EXPERTISES_LIST = [
         content: CONVERT_GMAIL_INPUTS_CONTEXT,
       },
     ],
-    model: MODELS[10].id,
+    model: MODELS[13].id,
   },
   {
     id: 'sheets',
@@ -133,7 +142,7 @@ export const EXPERTISES_LIST = [
         content: CONVERT_DISPLAYS_INPUTS_CONTEXT,
       },
     ],
-    model: MODELS[10].id,
+    model: MODELS[13].id,
   },
   {
     id: 'webSearch',

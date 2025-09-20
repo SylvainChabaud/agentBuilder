@@ -105,7 +105,7 @@ export async function executeNode({
 
         return handleExecutionError(() =>
           handleWebSearch({
-            searchQuery: searchQuery || 'Météo à Floirac 18 mars 2025',
+            searchQuery: searchQuery || 'Météo à Bordeaux',
           }).then(({ results }) => {
             return [{ search: searchQuery, results }];
           })

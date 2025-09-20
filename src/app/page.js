@@ -7,17 +7,17 @@ const Home = () => {
         Bienvenue dans l'orchestrateur d'applications
       </h2>
       <section style={styles.container}>
+        <p style={styles.subtitle}>Commencez à créer vos experts IA.</p>
+        <Link href="/chatInterface" style={styles.button}>
+          Aller à la page Models
+        </Link>
+      </section>
+      <section style={styles.container}>
         <p style={styles.subtitle}>
           Commencez à créer vos workflows d'applications.
         </p>
         <Link href="/agentBuilder" style={styles.button}>
-          Aller à la page Agents
-        </Link>
-      </section>
-      <section style={styles.container}>
-        <p style={styles.subtitle}>Commencez à créer vos experts IA.</p>
-        <Link href="/chatInterface" style={styles.button}>
-          Aller à la page Models
+          Aller à la page Automations
         </Link>
       </section>
     </>

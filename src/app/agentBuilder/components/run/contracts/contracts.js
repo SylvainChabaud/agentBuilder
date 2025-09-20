@@ -143,11 +143,15 @@ export const getIaPrompt = ({ data, inputs, hasConvertToString = true }) => {
   }
 
   // 🔹 Choix du format de sortie
-  const result = hasConvertToString
-    ? Object.entries(parsedData)
-        .map(([key, value]) => `${key}: '${value}'`)
-        .join(', ')
-    : parsedData;
+  // const result = hasConvertToString
+  //   ? Object.entries(parsedData)
+  //       .map(([key, value]) => `${key}: '${value}'`)
+  //       .join(', ')
+  //   : parsedData;
+
+  const result = Object.entries(parsedData)
+    .map(([key, value]) => `${key}: ${JSON.stringify(value)}`)
+    .join(', ');
 
   console.info('Formatted Data:', result);
   return result;

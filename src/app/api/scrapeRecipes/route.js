@@ -3,6 +3,8 @@ import puppeteer from 'puppeteer';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request) {
+  console.info('POST scrapeRecipes');
+
   try {
     const { sitesToScrape } = await request.json();
 

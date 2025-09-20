@@ -75,6 +75,7 @@ export const useChatInterface = () => {
       });
 
       if (!response.ok) {
+        console.info('response', response);
         throw new Error(`Erreur HTTP (${response.status})`);
       }
 

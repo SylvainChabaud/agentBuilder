@@ -1,4 +1,4 @@
-import { APPS_LIST, MIXER_LIST, NODE_PARAMS } from '../constants';
+import { APPS_LIST, MIXER_LIST, NODE_APPLIS, NODE_PARAMS } from '../constants';
 import {
   DeleteNodeButtonStyled,
   NodeParametersPanel,
@@ -60,21 +60,21 @@ const NodeParameters = ({
     });
 
     return expertisesList.filter((expertise) => {
-      if (nodeApp === APPS_LIST[4].id) {
+      if (nodeApp === NODE_APPLIS.SHEET) {
         return expertise?.id === 'sheets';
-      } else if (nodeApp === APPS_LIST[0].id) {
+      } else if (nodeApp === NODE_APPLIS.GMAIL) {
         return (
           expertise?.id === 'gmailEmails' ||
           expertise?.id === 'sendEmail' ||
           expertise?.id === 'webSearch'
         );
-      } else if (nodeApp === APPS_LIST[5].id) {
+      } else if (nodeApp === NODE_APPLIS.DISPLAYS) {
         return expertise?.id === 'displaysRanking';
-      } else if (nodeApp === APPS_LIST[3].id) {
+      } else if (nodeApp === NODE_APPLIS.JIRA) {
         return false;
-      } else if (nodeApp === APPS_LIST[1].id) {
+      } else if (nodeApp === NODE_APPLIS.OUTLOOK) {
         return false;
-      } else if (nodeApp === APPS_LIST[2].id) {
+      } else if (nodeApp === NODE_APPLIS.IA_MODEL) {
         return (
           expertise?.id !== 'gmailEmails' &&
           expertise?.id !== 'sendEmail' &&

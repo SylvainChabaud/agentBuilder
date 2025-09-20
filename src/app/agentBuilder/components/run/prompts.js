@@ -130,46 +130,68 @@ Ta mission est d'évaluer le ton et l'intensité émotionnelle du texte fourni e
 Génère maintenant une évaluation de l’humeur du texte en respectant ces consignes.
 `.trim();
 
-export const CONVERT_GMAIL_INPUTS_CONTEXT = `**Specialité**  
-Générateur d'emails professionnels structurés à partir de données brutes  
+export const CONVERT_GMAIL_INPUTS_CONTEXT = `**Spécialité**  
+Générateur d’emails professionnels au format HTML structuré  
+Objectif : insérer toutes les données d’entrée **sans aucune perte ou reformulation**, dans un email structuré et compatible avec les clients email.  
+
+---
 
 **Format de sortie**  
-JSON strict avec :  
+Un JSON strict contenant :  
 {  
-  subject: 'string',  
-  body: 'string'
+  subject: 'string',           // Sujet concis (<60 caractères) résumant l’objectif  
+  body: 'string'               // Contenu HTML structuré, contenant toutes les données  
 }  
 
-**Prompt**  
-"Convertis les données d'entrée en email professionnel avec :  
-1. Sujet concis (<60 caractères) incluant l'urgence/objectif principal  
-2. Corps contenant :  
-   - Salutation personnalisée  
-   - Structure claire : contexte → action requise → deadline  
-   - Mise en forme minimaliste
-4. Optimisation pour clients email (table layout)  
+---
 
-Exemple d'entrée :  
+**Consignes pour le contenu HTML (body)** :  
+1. Le corps du mail doit être structuré comme suit :  
+   - Salutation personnalisée (si un nom est fourni)  
+   - <strong>Section 1 — CONTEXTE :</strong> présenter les données de contexte  
+   - <strong>Section 2 — ACTION REQUISE :</strong> indiquer clairement toute action mentionnée  
+   - <strong>Section 3 — DEADLINE :</strong> afficher la date ou limite mentionnée  
+   - Clôture classique (Cordialement, etc.)  
+
+2. Le contenu HTML doit être sans Aucun style CSS, tableau, image, lien, ou code dynamique  
+
+3. Toutes les données d’entrée doivent être **intégralement présentes dans le corps** :  
+   - Aucun mot ne doit être supprimé ou reformulé  
+   - Tu peux regrouper les données selon leur fonction (contexte, action, deadline), mais sans modifier leur contenu  
+
+---
+
+**Exemple d’entrée** :  
 {  
-  "purpose": "Rappel paiement",  
-  "clientName": "{{nom_client}}",  
-  "deadline": "15/03/2024",  
-  "amount": "€450"  
+  "clientName": "Claire Dupont",  
+  "purpose": "Litige sur clause de non-concurrence",  
+  "details": "La clause interdit à Mme Dupont de travailler dans le secteur pendant 3 ans. Elle la conteste.",  
+  "jurisprudence": "Cour de Cassation, 10 juillet 2002, n° 00-45.135",  
+  "action": "Réévaluer les termes de la clause.",  
+  "deadline": "30/06/2024"  
 }  
 
-Sortie attendue :  
-{  
-  "subject": "URGENT - Paiement en attente (réf. {{nom_client}})",  
-  "body": "Nous vous rappelons que votre paaiement est troujours en attente.
-    Veuillez fair ele nécessaire avant le 15/03/2024" !
-     Cordialement,
-     L'équipe de Chabaud Sylvain
-}"  
+---
 
-**Règles strictes**  
-- UNIQUEMENT le JSON final  
-- Aucune mention "cid:" ou images externes  
-- Pas de commentaires/notes`;
+**Exemple de sortie** :  
+{  
+  "subject": "Clause de non-concurrence – Action requise",  
+  "body": "<p>Bonjour Claire Dupont,</p>  
+  <p><strong>CONTEXTE :</strong><br>Litige sur clause de non-concurrence<br>La clause interdit à Mme Dupont de travailler dans le secteur pendant 3 ans. Elle la conteste.</p>  
+  <p><strong>JURISPRUDENCE :</strong><br>Cour de Cassation, 10 juillet 2002, n° 00-45.135</p>  
+  <p><strong>ACTION REQUISE :</strong><br>Réévaluer les termes de la clause.</p>  
+  <p><strong>DEADLINE :</strong><br>30/06/2024</p>  
+  <p>Cordialement,<br>L’équipe de Chabaud Sylvain</p>"  
+}  
+
+---
+
+**Règles strictes** :  
+- Chaque information en entrée doit être présente dans le "body" sans perte, ni altération  
+- Ne pas générer de phrases ou tournures inventées : **zéro reformulation**  
+- Ne pas ignorer de champs, même optionnels  
+- Sortie = JSON uniquement, sans explication, sans code, sans commentaire  
+- Contenu HTML lisible dans Gmail, Outlook, Apple Mail, etc.`.trim();
 
 export const CONVERT_DISPLAYS_INPUTS_CONTEXT =
   'Tu expert en résumé et classement de donnée. Tu sais détecter et si la donnée en entrée est de type PUB, PERSO, PRO ou SOCIAL NETWORK. Et tu es capable de résumer cette donnée en une phrase. Le type de donnée en entrée est au format json. Et la sortie que tu vas produire est aussi format json. exemple de sortie { "type": "PUB", "resume": "string" }.';
